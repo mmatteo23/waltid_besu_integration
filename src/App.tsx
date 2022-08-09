@@ -2,9 +2,8 @@ import { ChakraProvider, theme } from '@chakra-ui/react';
 import React from 'react';
 import { WagmiConfig } from 'wagmi';
 import { wagmiClient, chains } from './utils/WagmiClient';
-import './App.css';
-import { ConnectButton, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { ColorModeSwitcher } from './components/ColorModeSwitcher';
+import './styles/App.css';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import Nav from './components/Nav';
 
 function App() {
