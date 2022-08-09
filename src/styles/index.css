@@ -24,3 +24,9 @@ nav p {
 div.connect-wallet-box {
   display: flex;
 }
+
+button.addButton {
+  display: block;
+  margin-right: 0;
+  margin-left: auto;
+}
