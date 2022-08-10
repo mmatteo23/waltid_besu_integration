@@ -1,8 +1,13 @@
 
 import MyTable from './MyTable';
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Button } from '@chakra-ui/react'
+import {
+    Tabs, TabList, TabPanels, Tab, TabPanel, Button,
+    Select, Box,
+} from '@chakra-ui/react'
 import { Component } from 'react'
 import { AddKeyModal } from './AddKeyModal'
+import { TabBox } from './TabBox'
+import { Issuer } from './Issuer'
 
 const chiave: IKey = {
     id: '1',
@@ -22,11 +27,15 @@ class TabsMenu extends Component {
             </TabList>
             <TabPanels>
                 <TabPanel>
-                    <AddKeyModal />
-                    <MyTable data={data1} caption="Table of this custodian keys" />
+                    <TabBox>
+                        <AddKeyModal />
+                        <MyTable data={data1} caption="Table of this custodian keys" />
+                    </TabBox>
                 </TabPanel>
                 <TabPanel>
-                    <p>two!</p>
+                    <TabBox>
+                        <Issuer/>
+                    </TabBox>
                 </TabPanel>
             </TabPanels>
         </Tabs>

@@ -1,16 +1,19 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import React, { Component } from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
+import { Heading } from "@chakra-ui/react";
 
 class Nav extends Component {
     render() {
-        return <nav>
-            <p>Besu/walt-id</p>
-            <div className="connect-wallet-box">
-                <ColorModeSwitcher />
-                <ConnectButton />
-            </div>
-        </nav>
+        return (
+            <nav>
+                <Heading as='h1'>Besu & walt.id integration</Heading>
+                <div className="connect-wallet-box">
+                    <ColorModeSwitcher />
+                    <ConnectButton />
+                </div>
+            </nav>
+        )
     }
 }
 
