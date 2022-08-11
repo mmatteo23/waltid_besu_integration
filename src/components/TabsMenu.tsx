@@ -8,6 +8,7 @@ import { Component } from 'react'
 import { AddKeyModal } from './AddKeyModal'
 import { TabBox } from './TabBox'
 import { Issuer } from './Issuer'
+import { Verifier } from './Verifier'
 
 const chiave: IKey = {
     id: '1',
@@ -35,6 +36,11 @@ class TabsMenu extends Component {
                 <TabPanel>
                     <TabBox>
                         <Issuer/>
+                    </TabBox>
+                </TabPanel>
+                <TabPanel>
+                    <TabBox>
+                        <Verifier />
                     </TabBox>
                 </TabPanel>
             </TabPanels>

@@ -26,3 +26,34 @@ button.addButton {
   margin-right: 0;
   margin-left: auto;
 }
+
+div.widget-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.widget {
+  background-color: #38a169;
+  padding: 1em 2em 2.5em 2em;
+  margin: 1em 0;
+  width: 45%;
+}
+
+div.widget h3 {
+  font-size: 2em;
+}
+
+div.widget p {
+  font-size: 1.2em;
+}
+
+
+div.widget .widget-text {
+  float: left;
+}
+
+div.widget .widget-icon {
+  font-size: 3em;
+  margin-left: 75%;
+  margin-top: 0.3em;
+}
