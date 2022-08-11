@@ -85,7 +85,7 @@ export function Issuer() {
                 />
             </Box>
 
-            <Box mb='3em' display='flex'>
+            <Box mb='2em' display='flex'>
                 <Box id='IssueCredentialForm' float='left' w='100%' mr='1em'>
                     <Heading as='h3' mb='0.5em'>
                         Issue a credential
@@ -127,16 +127,17 @@ export function Issuer() {
                         onChange={(e) => setCredentialData(e.target.value)}
                         mt='0.5em' h='8em'
                     />
-                    <Button onClick={() => issueCredential()}
-                        colorScheme='blue' display='block' mt='1em' w='8em'
-                    >
-                        Issue
-                    </Button>
                 </Box>
                 <Box id='TextAreaBox' float='right' w='100%' ml='1em'>
-                    <Textarea defaultValue='Issued Credential' h='30em'/>
+                    <Textarea defaultValue='Issued Credential' h='100%'/>
                 </Box>
             </Box>
+
+            <Button onClick={() => issueCredential()}
+                colorScheme='blue' display='block' mt='1em' mb='3em' w='8em' size='lg'
+            >
+                Issue
+            </Button>
         </>
     );
 }
