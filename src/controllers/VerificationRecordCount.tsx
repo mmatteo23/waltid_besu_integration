@@ -15,7 +15,7 @@ const VerificationRecordCountController = () => {
         functionName: 'getVerificationCount',
     })
 
-    return <WidgetCountView count={data?.toString()} description={"# Verification Record"} icon={undefined} />;
+    return <WidgetCountView count={data?data.toString():"-"} description={"# Verification Record"} icon={undefined} />;
 };
 
 export default VerificationRecordCountController;

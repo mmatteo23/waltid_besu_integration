@@ -37,6 +37,7 @@ div.widget {
   padding: 1em 2em 2.5em 2em;
   margin: 1em 0;
   width: 45%;
+  border-radius: 16px;
 }
 
 div.widget h3 {

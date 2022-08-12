@@ -17,9 +17,9 @@ const VerifierCountController = () => {
         functionName: 'getVerifierCount',
     })
 
-    if(data) console.log(data);
+    //if(data) console.log(data);
 
-    return <WidgetCountView count={data?.toString()} description={"# Verifier"} icon={undefined} />;
+    return <WidgetCountView count={data?data.toString():"-"} description={"# Verifier"} icon={undefined} />;
 };
 
 export default VerifierCountController;

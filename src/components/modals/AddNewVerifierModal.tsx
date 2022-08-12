@@ -39,7 +39,7 @@ export function AddNewVerifierModal(props: {
         url: url,
         signer: address
     }
-    console.log(verifierInfo)
+    //console.log(verifierInfo)
     const { config } = usePrepareContractWrite({
         addressOrName: vr_address,
         contractInterface: vr_abi,

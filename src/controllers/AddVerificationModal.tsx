@@ -1,7 +1,7 @@
 
-import { Button, FormControl, FormLabel, Input, useDisclosure } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, Input, Text, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractRead, useContractWrite, usePrepareContractWrite, useSigner, useSignTypedData } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
 
 import {
@@ -15,32 +15,41 @@ import {
 } from '@chakra-ui/react'
 import { FaPlus } from "react-icons/fa";
 
-
 const AddVerificationModal = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [vr_address, vr_abi, domain, types] = useVerificationRegistryData();
 
+    // Form params setters
     const [schema, setSchema] = useState('');
     const [subject, setSubject] = useState('');
     const [expiration, setExpiration] = useState('');
 
-    const signature = ""
 
-    const [vr_address, vr_abi] = useVerificationRegistryData();
+    const verificationResult: IVerificationResult = {
+        schema: schema,
+        subject: subject,
+        expiration: (new Date(expiration))?.getTime(),
+    };
+
+    //console.log(domain, types, verificationResult);
+
+    //const { signature, signTypedData } = CreateSignature(domain, types, verificationResult);
+
+    const { data: signature, error: signError, isError, isLoading: isLoadingSignature, isSuccess: isSuccessSignature, signTypedData } =
+        useSignTypedData({
+            domain,
+            types,
+            value: verificationResult
+        });
 
     const { config } = usePrepareContractWrite({
         addressOrName: vr_address,
         contractInterface: vr_abi,
         functionName: 'registerVerification',
-        args: [{schema, subject, expiration}, signature]
+        args: [verificationResult, signature]
     })
 
-    const { data, isLoading, isSuccess, write } = useContractWrite(config)
-
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-
-        //console.log(JSON.stringify(data));
-    };
+    const { data, error: writeError, isLoading, isSuccess, write } = useContractWrite(config);
 
     return (
         <>
@@ -54,7 +63,6 @@ const AddVerificationModal = () => {
                     <ModalHeader>Please provider the following fields</ModalHeader>
                     <ModalCloseButton />
 
-                    <form method='post' onSubmit={handleSubmit}>
                         <ModalBody>
                             <FormControl isRequired>
                                 <FormLabel>Schema</FormLabel>
@@ -76,15 +84,36 @@ const AddVerificationModal = () => {
                                 }
                                 />
                             </FormControl>
+                        
+                            {(isLoading || isLoadingSignature) ? <Text mt="1em" mb="0.5em" padding="0.3em" bg="gray">Complete on wallet...</Text> : null}
+                            {signError ? <Text mt="1em" mb="0.5em" bg="red">{signError.message}</Text> : null}
                         </ModalBody>
 
                         <ModalFooter>
+
                             <Button size='sm' colorScheme='red' mr={3} onClick={onClose}>
                                 Close
                             </Button>
-                            <Button type='submit' size='sm' colorScheme='green' disabled={!write} onClick={() => write?.()}>Confirm</Button>
+                            <Button size='sm' colorScheme={isLoadingSignature ? 'yellow' : 'blue'} disabled={isLoadingSignature} mr={3} onClick={() => {
+                                try {
+                                    signTypedData();
+                                } catch( error ) {
+                                    console.log("Passo per di qua");
+                                    console.log("Try catch error: ", error);
+                                }
+                            }}>
+                                {isLoadingSignature ? "Check Wallet" : "Create Signature"}
+                            </Button>
+                            <Button size='sm' colorScheme={isLoading ? 'yellow' : 'green'} disabled={!write} onClick={() => {
+                                console.log("Write passo per qua");
+                                write?.()
+                            }}>
+                                {isLoading ? "Confirm tx" : "Confirm"}
+                            </Button>
+
                         </ModalFooter>
-                    </form>
+                    
+                        {isSuccess && <div>Tx hash: {JSON.stringify(data)}</div>}
                 </ModalContent>
             </Modal>
         </>

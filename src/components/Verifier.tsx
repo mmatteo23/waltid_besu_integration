@@ -1,20 +1,10 @@
-
-import MyDidTable from './MyDidTable';
 import AddVerifierModal from './AddVerifierModal'
 
-import useVerificationRegistry from '../hooks/useVerificationRegistry';
-import { useEffect } from 'react';
 import { VerificationRecordCountController, VerifierCountController } from '../controllers';
 import AddVerificationModal from '../controllers/AddVerificationModal';
+import GetVerifierFromAddressController from '../controllers/GetVerifierFromAddress';
+import GetVerificationRecordsController from '../controllers/GetVerificationRecords';
 
-const verifier: IVerifier = {
-    name: "Monokee",
-    did: "did:web:123456",
-    url: "https://monokee.it",
-    signer: "0x123456789"
-}
-
-const verifiers: Array<IVerifier> = [verifier];
 
 export function Verifier(){
     
@@ -24,9 +14,13 @@ export function Verifier(){
             <VerifierCountController />
             <VerificationRecordCountController />
         </div>
+        <GetVerifierFromAddressController />
+        {/*
         <MyDidTable columns={["Address", "DID", "Url", "Signer", "Action"]} data={verifiers} caption="Table of verifiers" />
+        */}
         <div>
             <AddVerificationModal />
+            <GetVerificationRecordsController />
         </div>
     </>;
 
