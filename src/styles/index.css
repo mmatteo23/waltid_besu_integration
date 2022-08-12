@@ -21,12 +21,6 @@ div.connect-wallet-box {
   display: flex;
 }
 
-button.addButton {
-  display: block;
-  margin-right: 0;
-  margin-left: auto;
-}
-
 div.widget-box {
   display: flex;
   justify-content: space-between;

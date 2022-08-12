@@ -8,27 +8,25 @@ import {
     ModalCloseButton,
     Button,
     useDisclosure,
-    Select,
     FormControl,
     FormLabel,
+    Textarea,
 } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
-import { FaPlus } from 'react-icons/fa';
-import { Custodian, utils } from 'ssikit-sdk';
+import { useEffect, useState } from 'react'
+import { BiImport } from 'react-icons/bi';
+import { Custodian } from 'ssikit-sdk';
 
-export function AddKeyModal(props: {updateKeys: Promise<void>}) {
+export function ImportKeyModal(props: {updateKeys: Promise<void>}) {
 
     const custodian = Custodian.Custodian;
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [algorithm, setAlgorithm] = useState<utils.KeyAlgorithm>("RSA");
-
-    const algorithms: utils.KeyAlgorithm[] = ["RSA", "EdDSA_Ed25519", "ECDSA_Secp256k1"]
+    const [ keyToImport, setKeyToImport ] = useState<string>("");
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.generateKey(algorithm);
+            await custodian.importKey(keyToImport as unknown as object);
             onClose();
             await props.updateKeys;
         } catch (error) {
@@ -37,35 +35,30 @@ export function AddKeyModal(props: {updateKeys: Promise<void>}) {
     };
 
     useEffect(() => {
-        setAlgorithm("RSA");
+        setKeyToImport("");
     } , [isOpen]);
 
     return (
         <>
-            <Button onClick={onOpen} leftIcon={<FaPlus/>} colorScheme='green' variant='solid' alignSelf='right' mr='1em'>
-                Generate Key
+            <Button onClick={onOpen} leftIcon={<BiImport/>} colorScheme='orange' variant='solid'>
+                Import JWK Key
             </Button>
 
             <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Please select an algoritm:</ModalHeader>
+                    <ModalHeader>Import a key</ModalHeader>
                     <ModalCloseButton />
                     <form method='post' onSubmit={handleSubmit}>
                         <ModalBody>
                                 <FormControl isRequired>
-                                    <FormLabel>Algorithm</FormLabel>
-                                    <Select
-                                        variant='filled' 
-                                        mt='1em' 
-                                        name='algorithm'
-                                        onChange={ event => setAlgorithm(event.currentTarget.value as utils.KeyAlgorithm) }
-                                        value={algorithm}
-                                    >
-                                        {algorithms.map(algorithm => (
-                                            <option key={algorithm} value={algorithm}>{algorithm}</option>
-                                        ))}
-                                    </Select>
+                                    <FormLabel>Key to import</FormLabel>
+                                    <Textarea
+                                        value={keyToImport}
+                                        onChange={ e => setKeyToImport(e.target.value) }
+                                        placeholder='Place here your key'
+                                        size='sm'
+                                    />
                                 </FormControl>
                         </ModalBody>
 
@@ -74,7 +67,7 @@ export function AddKeyModal(props: {updateKeys: Promise<void>}) {
                                 Close
                             </Button>
                             <Button onClick={onClose} type='submit' size='sm' colorScheme='green'>
-                                Generate
+                                Import
                             </Button>
                         </ModalFooter>
                     </form>

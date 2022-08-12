@@ -1,8 +1,3 @@
-declare interface IKey {
-    id: string,
-    algorithm: string
-}
-
 declare interface IVerifier {
     name: string,
     did: string,

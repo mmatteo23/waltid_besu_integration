@@ -11,7 +11,7 @@ export function AddVerifierModal() {
 
     return (
         <>
-            <Button onClick={onOpen} leftIcon={<FaPlus />} colorScheme='green' variant='solid' alignSelf='right' className='addButton'>
+            <Button onClick={onOpen} leftIcon={<FaPlus />} colorScheme='green' variant='solid' alignSelf='right'>
                 New Verifier
             </Button>
 
