@@ -1,7 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import React, { Component } from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { Heading } from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 
 class Nav extends Component {
     render() {

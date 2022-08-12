@@ -9,8 +9,8 @@ import {
     TableContainer,
 } from '@chakra-ui/react';
 import { utils } from 'ssikit-sdk';
-import { DeleteKeyModal } from './DeleteKeyModal';
-import { ExportKeyModal } from './ExportKeyModal';
+import { DeleteKeyModal } from './modals/DeleteKeyModal';
+import { ExportKeyModal } from './modals/ExportKeyModal';
 
 export function KeysTable(props: { data: utils.IKey[], updateKeys: Promise<void>, caption: string }) {    
     return <TableContainer>

@@ -14,7 +14,7 @@ function App() {
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider chains={chains}>
           <Nav />
-          <MyBreadcrumb />
+          {/* <MyBreadcrumb /> */}
           <TabsMenu />
         </RainbowKitProvider>
       </WagmiConfig>

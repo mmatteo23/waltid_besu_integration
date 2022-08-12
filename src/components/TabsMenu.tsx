@@ -10,7 +10,7 @@ import { Issuer } from './Issuer'
 import { Verifier } from './Verifier'
 class TabsMenu extends Component {
     render() {
-        return <Tabs isFitted variant='enclosed'>
+        return <Tabs isFitted size='lg'>
             <TabList mb='1em'>
                 <Tab>Holder</Tab>
                 <Tab>Issuer/Revoker</Tab>

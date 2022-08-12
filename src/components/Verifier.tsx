@@ -1,4 +1,4 @@
-import AddVerifierModal from './AddVerifierModal'
+import AddVerifierModal from './modals/AddVerifierModal'
 
 import { VerificationRecordCountController, VerifierCountController } from '../controllers';
 import AddVerificationModal from '../controllers/AddVerificationModal';

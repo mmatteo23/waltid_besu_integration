@@ -1,3 +1,4 @@
+import { DeleteIcon } from '@chakra-ui/icons';
 import {
     Modal,
     ModalOverlay,
@@ -8,12 +9,12 @@ import {
     ModalCloseButton,
     Button,
     useDisclosure,
-    Text
+    Text,
+    IconButton,
 } from '@chakra-ui/react'
-import { Custodian } from 'ssikit-sdk';
-import { DeleteIcon } from '@chakra-ui/icons';
+import { Custodian, utils } from 'ssikit-sdk';
 
-export function DeleteAllKeysModal(props: {updateKeys: Promise<void>}) {
+export function DeleteKeyModal(props: {keyToDelete: utils.IKey, updateKeys: Promise<void>}) {
 
     const custodian = Custodian.Custodian;
 
@@ -22,7 +23,7 @@ export function DeleteAllKeysModal(props: {updateKeys: Promise<void>}) {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.deleteAllKeys();
+            await custodian.deleteKey(props.keyToDelete);
             onClose();
             await props.updateKeys;
         } catch (error) {
@@ -32,10 +33,13 @@ export function DeleteAllKeysModal(props: {updateKeys: Promise<void>}) {
 
     return (
         <>
-            <Button onClick={onOpen} leftIcon={<DeleteIcon/>} colorScheme='red' variant='solid' alignSelf='right'>
-                Delete All Keys
-            </Button>
-
+            <IconButton
+                onClick={onOpen}
+                colorScheme='red'
+                aria-label='Delete key'
+                size='sm'
+                icon={<DeleteIcon/>}
+            />
             <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay/>
                 <ModalContent>
@@ -43,15 +47,15 @@ export function DeleteAllKeysModal(props: {updateKeys: Promise<void>}) {
                     <ModalCloseButton/>
                     <form method='post' onSubmit={handleSubmit}>
                         <ModalBody>
-                            <Text>Are you sure you want to delete <strong>all</strong> your keys?</Text>
+                            <Text>Are you sure you want to delete this key?</Text>
                             <Text>This action is not reversible.</Text>
                         </ModalBody>
                         <ModalFooter>
                             <Button onClick={onClose} size='sm' colorScheme='green' mr={3}>
                                 Abort
                             </Button>
-                            <Button onClick={onClose} type='submit' size='sm' colorScheme='red'>
-                                Delete All
+                            <Button type='submit' size='sm' colorScheme='red'>
+                                Delete Key
                             </Button>
                         </ModalFooter>
                     </form>

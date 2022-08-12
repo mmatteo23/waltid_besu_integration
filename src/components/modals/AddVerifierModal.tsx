@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { FaPlus } from 'react-icons/fa';
-import AddNewVerifierModal from './modals/AddNewVerifierModal';
+import AddNewVerifierModal from './AddNewVerifierModal';
 
 export function AddVerifierModal() {
     const { isOpen, onOpen, onClose } = useDisclosure();

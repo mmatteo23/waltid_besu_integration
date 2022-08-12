@@ -73,7 +73,7 @@ export function AddKeyModal(props: {updateKeys: Promise<void>}) {
                             <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>
                                 Close
                             </Button>
-                            <Button onClick={onClose} type='submit' size='sm' colorScheme='green'>
+                            <Button type='submit' size='sm' colorScheme='green'>
                                 Generate
                             </Button>
                         </ModalFooter>

@@ -119,10 +119,6 @@ export function Issuer() {
 
     return (
         <>
-            <Box id='getCredential' mb='3em'>            
-                
-            </Box>
-
             <Box id='IssueCredential' mb='2em' display='flex'>
                 <Box id='IssueCredentialForm' float='left' w='100%' mr='1em'>
                     <Heading as='h3' mb='0.5em'>

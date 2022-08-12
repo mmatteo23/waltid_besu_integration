@@ -14,7 +14,7 @@ code {
 nav {
   display: flex;
   justify-content: space-between;
-  padding: 1em;
+  padding: 2em;
 }
 
 div.connect-wallet-box {
