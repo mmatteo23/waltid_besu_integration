@@ -1,14 +1,18 @@
-import { useState, useEffect, ChangeEventHandler } from 'react';
+import { useState, useEffect } from 'react';
 import { Custodian, utils } from "ssikit-sdk";
 import { AddKeyModal } from './modals/AddKeyModal';
 import { AddDidModal } from './modals/AddDidModal';
 import { ImportKeyModal } from './modals/ImportKeyModal';
 import { ImportDidModal } from './modals/ImportDidModal';
+import { ImportVcModal } from './modals/ImportVcModal';
+import { PresentVcsModal } from './modals/PresentVcsModal';
 import { DeleteAllKeysModal } from './modals/DeleteAllKeysModal';
 import { DeleteAllDidsModal } from './modals/DeleteAllDidsModal';
+import { DeleteAllVcsModal } from './modals/DeleteAllVcsModal';
 import { ResolveDidModal } from './modals/ResolveDidModal';
 import { KeysTable } from './KeysTable';
 import { DidsTable } from './DidsTable';
+import { VcsTable } from './VcsTable';
 import { Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { TabBox } from './TabBox';
 
@@ -18,6 +22,7 @@ export function Holder() {
 
     const [keys, setKeys] = useState<utils.IKey[]>([]);
     const [dids, setDids] = useState<string[]>([]);
+    const [vcs, setVcs] = useState<string[]>([]);
     
     const updateKeys = async () => {
         let keys = await custodian.getKeys();
@@ -29,9 +34,15 @@ export function Holder() {
         setDids(dids.reverse());
     }
 
+    const updateVcs = async () => {
+        let vcs = await custodian.getCredentialIDs();
+        setVcs(vcs.reverse());
+    }
+
     useEffect(() => {
         updateKeys();
         updateDids();
+        updateVcs();
     }, []);
 
     return (
@@ -80,6 +91,19 @@ export function Holder() {
                     </TabPanel>
                     <TabPanel>
                         <TabBox>
+                            <Box id="CredentialsManagement">
+                                <Heading as='h2' mb='1em'>
+                                    Credentials Management
+                                </Heading>
+                                <Box display='flex' justifyContent='space-between' mb='2em'>
+                                    <Box>
+                                        <ImportVcModal updateVcs={updateVcs()}/>
+                                        <PresentVcsModal updateVcs={updateVcs()}/>
+                                    </Box>             
+                                    <DeleteAllVcsModal updateVcs={updateVcs()}/>
+                                </Box>
+                                <VcsTable data={vcs} updateVcs={updateVcs()} caption='Your Credentials'/>
+                            </Box>
                         </TabBox>
                     </TabPanel>
                 </TabPanels>

@@ -57,6 +57,7 @@ export function ImportDidModal(props: {updateDids: Promise<void>}) {
                                         value={didToImport}
                                         onChange={ e => setDidToImport(e.target.value) }
                                         placeholder='did:...'
+                                        variant="filled"
                                     />
                                 </FormControl>
                         </ModalBody>

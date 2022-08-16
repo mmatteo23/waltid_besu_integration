@@ -65,6 +65,7 @@ export function Issuer() {
                 w='50%'
                 mt='0.5em'
                 onChange={onChangeHandlder}
+                variant="filled"
             >
                 {templates.map((template, index) => (
                     <option key={index} value={template}>{template}</option>
@@ -137,6 +138,7 @@ export function Issuer() {
                         onChange={(e) => setIssuerDID(e.target.value)}
                         placeholder='did:example:123456789' 
                         mt='0.5em' width='50%'
+                        variant="filled"
                     />
                     <Text mt='1em'>* Subject DID:</Text>
                     <Input 
@@ -144,12 +146,14 @@ export function Issuer() {
                         onChange={(e) => setSubjectDID(e.target.value)}
                         placeholder='did:example:123456789' 
                         mt='0.5em'width='50%'
+                        variant="filled"
                     />
                     <Text mt='1em'>* Select a Proof Type:</Text>
                     <Select
                         value={proofType}
                         onChange={(e) => setProofType(e.target.value as utils.ProofType)}
                         w='50%' mt='0.5em'
+                        variant="filled"
                     >
                         <option value='LD_PROOF'>LD_PROOF</option>
                         <option value='JWT'>JWT</option>
@@ -159,6 +163,7 @@ export function Issuer() {
                         value={proofConfig}
                         onChange={(e) => setProofConfig(e.target.value)}
                         mt='0.5em' h='21em'
+                        variant="filled"
                     />
                     <Text mt='1em'>Enable CredentialStatus (for revocations):</Text>
                     <Button onClick={() => createRevocationTokens()}
@@ -172,11 +177,13 @@ export function Issuer() {
                         placeholder='Your private revocation token (save it)'
                         isDisabled={privateRevocationToken?false:true}
                         mt='0.5em'
+                        variant="filled"
                     />
                     <Textarea
                         value={credentialData}
                         onChange={(e) => setCredentialData(e.target.value)}
                         mt='0.5em' h='20em'
+                        variant="filled"
                     />
                 </Box>
                 <Box id='IssuedCredential' float='right' w='100%' ml='1em'>
@@ -185,11 +192,12 @@ export function Issuer() {
                     </Heading>
                     <Textarea defaultValue={templateGet}
                         mt='0.5em' h='30em'
+                        variant="filled"
                     />
                     <Heading as='h3' mb='0.5em' mt='1em'>
                         Issued credential:
                     </Heading>
-                    <Textarea defaultValue={issuedCredential} h='47%'/>
+                    <Textarea defaultValue={issuedCredential} variant="filled" h='47%'/>
                 </Box>
             </Box>
             <Box display='flex'>
