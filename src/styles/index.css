@@ -72,10 +72,23 @@ div.verification-record-box p {
   margin: 0.4em 0;
 }
 
+div.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+div.verification-record-box time {
+  background-color: slategray;
+  padding: 0.4em;
+  border-radius: 16px;
+  margin: 0 1em;
+}
+
 div span.uuid {
   font-size: 1em;
   font-weight: bold;
-  background-color: gray;
+  background-color: slategray;
   padding: 0.5em;
   border-radius: 16px;
 }

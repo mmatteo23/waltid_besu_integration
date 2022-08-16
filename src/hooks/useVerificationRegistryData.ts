@@ -3,11 +3,17 @@ import { domAnimation } from "framer-motion";
 import { useNetwork } from "wagmi";
 import VR from '../abis/VerificationRegistry.json';
 
+declare type WagmiContract = {
+    addressOrName: string,
+    contractInterface: ContractInterface
+}
+
 const useVerificationRegistryData = (): [
     string,
     ContractInterface,
     {},
-    {}
+    {},
+    WagmiContract,
 ] => {
 
     const { chain } = useNetwork();
@@ -30,7 +36,12 @@ const useVerificationRegistryData = (): [
         ]
     }
 
-    return [verificationRegistryAddress, abi, domain, types];
+    const contract = {
+        addressOrName: verificationRegistryAddress,
+        contractInterface: abi,
+    }
+
+    return [verificationRegistryAddress, abi, domain, types, contract];
 
 }
 

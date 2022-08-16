@@ -1,37 +1,46 @@
-import { ethers } from "ethers";
 import { useState } from "react";
-import { useContractRead, useContractReads } from "wagmi";
+import { useContractRead } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
-import { VerificationInfoView, VerifierInfoView } from "../views";
+import {SearchVerificationRecordsView} from "../views";
 
-const GetVerificationRecordsController = () => {
+
+const SearchVerificationRecordsController = () => {
+
+    /**
+     * State
+     */
 
     const [verifierAddress, setVerifierAddress] = useState("");
     const [uuid, setUuid] = useState("");
     const [subjectAddress, setSubjectAddress] = useState("");
 
-    const [vr_address, vr_abi] = useVerificationRegistryData();
+    /**
+     * Contract Data
+     */
 
+
+    const [vr_address, vr_abi] = useVerificationRegistryData();
     const contract = {
         addressOrName: vr_address,
         contractInterface: vr_abi,
     }
 
+    /**
+     * Contract Reads
+     */
+
+    // Take care! This read function returns a Result and not a Result[]
     const { data: verificationRecords1 } = useContractRead({
         ...contract,
         functionName: 'getVerification',
         args: [uuid]
     });
 
-
-
     const { data: verificationRecords2 } = useContractRead({
         ...contract,
         functionName: 'getVerificationsForSubject',
         args: [subjectAddress]
     });
-
-
 
     const { data: verificationRecords3 } = useContractRead({
         ...contract,
@@ -40,20 +49,24 @@ const GetVerificationRecordsController = () => {
     });
 
     let verificationRecords;
-    if(uuid) {
+    if (uuid) {
+        // this is a Result so we have to wrap it in an array.
         verificationRecords = [verificationRecords1];
     }
-    if(subjectAddress) {
+    if (subjectAddress) {
         verificationRecords = verificationRecords2;
     }
-    if(verifierAddress) {
+    if (verifierAddress) {
         verificationRecords = verificationRecords3;
     }
 
-    console.log(verificationRecords1, verificationRecords2, verificationRecords3);
-    console.log("UUID: ", uuid, verificationRecords1);
+    return <SearchVerificationRecordsView 
+        verificationRecords={verificationRecords} 
+        setUuid={setUuid} 
+        setSubjectAddress={setSubjectAddress} 
+        setVerifierAddress={setVerifierAddress} 
+    />;
+}
 
-    return <VerificationInfoView verificationRecords={verificationRecords} setUuid={setUuid} setSubjectAddress={setSubjectAddress} setVerifierAddress={setVerifierAddress} />
-};
 
-export default GetVerificationRecordsController;
+export default SearchVerificationRecordsController;

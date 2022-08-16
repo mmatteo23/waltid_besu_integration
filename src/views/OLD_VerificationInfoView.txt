@@ -1,0 +1,128 @@
+import { CloseIcon, DeleteIcon } from "@chakra-ui/icons";
+import {
+    FormControl, FormLabel, Input,
+    Badge,
+    Button,
+    ButtonGroup,
+} from "@chakra-ui/react";
+import { Result } from "ethers/lib/utils";
+import Moment from 'react-moment';
+Moment.globalFormat = 'YYYY-MM-DD HH:mm:ss';
+
+const VerificationInfoView = ({ 
+    verificationRecords, 
+    setUuid, 
+    setSubjectAddress, 
+    setVerifierAddress, 
+    setRecordUuid, 
+    handleClickRevoke, 
+    isLoadingRevoke, 
+    isSuccessRevoke,
+    isPrepareRevokeError,
+    isRevokeError,
+    prepareRevokeError, 
+    revokeError,
+    handleClickRemove, 
+    isLoadingRemove, 
+    isSuccessRemove,
+    isPrepareRemoveError,
+    isRemoveError,
+    prepareRemoveError, 
+    removeError
+}: {
+    verificationRecords: Result | undefined,
+    setUuid: (arg0: string) => void,
+    setSubjectAddress: (arg0: string) => void,
+    setVerifierAddress: (arg0: string) => void,
+    setRecordUuid: (arg0: string) => void,
+    handleClickRevoke: () => void,
+    isLoadingRevoke: boolean,
+    isSuccessRevoke: boolean,
+    isPrepareRevokeError: boolean,
+    isRevokeError: boolean,
+    prepareRevokeError: Error | null,
+    revokeError: Error | null,
+    handleClickRemove: () => void,
+    isLoadingRemove: boolean,
+    isSuccessRemove: boolean,
+    isPrepareRemoveError: boolean,
+    isRemoveError: boolean,
+    prepareRemoveError: Error | null,
+    removeError: Error | null
+}) => {
+    return <>
+        <FormControl mt="2em" mb="2em">
+            <FormLabel htmlFor="uuid">UUID:</FormLabel>
+            <Input name="uuid" variant='filled' placeholder='000-0000-0000' onChange={event =>
+                setUuid(event.currentTarget.value)
+            } />
+        </FormControl>
+        <FormControl mt="2em" mb="2em">
+            <FormLabel htmlFor="subject">Subject address:</FormLabel>
+            <Input name="subject" variant='filled' placeholder='0x123...' onChange={event =>
+                setSubjectAddress(event.currentTarget.value)
+            } />
+        </FormControl>
+        <FormControl mt="2em" mb="2em">
+            <FormLabel htmlFor="verifier">Verifier address:</FormLabel>
+            <Input name="verifier" variant='filled' placeholder='0x123...' onChange={event =>
+                setVerifierAddress(event.currentTarget.value)
+            } />
+        </FormControl>
+
+        {(verificationRecords?.length && verificationRecords?.[0]) ? 
+            <>
+                <h1>Verification Records list</h1>
+                <ul>
+                    {verificationRecords.map((record, index) => <li key={index} className="verification-record-item">
+                        <div className="verification-record-box">
+                            <div className="card-header">
+                                <span className="uuid">{record.uuid}</span>
+                                <Badge variant="solid" colorScheme={record.revoked ? 'red' : 'green'} fontSize='1em'>{record.revoked ? "REVOKED" : "VALID"}</Badge>
+                            </div>
+                            <div className="verification-record-data">
+                                <p>
+                                    <span className="fieldname">Verifier:</span> {record.verifier}
+                                </p>
+                                <p>
+                                    <span className="fieldname">Subject:</span>  {record.subject}
+                                </p>
+                            </div>
+                            <div>
+                                <p>
+                                    <span className="fieldname">Entry time: </span> <Moment unix>{record.entryTime}</Moment>
+                                    <span className="fieldname">Expiration time: </span> <Moment unix>{(record.expirationTime)}</Moment>
+                                </p>
+                            </div>
+
+                            
+                            <ButtonGroup variant='outline' spacing='6' mt='1em'>
+                                {!record.revoked ? 
+                                    <Button isLoading={isLoadingRevoke} loadingText="Revoking" leftIcon={<CloseIcon />} colorScheme='yellow' variant='solid' disabled={isLoadingRevoke || isLoadingRemove} onClick={() => {
+                                        setRecordUuid(record.uuid);
+                                        handleClickRevoke()
+                                    }}>
+                                        Revoke
+                                    </Button>
+                                : null}
+                                
+                                
+                                <Button isLoading={isLoadingRemove} loadingText="Removing" leftIcon={<DeleteIcon />} colorScheme='red' variant='solid' disabled={isLoadingRevoke || isLoadingRemove} onClick={() => {
+                                    setRecordUuid(record.uuid);
+                                    handleClickRemove()
+                                }}>
+                                    Remove
+                                </Button>
+                            </ButtonGroup>
+                            {(isRevokeError || isRemoveError) && (
+                                <div>Error: {(revokeError || removeError)?.message}</div>
+                            )}
+                        </div>
+                    </li>)}
+                </ul>
+            </>
+            : null}
+    </>
+};
+
+export default VerificationInfoView;

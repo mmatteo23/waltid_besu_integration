@@ -1,10 +1,7 @@
 import AddVerifierModal from './modals/AddVerifierModal'
 
 import { VerificationRecordCountController, VerifierCountController } from '../controllers';
-import AddVerificationModal from '../controllers/AddVerificationModal';
-import GetVerifierFromAddressController from '../controllers/GetVerifierFromAddress';
-import GetVerificationRecordsController from '../controllers/GetVerificationRecords';
-
+import { AddVerificationModalController, GetVerifierFromAddressController, SearchVerificationRecordsController } from '../controllers';
 
 export function Verifier(){
     
@@ -17,10 +14,11 @@ export function Verifier(){
         <GetVerifierFromAddressController />
         {/*
         <MyDidTable columns={["Address", "DID", "Url", "Signer", "Action"]} data={verifiers} caption="Table of verifiers" />
+            <VerificationRecordsController />
         */}
         <div>
-            <AddVerificationModal />
-            <GetVerificationRecordsController />
+            <AddVerificationModalController />
+            <SearchVerificationRecordsController />
         </div>
     </>;
 
