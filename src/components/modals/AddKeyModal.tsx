@@ -20,10 +20,11 @@ export function AddKeyModal(props: {updateKeys: Promise<void>}) {
 
     const custodian = Custodian.Custodian;
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const [algorithm, setAlgorithm] = useState<utils.KeyAlgorithm>("RSA");
-
     const algorithms: utils.KeyAlgorithm[] = ["RSA", "EdDSA_Ed25519", "ECDSA_Secp256k1"]
+    const defaultAlgorithm: utils.KeyAlgorithm = algorithms[0];
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [algorithm, setAlgorithm] = useState<utils.KeyAlgorithm>(defaultAlgorithm);
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -37,7 +38,7 @@ export function AddKeyModal(props: {updateKeys: Promise<void>}) {
     };
 
     useEffect(() => {
-        setAlgorithm("RSA");
+        setAlgorithm(defaultAlgorithm);
     } , [isOpen]);
 
     return (

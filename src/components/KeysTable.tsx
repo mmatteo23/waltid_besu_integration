@@ -20,7 +20,7 @@ export function KeysTable(props: { data: utils.IKey[], updateKeys: Promise<void>
                 <Tr>
                     <Th>Id</Th>
                     <Th>Algorithm</Th>
-                    <Th>Action</Th>
+                    <Th>Actions</Th>
                 </Tr>
             </Thead>
             <Tbody>

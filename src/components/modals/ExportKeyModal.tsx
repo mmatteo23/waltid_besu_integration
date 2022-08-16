@@ -77,7 +77,7 @@ export function ExportKeyModal(props: {keyToExport: utils.IKey}) {
                                     >
                                         <Stack direction='row'>
                                             {keyFormats.map(keyFormat => (
-                                                <Radio value={keyFormat}>{keyFormat}</Radio>
+                                                <Radio key={keyFormat} value={keyFormat}>{keyFormat}</Radio>
                                             ))}
                                         </Stack>
                                     </RadioGroup>
