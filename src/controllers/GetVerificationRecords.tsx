@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { useState } from "react";
 import { useContractRead, useContractReads } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
@@ -40,7 +41,7 @@ const GetVerificationRecordsController = () => {
 
     let verificationRecords;
     if(uuid) {
-        verificationRecords = verificationRecords1;
+        verificationRecords = [verificationRecords1];
     }
     if(subjectAddress) {
         verificationRecords = verificationRecords2;
@@ -50,6 +51,7 @@ const GetVerificationRecordsController = () => {
     }
 
     console.log(verificationRecords1, verificationRecords2, verificationRecords3);
+    console.log("UUID: ", uuid, verificationRecords1);
 
     return <VerificationInfoView verificationRecords={verificationRecords} setUuid={setUuid} setSubjectAddress={setSubjectAddress} setVerifierAddress={setVerifierAddress} />
 };

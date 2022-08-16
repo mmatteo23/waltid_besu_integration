@@ -52,3 +52,40 @@ div.widget .widget-icon {
   margin-left: 75%;
   margin-top: 0.3em;
 }
+
+/*
+ *  Verification Record
+ */
+
+li.verification-record-item {
+  list-style: none;
+  margin-top: 0.8em;
+}
+
+div.verification-record-box {
+  background-color: #2c374c;
+  padding: 1em;
+  border-radius: 16px;
+}
+
+div.verification-record-box p {
+  margin: 0.4em 0;
+}
+
+div span.uuid {
+  font-size: 1em;
+  font-weight: bold;
+  background-color: gray;
+  padding: 0.5em;
+  border-radius: 16px;
+}
+
+div.verification-record-data {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1em;
+}
+
+div span.fieldname {
+  font-weight: bold;
+}

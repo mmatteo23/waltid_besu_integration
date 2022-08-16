@@ -9,11 +9,14 @@ import {
     TableCaption,
     TableContainer,
     IconButton,
+    Badge,
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { Result } from "ethers/lib/utils";
 import { BiExport } from "react-icons/bi";
 import { FaTimes } from "react-icons/fa";
+import Moment from 'react-moment';
+Moment.globalFormat = 'YYYY-MM-DD HH:mm:ss';
 
 const VerificationInfoView = ({ verificationRecords, setUuid, setSubjectAddress, setVerifierAddress }: {
     verificationRecords: Result | undefined,
@@ -41,55 +44,52 @@ const VerificationInfoView = ({ verificationRecords, setUuid, setSubjectAddress,
             } />
         </FormControl>
 
-        {verificationRecords?.length ?
-            <TableContainer>
-                <Table variant='simple' colorScheme='teal' size="sm">
-                    <TableCaption>Caption</TableCaption>
-                    <Thead>
-                        <Tr>
-                            <Th>UUID</Th>
-                            <Th>Verifier</Th>
-                            <Th>Subject</Th>
-                            <Th>Entry Time</Th>
-                            <Th>Expiration Time</Th>
-                            <Th>State</Th>
-                            <Th>Action</Th>
-                        </Tr>
-                    </Thead>
-                    <tbody>
-                        <>
-                        {verificationRecords.forEach(record => {
-                            console.log(record.uuid);
-                            return <Tr key={record?.uuid}>
-                                    <Td>{record?.uuid}</Td>
-                                    <Td>{record?.verifier}</Td>
-                                    <Td>{record?.subject}</Td>
-                                    <Td>{record?.entryTime}</Td>
-                                    <Td>{record?.expirationTime}</Td>
-                                    <Td>{record?.revoked}</Td>
-                                    <Td>
+        {(verificationRecords?.length && verificationRecords?.[0]) ? 
+            <>
+                <h1>Verification Records list</h1>
+                <ul>
+                    {verificationRecords.map((record, index) => {
+                        return <li key={index} className="verification-record-item">
+                            <div className="verification-record-box">
+                                <div>
+                                    <span className="uuid">{record.uuid}</span>
+                                </div>
+                                <div className="verification-record-data">
+                                    <p>
+                                        <span className="fieldname">Verifier:</span> {record.verifier}
+                                    </p>
+                                    <p>
+                                        <span className="fieldname">Subject:</span>  {record.subject}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p>
+                                        <span className="fieldname">Entry time: </span> <Moment unix>{record.entryTime}</Moment>
+                                        <span className="fieldname">Expiration time: </span> <Moment unix>{(record.expirationTime / 1000)}</Moment>
+                                    </p>
+                                    <Badge colorScheme={record.revoked ? 'red' : 'green'}>{record.revoked ? "REVOKED" : "VALID"}</Badge>
+                                </div>
+                                <div>
                                         <IconButton
                                             colorScheme='red'
                                             aria-label='Delete key'
                                             size='sm'
                                             icon={<FaTimes />}
                                             mr='0.5em'
-                                            />
+                                        />
                                         <IconButton
                                             colorScheme='blue'
                                             aria-label='Export key'
                                             size='sm'
                                             icon={<BiExport />}
-                                            />
-                                    </Td>
-                                </Tr>
-                        })};
-                    </>
-                    </tbody>
-                </Table>
-            </TableContainer>
-            : null
-        }
+                                        />
+                                </div>
+                            </div>
+                        </li>
+                    })}
+                </ul>
+            </>
+            : null}
     </>
 };
 
