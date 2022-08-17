@@ -8,6 +8,8 @@ import { TabBox } from './TabBox'
 import { Holder } from './Holder'
 import { Issuer } from './Issuer'
 import { Verifier } from './Verifier'
+import { TrustedContracts } from './TrustedContracts'
+
 class TabsMenu extends Component {
     render() {
         return <Tabs isFitted size='lg'>
@@ -31,6 +33,11 @@ class TabsMenu extends Component {
                 <TabPanel>
                     <TabBox>
                         <Verifier/>
+                    </TabBox>
+                </TabPanel>
+                <TabPanel>
+                    <TabBox>
+                        <TrustedContracts/>
                     </TabBox>
                 </TabPanel>
             </TabPanels>

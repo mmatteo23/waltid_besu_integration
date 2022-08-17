@@ -24,9 +24,7 @@ export function AddNewVerifierModal(props: {
     onClose: () => void
 }) {
 
-    const [contract, { addVerifier }] = useVerificationRegistry();
     const [ vr_address, vr_abi] = useVerificationRegistryData();
-    const { address, isConnecting, isDisconnected } = useAccount();
 
     const [inputName, setName] = useState('');
     const [did, setDid] = useState('');
@@ -37,7 +35,7 @@ export function AddNewVerifierModal(props: {
         name: ethers.utils.formatBytes32String(inputName),
         did: did,
         url: url,
-        signer: address
+        signer: inputAddress
     }
     //console.log(verifierInfo)
     const { config } = usePrepareContractWrite({
@@ -49,19 +47,12 @@ export function AddNewVerifierModal(props: {
 
     const { data, isLoading, isSuccess, write } = useContractWrite(config)
 
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-
-        console.log(JSON.stringify(data));
-    };
-
     return <Modal blockScrollOnMount={false} isOpen={props.isOpen} onClose={props.onClose}>
         <ModalOverlay />
         <ModalContent>
             <ModalHeader>Please provide the following fields:</ModalHeader>
             <ModalCloseButton />
 
-            <form method='post' onSubmit={handleSubmit}>
                 <ModalBody>
                     <FormControl isRequired>
                         <FormLabel>Name</FormLabel>
@@ -90,18 +81,18 @@ export function AddNewVerifierModal(props: {
                         } placeholder='0x123...'
                         />
                     </FormControl>
+
+                    {isLoading && <p>Please check your wallet to complete the procedure...</p>}
+                    {isSuccess && <p>Transaction hash: {JSON.stringify(data)}</p>}
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button size='sm' colorScheme='red' mr={3} onClick={props.onClose}>
+                    <Button size='sm' colorScheme='red' mr={3} disabled={isLoading} onClick={props.onClose}>
                         Close
                     </Button>
-                    <Button type='submit' size='sm' colorScheme='green' disabled={!write} onClick={() => write?.()}>Confirm</Button>
+                    <Button isLoading={isLoading} loadingText="Confirming" size='sm' colorScheme='green' disabled={!write} onClick={() => write?.()}>Confirm</Button>
                 </ModalFooter>
-            </form>
 
-        {isLoading && <div>Check Wallet!</div>}
-        {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
         </ModalContent>
     </Modal>
 }

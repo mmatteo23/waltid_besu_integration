@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useContractRead } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
-import { VerifierInfoView } from "../views";
+import { SearchVerifierView } from "../views";
 
 
-const GetVerifierFromAddressController = () => {
+const SearchVerifierFromAddressController = () => {
 
     const [verifierAddress, setVerifierAddress] = useState("");
 
@@ -17,7 +17,7 @@ const GetVerifierFromAddressController = () => {
         args: [verifierAddress]
     })
 
-    return <VerifierInfoView verifierInfo={verifierInfo} setVerifierAddress={setVerifierAddress} />
+    return <SearchVerifierView verifier={verifierInfo} setVerifierAddress={setVerifierAddress} />
 };
 
-export default GetVerifierFromAddressController;
+export default SearchVerifierFromAddressController;
