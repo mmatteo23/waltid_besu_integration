@@ -6,11 +6,9 @@ import VerificationRecordItemView from "../views/VerificationRecordItemView";
 
 
 const VerificationRecordItemController = ({
-    record,
-    index
+    record
 } : {
-    record: Result,
-    index: number
+    record: Result
 }) => {
 
     /**
@@ -65,8 +63,7 @@ const VerificationRecordItemController = ({
     }
 
     return <VerificationRecordItemView 
-        record={record} 
-        index={index}
+        record={record}
         handleClickRevoke={handleClickRevoke}
         isLoadingRevoke={isLoadingRevoke}
         isSuccessRevoke={isSuccessRevoke}

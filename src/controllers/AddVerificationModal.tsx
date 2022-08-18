@@ -14,6 +14,7 @@ import {
     ModalCloseButton,
 } from '@chakra-ui/react'
 import { FaPlus } from "react-icons/fa";
+import { ethers } from "ethers";
 
 const AddVerificationModal = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,6 +47,7 @@ const AddVerificationModal = () => {
         addressOrName: vr_address,
         contractInterface: vr_abi,
         functionName: 'registerVerification',
+        enabled: (ethers.utils.isAddress(subject)),
         args: [verificationResult, signature]
     })
 

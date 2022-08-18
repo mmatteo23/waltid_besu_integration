@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { useState } from "react";
 import { useContractRead } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
@@ -14,7 +15,11 @@ const SearchVerifierFromAddressController = () => {
         addressOrName: vr_address,
         contractInterface: vr_abi,
         functionName: 'getVerifier',
-        args: [verifierAddress]
+        args: [verifierAddress],
+        enabled: (ethers.utils.isAddress(verifierAddress)),
+        onError(error) {
+            console.log(error);
+        }
     })
 
     return <SearchVerifierView verifier={verifierInfo} setVerifierAddress={setVerifierAddress} />

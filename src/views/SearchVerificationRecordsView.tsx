@@ -47,9 +47,7 @@ const SearchVerificationRecordsView = ({
                 <Heading as='h2' size='xl'>Verification Records list</Heading>
                 <ul>
                     {verificationRecords.map((record, index) => 
-                        
-                        <VerificationRecordItemController record={record} index={index} />
-                    
+                        <VerificationRecordItemController record={record} key={index} />
                     )}
                 </ul>
             </>

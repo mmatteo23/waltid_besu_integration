@@ -6,7 +6,6 @@ Moment.globalFormat = 'YYYY-MM-DD HH:mm:ss';
 
 const VerificationRecordItemView = ({
     record,
-    index,
     handleClickRevoke, 
     isLoadingRevoke, 
     isSuccessRevoke,
@@ -23,7 +22,6 @@ const VerificationRecordItemView = ({
     removeError
 }: {
     record: Result,
-    index: number,
     handleClickRevoke: () => void,
     isLoadingRevoke: boolean,
     isSuccessRevoke: boolean,
@@ -39,7 +37,7 @@ const VerificationRecordItemView = ({
     prepareRemoveError: Error | null,
     removeError: Error | null
 }) => {
-    return <li key={index} className="card-item">
+    return <li className="card-item">
         <div className="verification-record-box">
             <div className="card-header">
                 <span className="uuid">{record.uuid}</span>

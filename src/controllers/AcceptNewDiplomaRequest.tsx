@@ -25,8 +25,6 @@ const AcceptNewDiplomaRequestController = () => {
 
     const { data, isLoading: isLoadingWrite, error: writeError, isError: isWriteError, write } = useContractWrite(config);
 
-    console.log(data);
-
     // using the useWaitForTransaction we can show feedback on the status of the transaction
     const { isLoading: isLoadingTx, isSuccess: isSuccessTx } = useWaitForTransaction({
         hash: data?.hash,

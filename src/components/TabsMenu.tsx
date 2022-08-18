@@ -37,6 +37,7 @@ class TabsMenu extends Component {
                         <Verifier/>
                     </TabBox>
                 </TabPanel>
+                {/*
                 <TabPanel>
                     <TabBox>
                         <TrustedContracts/>
@@ -47,6 +48,7 @@ class TabsMenu extends Component {
                         <DiplomaUseCase/>
                     </TabBox>
                 </TabPanel>
+                */}
             </TabPanels>
         </Tabs>
     }

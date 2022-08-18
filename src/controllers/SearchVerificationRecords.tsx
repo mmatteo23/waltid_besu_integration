@@ -1,8 +1,14 @@
+import { ethers } from "ethers";
+import { Result } from "ethers/lib/utils";
 import { useState } from "react";
 import { useContractRead } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
 import {SearchVerificationRecordsView} from "../views";
 
+
+const filterDeletedData = (data: Result) => {
+    return data.filter((item) => item.uuid != "0x0000000000000000000000000000000000000000000000000000000000000000");
+}
 
 const SearchVerificationRecordsController = () => {
 
@@ -33,23 +39,36 @@ const SearchVerificationRecordsController = () => {
     const { data: verificationRecords1 } = useContractRead({
         ...contract,
         functionName: 'getVerification',
-        args: [uuid]
+        enabled: (uuid?.length == 66),
+        args: [uuid],
+        select: (data) => {
+            return filterDeletedData(data);
+        },
     });
 
     const { data: verificationRecords2 } = useContractRead({
         ...contract,
         functionName: 'getVerificationsForSubject',
-        args: [subjectAddress]
+        enabled: (ethers.utils.isAddress(subjectAddress)),
+        args: [subjectAddress],
+        select: (data) => {
+            return filterDeletedData(data);
+        },
     });
 
     const { data: verificationRecords3 } = useContractRead({
         ...contract,
         functionName: 'getVerificationsForVerifier',
+        enabled: (ethers.utils.isAddress(verifierAddress)),
+        select: (data) => {
+            return filterDeletedData(data);
+        },
         args: [verifierAddress],
     });
 
     let verificationRecords;
     if (uuid) {
+        console.log(verificationRecords1)
         // this is a Result so we have to wrap it in an array.
         verificationRecords = [verificationRecords1];
     }

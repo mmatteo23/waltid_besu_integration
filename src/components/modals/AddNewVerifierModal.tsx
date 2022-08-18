@@ -42,6 +42,7 @@ export function AddNewVerifierModal(props: {
         addressOrName: vr_address,
         contractInterface: vr_abi,
         functionName: 'addVerifier',
+        enabled: (ethers.utils.isAddress(inputAddress)),
         args: [inputAddress, verifierInfo]
     })
 
