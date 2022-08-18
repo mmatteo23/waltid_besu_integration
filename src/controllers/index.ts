@@ -10,3 +10,5 @@ export { default as AddTrustedContract } from "./AddTrustedContract";
 export { default as AddTrustedContractModalController } from "./AddTrustedContractModal";
 export { default as SearchTrustedContractFromAddressController } from "./SearchTrustedContractFromAddress";
 export { default as TrustedContractItemController } from "./TrustedContractItem";
+export { default as AcceptNewDiplomaRequestController } from "./AcceptNewDiplomaRequest";
+export { default as ConsumeTokenController } from "./ConsumeToken";

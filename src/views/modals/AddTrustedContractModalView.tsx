@@ -65,8 +65,9 @@ const AddTrustedContractModalView = ({
                 </FormControl>
                 <FormControl mt='1em'>
                     <FormLabel htmlFor="contractTrust">Check the box if the contract is trusted</FormLabel>
-                    <Checkbox id="contractTrust" onChange={(e) =>
-                        setContractTrust(e.target.value === 'true')}
+                    <Checkbox defaultChecked={false} id="contractTrust" onChange={(e) => {
+                        setContractTrust(e.target.checked)
+                    }}
                     >
                         Trusted
                     </Checkbox>   
@@ -82,7 +83,7 @@ const AddTrustedContractModalView = ({
                 <Button size='sm' variant='solid' colorScheme='red' mr={3} disabled={isLoadingWrite || isLoadingTx} onClick={onClose}>
                     Close
                 </Button>
-                <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingTx} colorScheme='green' onClick={() => handleClick()}>Register</Button>
+                <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingTx || isLoadingWrite} colorScheme='green' onClick={() => handleClick()}>Register</Button>
             </ModalFooter>
         </ModalContent>
     </Modal>

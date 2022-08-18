@@ -30,6 +30,8 @@ export function AddTrustedContractModalController({
         args: [contractAddress, contractName, contractTrust],
     });
 
+    
+
     const { data, isLoading: isLoadingWrite, error: writeError, isError: isWriteError, write } = useContractWrite(config);
 
     // using the useWaitForTransaction we can show feedback on the status of the transaction
@@ -40,7 +42,6 @@ export function AddTrustedContractModalController({
     function handleClick() {
         write?.();
     }
-
 
     return <AddTrustedContractModalView 
         isOpen={isOpen}

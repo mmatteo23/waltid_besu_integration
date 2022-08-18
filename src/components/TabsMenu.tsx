@@ -9,6 +9,7 @@ import { Holder } from './Holder'
 import { Issuer } from './Issuer'
 import { Verifier } from './Verifier'
 import { TrustedContracts } from './TrustedContracts'
+import DiplomaUseCase from './DiplomaUseCase'
 
 class TabsMenu extends Component {
     render() {
@@ -18,6 +19,7 @@ class TabsMenu extends Component {
                 <Tab>Issuer/Revoker</Tab>
                 <Tab>Verifier</Tab>
                 <Tab>Trusted Contracts</Tab>
+                <Tab>Diploma Use Case</Tab>
             </TabList>
             <TabPanels>
                 <TabPanel>
@@ -38,6 +40,11 @@ class TabsMenu extends Component {
                 <TabPanel>
                     <TabBox>
                         <TrustedContracts/>
+                    </TabBox>
+                </TabPanel>
+                <TabPanel>
+                    <TabBox>
+                        <DiplomaUseCase/>
                     </TabBox>
                 </TabPanel>
             </TabPanels>

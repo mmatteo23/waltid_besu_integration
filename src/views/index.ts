@@ -7,3 +7,5 @@ export { default as UpdateVerifierModalView } from "./modals/UpdateVerifierModal
 export { default as AddTrustedContractModalView } from "./modals/AddTrustedContractModalView";
 export { default as SearchTrustedContractView } from "./SearchTrustedContractView";
 export { default as TrustedContractItemView } from "./TrustedContractItemView";
+export { default as AcceptNewDiplomaRequestView } from "./AcceptNewDiplomaRequestView";
+export { default as ConsumeTokenView } from "./ConsumeTokenView";
