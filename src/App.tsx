@@ -1,5 +1,4 @@
-import { ChakraProvider, Tabs, theme } from '@chakra-ui/react';
-import React from 'react';
+import { ChakraProvider, theme } from '@chakra-ui/react';
 import { WagmiConfig } from 'wagmi';
 import { wagmiClient, chains } from './utils/WagmiClient';
 import './styles/App.css';

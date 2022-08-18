@@ -12,7 +12,7 @@ import {
     FormControl,
     FormLabel,
 } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa';
 import { Custodian, utils } from 'ssikit-sdk';
 

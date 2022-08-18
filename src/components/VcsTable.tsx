@@ -8,8 +8,8 @@ import {
     TableCaption,
     TableContainer,
 } from '@chakra-ui/react';
-import { DeleteVcModal } from './modals/DeleteVcModal';
-import { ViewVcModal } from './modals/ViewVcModal';
+import { DeleteVcModal } from './modals/VCs/DeleteVcModal';
+import { ViewVcModal } from './modals/VCs/ViewVcModal';
 
 export function VcsTable(props: { data: string[], updateVcs: Promise<void>, caption: string }) {
 
