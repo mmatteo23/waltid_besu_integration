@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { Custodian, utils } from 'ssikit-sdk';
 
-export function DeleteKeyModal(props: {keyToDelete: utils.IKey, updateKeys: Promise<void>}) {
+export function DeleteKeyModal(props: {keyToDelete: utils.Key, updateKeys: Promise<void>}) {
 
     const custodian = Custodian.Custodian;
 

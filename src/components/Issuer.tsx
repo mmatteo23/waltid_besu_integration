@@ -12,15 +12,18 @@ export function Issuer() {
     let [privateRevocationToken, setPrivateRevocationToken] = useState<string>("");
     let [publicRevocationToken, setPublicRevocationToken] = useState<string>("");
 
-    let emptyProofConfig: any = new utils.ProofConfig("", "", undefined, "", "", "", "", "", "", "", "", "", "");
-    emptyProofConfig =
-        Object
-            .keys(emptyProofConfig)
-            .slice(3)
-            .reduce((acc: any, field) => {
-                acc[field] = "";
-                return acc;
-            } , {});
+    let emptyProofConfig = { 
+        verifierDid: "",
+        issuerVerificationMethod: "",
+        domain: "",
+        nonce: "",
+        proofPurpose: "",
+        credentialId: "",
+        issueDate: "",
+        validDate: "",
+        expirationDate: "",
+        dataProviderIdentifier: ""
+    };
 
     let proofConfigDefault = JSON.stringify(emptyProofConfig, null, 2);
     let credentialDataDefault = JSON.stringify({
@@ -82,21 +85,16 @@ export function Issuer() {
     }
 
     const issueCredential = async () => {
-        let pcfields = JSON.parse(proofConfig);
-        let proofConfigField = new utils.ProofConfig(
-            issuerDID, subjectDID, proofType, 
-            pcfields.verifierDid, pcfields.issuerVerificationMethod,
-            pcfields.domain, pcfields.nonce,
-            pcfields.proofPurpose, pcfields.credentialId,
-            pcfields.issueDate, pcfields.validDate,
-            pcfields.expirationDate, pcfields.dataProviderIdentifier            
-        );
+        let pcObject = JSON.parse(proofConfig);
+        pcObject.issuerDid = issuerDID;
+        pcObject.subjectDid = subjectDID;
+        pcObject.proofType = proofType;
         let credentialDataField = JSON.parse(credentialData)
-        let request = new utils.IssueCredentialRequest(
-            templateForm,
-            proofConfigField,
-            credentialDataField,
-        );
+        let request = {
+            templateId: templateForm,
+            config: pcObject as utils.ProofConfig,
+            credentialData: credentialDataField,
+        } as utils.IssueCredentialRequest;
         let issuedCredential = await signatory.issueCredential(request);
         setIssuedCredential(JSON.stringify(issuedCredential, null, 4));
     }

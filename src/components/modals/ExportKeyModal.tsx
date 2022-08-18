@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react'
 import { BiExport } from 'react-icons/bi';
 import { Custodian, utils } from 'ssikit-sdk';
 
-export function ExportKeyModal(props: {keyToExport: utils.IKey}) {
+export function ExportKeyModal(props: {keyToExport: utils.Key}) {
 
     const custodian = Custodian.Custodian;
 

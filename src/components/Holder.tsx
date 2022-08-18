@@ -20,7 +20,7 @@ export function Holder() {
 
     const custodian = Custodian.Custodian;
 
-    const [keys, setKeys] = useState<utils.IKey[]>([]);
+    const [keys, setKeys] = useState<utils.Key[]>([]);
     const [dids, setDids] = useState<string[]>([]);
     const [vcs, setVcs] = useState<string[]>([]);
     

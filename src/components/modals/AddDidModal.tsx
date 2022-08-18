@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa';
 import { Custodian, utils } from 'ssikit-sdk';
 
-export function AddDidModal(props: {keys: utils.IKey[], dids: string[], updateDids: Promise<void>}) {
+export function AddDidModal(props: {keys: utils.Key[], dids: string[], updateDids: Promise<void>}) {
 
     const custodian = Custodian.Custodian;
 
