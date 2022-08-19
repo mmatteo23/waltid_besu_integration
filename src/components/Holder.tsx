@@ -15,8 +15,9 @@ import { DidsTable } from './DidsTable';
 import { VcsTable } from './VcsTable';
 import { Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { TabBox } from './TabBox';
+import Nav from './Nav';
 
-export function Holder() {
+export default function Holder() {
 
     const custodian = Custodian.Custodian;
 
@@ -47,6 +48,7 @@ export function Holder() {
 
     return (
         <>  
+            <Nav/>
             <Tabs size='lg' isFitted>
                 <TabList mb='1em'>
                     <Tab>Keys</Tab>

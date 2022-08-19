@@ -13,8 +13,10 @@ code {
 
 nav {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   padding: 2em;
+  width: 100%;
+  background-color: #232934;
 }
 
 div.connect-wallet-box {
@@ -23,6 +25,8 @@ div.connect-wallet-box {
 
 div.widget-box {
   display: flex;
+  width: 100%;
+  justify-content: flex-start;
 }
 
 div.widget-box :not(:last-child) {
@@ -107,4 +111,37 @@ div.verification-record-data {
 
 div span.fieldname {
   font-weight: bold;
+}
+
+#main-menu {
+  font-size: 1.3em
+}
+
+#main-menu > a {
+  margin-right: 1em;
+  padding-bottom: 0.3em;
+  transition: padding-bottom 0.1s;
+}
+
+#main-menu > a.active-link {
+  border-bottom: 2px solid #90cdf4;
+}
+
+#main-menu > a.active-link:hover {
+  padding-bottom: 0em;
+}
+
+#main-menu > a.inactive-link {
+  text-decoration: none;;
+}
+
+#main-container {
+  width: 75%;
+  margin-top: 3em;
+  text-align: left;
+  margin-bottom: 3em;
+}
+
+#template-and-issued {
+  margin-bottom: auto;
 }

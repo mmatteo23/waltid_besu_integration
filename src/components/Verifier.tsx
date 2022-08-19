@@ -7,19 +7,28 @@ import {
     AddVerificationModalController, 
     SearchVerificationRecordsController 
 } from '../controllers';
+import Nav from './Nav';
+import { Box, Flex, HStack, VStack } from '@chakra-ui/react';
 
 export function Verifier(){
     
-    return <>
-        <AddVerifierModal />
-        <div className="widget-box">
-            <VerifierCountController />
-            <VerificationRecordCountController />
-        </div>
-        <SearchVerifierFromAddressController />
-        <AddVerificationModalController />
-        <SearchVerificationRecordsController />
-    </>;
+    return (
+        <VStack>
+            <Nav/>
+            <VStack id='main-container'>
+                <HStack mr="auto">
+                    <AddVerifierModal />
+                    <AddVerificationModalController />
+                </HStack>
+                <Box className="widget-box">
+                    <VerifierCountController />
+                    <VerificationRecordCountController />
+                </Box>
+                <SearchVerifierFromAddressController />
+                <SearchVerificationRecordsController />
+            </VStack>
+        </VStack>
+    );
 
 }
 

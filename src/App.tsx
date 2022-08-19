@@ -6,15 +6,36 @@ import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import Nav from './components/Nav';
 import MyBreadcrumb from './components/MyBreadcrumb';
 import TabsMenu from './components/TabsMenu';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Holder from './components/Holder';
+import Issuer from './components/Issuer';
+import Verifier from './components/Verifier';
+import TrustedContracts from './components/TrustedContracts';
+import DiplomaUseCase from './components/DiplomaUseCase';
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider chains={chains}>
-          <Nav />
+          <BrowserRouter>
+            <Routes>
+                <Route path="*" element={<Navigate to="/holder" replace={true} />}/>
+                <Route path="holder" element={<Holder />} />
+                <Route path="issuer" element={<Issuer />} />
+                <Route path="verifier" element={<Verifier />} />
+                <Route path="contracts" element={<TrustedContracts />} />
+                <Route path="diploma" element={<DiplomaUseCase />} />
+            </Routes>
+          </BrowserRouter>
+          {/* <Nav /> */}
           {/* <MyBreadcrumb /> */}
-          <TabsMenu />
+          {/* <TabsMenu /> */}
         </RainbowKitProvider>
       </WagmiConfig>
     </ChakraProvider>

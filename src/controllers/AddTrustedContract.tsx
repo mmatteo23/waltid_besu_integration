@@ -7,7 +7,7 @@ const AddTrustedContract = () => {
 
     return (
         <>
-            <Button onClick={onOpen} leftIcon={<FaPlus />} colorScheme='green' variant='solid' alignSelf='right'>
+            <Button onClick={onOpen} leftIcon={<FaPlus />} colorScheme='green' variant='solid' mr="auto">
                 Register contract
             </Button>
 

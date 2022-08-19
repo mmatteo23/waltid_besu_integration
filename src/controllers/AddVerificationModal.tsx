@@ -55,7 +55,7 @@ const AddVerificationModal = () => {
 
     return (
         <>
-            <Button mt="1em" onClick={onOpen} leftIcon={<FaPlus />} colorScheme='blue' variant='solid' alignSelf='right'>
+            <Button onClick={onOpen} leftIcon={<FaPlus />} colorScheme='blue' variant='solid' mt="1em">
                 New Verification
             </Button>
 
