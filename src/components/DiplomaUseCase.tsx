@@ -1,6 +1,6 @@
 
 import { Box, Divider, Flex, VStack } from "@chakra-ui/react";
-import { AcceptNewDiplomaRequestController, ConsumeTokenController } from "../controllers";
+import { AcceptNewDiplomaRequestController, ConsumeTokenController, ShowPersonalNFTsController } from "../controllers";
 import Nav from "./Nav";
 
 export function DiplomaUseCase(){
@@ -10,7 +10,9 @@ export function DiplomaUseCase(){
             <Nav/>
             <Box id='main-container'>
                 <AcceptNewDiplomaRequestController />
-                <Divider m={8} />
+                <Divider m={6} />
+                <ShowPersonalNFTsController />
+                <Divider m={6} />
                 <ConsumeTokenController />
             </Box>
         </VStack>

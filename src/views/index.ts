@@ -9,3 +9,4 @@ export { default as SearchTrustedContractView } from "./SearchTrustedContractVie
 export { default as TrustedContractItemView } from "./TrustedContractItemView";
 export { default as AcceptNewDiplomaRequestView } from "./AcceptNewDiplomaRequestView";
 export { default as ConsumeTokenView } from "./ConsumeTokenView";
+export { default as ShowPersonalNFTsView } from "./ShowPersonalNFTsView";

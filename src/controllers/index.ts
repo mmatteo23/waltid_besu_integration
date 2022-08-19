@@ -12,3 +12,4 @@ export { default as SearchTrustedContractFromAddressController } from "./SearchT
 export { default as TrustedContractItemController } from "./TrustedContractItem";
 export { default as AcceptNewDiplomaRequestController } from "./AcceptNewDiplomaRequest";
 export { default as ConsumeTokenController } from "./ConsumeToken";
+export { default as ShowPersonalNFTsController } from "./ShowPersonalNFTs";
