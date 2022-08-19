@@ -1,6 +1,8 @@
 import { Button, Heading, useDisclosure } from "@chakra-ui/react";
-import { useState } from "react";
+import { BigNumber, ethers } from "ethers";
+import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
+import { isNumberObject } from "util/types";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import { AddTrustedContractModalController } from ".";
 import useDiplomaERC721Data from "../hooks/useDiplomaERC721Data";
@@ -20,7 +22,8 @@ const ConsumeTokenController = () => {
     const { config, error: prepareError, isError: isPrepareError } = usePrepareContractWrite({
         ...contract,
         functionName: 'consumeDiplomaAccessToken',
-        args: [tokenId],
+        enabled: (+tokenId)>=0,
+        args: [+tokenId],
     });
 
     const { data, isLoading: isLoadingWrite, error: writeError, isError: isWriteError, write } = useContractWrite(config);
@@ -39,7 +42,8 @@ const ConsumeTokenController = () => {
     const { config: configERC721, error: prepareERC721Error, isError: isPrepareERC721Error } = usePrepareContractWrite({
         ...contractERC721,
         functionName: 'approve',
-        args: [contract_address, tokenId],
+        enabled: (+tokenId)>=0,
+        args: [contract_address, +tokenId],
     });
 
     const { data: dataERC721, isLoading: isLoadingERC721Write, error: writeERC721Error, isError: isWriteERC721Error, write: writeERC721 } = useContractWrite(configERC721);

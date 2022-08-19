@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { useState } from "react";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import useTrustedSCRegistryData from "../hooks/useTrustedSCRegistryData";
@@ -27,6 +28,7 @@ export function AddTrustedContractModalController({
     const { config, error: prepareError, isError: isPrepareError } = usePrepareContractWrite({
         ...contract,
         functionName: 'register',
+        enabled: (ethers.utils.isAddress(contractAddress)),
         args: [contractAddress, contractName, contractTrust],
     });
 

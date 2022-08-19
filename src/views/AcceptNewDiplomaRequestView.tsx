@@ -29,9 +29,7 @@ const AcceptNewDiplomaRequestView = ({
 
         <ButtonGroup mt={4}>
 
-            <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingTx || isLoadingWrite} colorScheme='green' onClick={() => handleClick()}>Request NFT</Button>
-
-            
+            <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingTx || isLoadingWrite || isPrepareError} colorScheme='green' onClick={() => handleClick()}>Request NFT</Button>
 
         </ButtonGroup>
 
@@ -40,8 +38,7 @@ const AcceptNewDiplomaRequestView = ({
         {isLoadingTx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Please wait for the transaction to be mined...</Box>}
         {isSuccessTx && 
             <Box mt="1em" p={4} bg="green" borderRadius="lg">
-                Transaction mined with success.
-                <p><a href='https://goerli.etherscan.io/tx/0xfa97dc0e3737e6114725ea92827dc3dc550c2e984035941b490549ae0df187e8'/></p>
+                Transaction mined with success. See your tx at: <a href={'https://goerli.etherscan.io/tx/'+txHash}>{'https://goerli.etherscan.io/tx/'+txHash}</a>
             </Box>}
         {isError && <Box mt="1em" p={4} bg="tomato" borderRadius="lg">Error: {error?.message}</Box>}
         {isPrepareError && <Box mt="1em" p={4} bg="tomato" borderRadius="lg">Prepare error: {prepareError?.message}</Box>}  

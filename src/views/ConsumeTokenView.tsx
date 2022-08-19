@@ -67,9 +67,9 @@ const ConsumeTokenView = ({
 
         <ButtonGroup mt={4}>
 
-            <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingTx || isLoadingWrite} colorScheme='green' onClick={() => handleClick()}>Consume NFT</Button>
+            <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingTx || isLoadingWrite || isPrepareError} colorScheme='green' onClick={() => handleClick()}>Consume NFT</Button>
             
-            <Button isLoading={isLoadingERC721Write || isLoadingERC721Tx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingERC721Tx || isLoadingERC721Write} colorScheme='yellow' onClick={() => handleERC721Click()}>Approve</Button>
+            <Button isLoading={isLoadingERC721Write || isLoadingERC721Tx} loadingText="Approving" variant='solid' size='sm' disabled={isLoadingERC721Tx || isLoadingERC721Write || isPrepareERC721Error} colorScheme='yellow' onClick={() => handleERC721Click()}>Approve</Button>
             
         </ButtonGroup>
 

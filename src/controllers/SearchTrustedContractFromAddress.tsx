@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { useState } from "react";
 import { useContractRead } from "wagmi";
 import useTrustedSCRegistryData from "../hooks/useTrustedSCRegistryData";
@@ -13,6 +14,7 @@ const SearchTrustedContractFromAddressController = () => {
     const { data: contractInfo, isError, isLoading } = useContractRead({
         ...contract,
         functionName: 'getContract',
+        enabled: (ethers.utils.isAddress(contractAddress)),
         args: [contractAddress == "" ? undefined : contractAddress]
     })
 

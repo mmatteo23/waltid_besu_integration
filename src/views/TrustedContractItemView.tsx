@@ -31,16 +31,16 @@ const VerifierItemView = ({
 
     return <li key={index} className="card-item">
         <Stack spacing="20px">
-            <p>
+            <Box>
                 <Text fontSize='3xl'>{contractInfo.name}</Text>
                 <Badge variant="solid" colorScheme={contractInfo.trusted ? 'green' : 'red'} fontSize='1em'>{contractInfo.trusted ? "TRUSTED" : "UNTRUSTED"}</Badge>
-            </p>
-            <p>
+            </Box>
+            <Box>
                 <span className="fieldname">Address:</span> {contractInfo.addr}
-            </p>
-            <p>
+            </Box>
+            <Box>
                 <span className="fieldname">Registration date:</span> <Moment unix>{contractInfo.registrationDate}</Moment>
-            </p>
+            </Box>
 
             {isLoadingWrite && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Check your wallet to complete the procedure...</Box>}
             {isLoadingTx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Please wait for the transaction to be mined...</Box>}

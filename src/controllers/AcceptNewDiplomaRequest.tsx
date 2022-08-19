@@ -23,7 +23,19 @@ const AcceptNewDiplomaRequestController = () => {
         args: [tokenURI],
     });
 
+    console.log(
+        "CAUSE:", prepareError?.cause, 
+        "NAME: ", prepareError?.name, 
+        "STACK: ", prepareError?.stack,
+        "MESSAGE: ", prepareError?.message,
+    );
+
     const { data, isLoading: isLoadingWrite, error: writeError, isError: isWriteError, write } = useContractWrite(config);
+
+    console.log(
+        "WRITE ERROR:", writeError, 
+        "isWriteError: ", isWriteError,
+    );
 
     // using the useWaitForTransaction we can show feedback on the status of the transaction
     const { isLoading: isLoadingTx, isSuccess: isSuccessTx } = useWaitForTransaction({
