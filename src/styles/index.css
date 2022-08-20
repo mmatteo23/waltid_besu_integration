@@ -113,35 +113,78 @@ div span.fieldname {
   font-weight: bold;
 }
 
-#main-menu {
+form {
+  width: 100%;
+}
+
+#menu {
   font-size: 1.3em
 }
 
-#main-menu > a {
+#menu > a {
   margin-right: 1em;
   padding-bottom: 0.3em;
   transition: padding-bottom 0.1s;
 }
 
-#main-menu > a.active-link {
+#menu > a.active-link {
   border-bottom: 2px solid #90cdf4;
 }
 
-#main-menu > a.active-link:hover {
+#menu > a.active-link:hover {
   padding-bottom: 0em;
 }
 
-#main-menu > a.inactive-link {
-  text-decoration: none;;
+#menu > a.inactive-link {
+  text-decoration: none;
+  pointer-events: none;
 }
 
 #main-container {
   width: 75%;
+  margin: auto;
   margin-top: 3em;
-  text-align: left;
   margin-bottom: 3em;
+  text-align: left;
 }
 
 #template-and-issued {
   margin-bottom: auto;
+}
+
+#menu.holder-menu {
+  margin-top: 0;
+  flex-direction: column;
+}
+
+#holder-nav {
+  width: 11em;
+  padding: 1em;
+  margin-left: 3em;
+  margin-top: 3em;
+}
+
+#holder-nav > #menu > a {
+  margin-right: 0;
+  padding: 0.4em;
+  transition: background-color 0.2s;
+  transition: color 0.2s;
+}
+
+#holder-nav > #menu > a.inactive-link {
+  font-weight: bold;
+  color: #90cdf4;
+}
+
+#holder-nav > #menu > a.active-link {
+  border-bottom: none;
+}
+
+#holder-nav > #menu > a.active-link:hover {
+  background-color: #90cef42e;
+  color: #71a1bf;
+}
+
+#main-container.holder-content {
+  margin-left: 4em;
 }

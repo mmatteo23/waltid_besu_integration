@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { Custodian } from 'ssikit-sdk';
 
-export function DeleteVcModal(props: {vcToDelete: string, updateVcs: Promise<void>}) {
+export default function DeleteVcModal(props: {vcToDelete: string, updateVcs: Promise<void>}) {
 
     const custodian = Custodian.Custodian;
 

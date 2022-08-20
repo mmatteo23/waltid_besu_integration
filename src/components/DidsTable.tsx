@@ -15,8 +15,7 @@ import {
     PopoverArrow,
     PopoverCloseButton,
 } from '@chakra-ui/react';
-import { DeleteDidModal } from './modals/DIDs/DeleteDidModal';
-import { ViewDidModal } from './modals/DIDs/ViewDidModal';
+import { DeleteDidModal, ViewDidModal } from './modals/DIDs';
 
 export function DidsTable(props: { data: string[], updateDids: Promise<void>, caption: string }) {
 

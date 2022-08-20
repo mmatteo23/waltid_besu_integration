@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { BiImport } from 'react-icons/bi';
 import { Custodian } from 'ssikit-sdk';
 
-export function ImportDidModal(props: {updateDids: Promise<void>}) {
+export default function ImportDidModal(props: {updateDids: Promise<void>}) {
 
     const custodian = Custodian.Custodian;
 

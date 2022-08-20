@@ -13,7 +13,7 @@ import {
 import { Custodian } from 'ssikit-sdk';
 import { DeleteIcon } from '@chakra-ui/icons';
 
-export function DeleteAllDidsModal(props: {updateDids: Promise<void>}) {
+export default function DeleteAllDidsModal(props: {updateDids: Promise<void>}) {
 
     const custodian = Custodian.Custodian;
 

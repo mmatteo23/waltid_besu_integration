@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa';
 import { Custodian, utils } from 'ssikit-sdk';
 
-export function AddKeyModal(props: {updateKeys: Promise<void>}) {
+export default function AddKeyModal(props: {updateKeys: Promise<void>}) {
 
     const custodian = Custodian.Custodian;
 

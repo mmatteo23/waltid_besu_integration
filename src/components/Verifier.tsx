@@ -13,8 +13,6 @@ import { Box, Flex, HStack, VStack } from '@chakra-ui/react';
 export function Verifier(){
     
     return (
-        <VStack>
-            <Nav/>
             <VStack id='main-container'>
                 <HStack mr="auto">
                     <AddVerifierModal />
@@ -27,7 +25,6 @@ export function Verifier(){
                 <SearchVerifierFromAddressController />
                 <SearchVerificationRecordsController />
             </VStack>
-        </VStack>
     );
 
 }

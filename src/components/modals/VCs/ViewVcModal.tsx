@@ -15,7 +15,7 @@ import {
 import { useEffect, useState } from 'react'
 import { Custodian } from 'ssikit-sdk';
 
-export function ViewVcModal(props: {vcToView: string}) {
+export default function ViewVcModal(props: {vcToView: string}) {
 
     const custodian = Custodian.Custodian;
 

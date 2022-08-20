@@ -7,15 +7,13 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
-    Select,
     FormControl,
     FormLabel,
     Input,
 } from '@chakra-ui/react'
-import { Bytes, ethers } from 'ethers';
-import React, { useEffect, useState } from 'react'
-import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
-import useVerificationRegistry from '../../hooks/useVerificationRegistry';
+import { ethers } from 'ethers';
+import { useState } from 'react'
+import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import useVerificationRegistryData from '../../hooks/useVerificationRegistryData';
 
 export function AddNewVerifierModal(props: {

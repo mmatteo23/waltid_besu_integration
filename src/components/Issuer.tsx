@@ -1,9 +1,8 @@
 import { 
-    Select, Textarea, Heading, Input, Text, Button, Box, Container, VStack, Flex, HStack,
+    Select, Textarea, Heading, Input, Button, Box, VStack, HStack, FormControl, FormLabel,
 } from '@chakra-ui/react';
-import { useState, useEffect, ChangeEventHandler } from 'react';
+import { useState, useEffect } from 'react';
 import { Custodian, Signatory, utils } from "ssikit-sdk";
-import Nav from './Nav';
 
 export default function Issuer() {
 
@@ -37,6 +36,7 @@ export default function Issuer() {
     let [templates, setTemplates] = useState<string[]>([]);
     let [templateGet, setTemplateGet] = useState<string>("");
     let [templateForm, setTemplateForm] = useState<string>("");
+    let [userDIDs, setUserDIDs] = useState<string[]>([]);
     let [issuerDID, setIssuerDID] = useState<string>("");
     let [subjectDID, setSubjectDID] = useState<string>("");
     let [proofType, setProofType] = useState<utils.ProofType>("LD_PROOF");
@@ -49,11 +49,21 @@ export default function Issuer() {
         setTemplateGet(JSON.stringify(template, null, 4));
     }
 
-    const initTemplates = async () => {
+    const fetchData = async () => {
         let vcTemplates = await signatory.getVCTemplateIDs();
         setTemplates(vcTemplates);
         setTemplateForm(vcTemplates[0]);
         await mySetVCTemplate(vcTemplates[0]);
+        await initUserDIDs();
+    }
+
+    const truncateDid = (did: string) => {
+        return did.substring(0, 15) + '...' + did.substring(did.length - 10);
+    }
+
+    const initUserDIDs = async () => {
+        let userDIDs = await custodian.getDIDs();
+        setUserDIDs(userDIDs);
     }
 
     const handleInputChangeGetTemplate = async (e: any) => {
@@ -61,21 +71,6 @@ export default function Issuer() {
         let templateId = templates[index];
         setTemplateForm(templateId);
         await mySetVCTemplate(templateId);
-    }
-
-    const selectTemplate = (onChangeHandlder?: ChangeEventHandler<HTMLSelectElement>) => {
-        return (
-            <Select 
-                w='50%'
-                mt='0.5em'
-                onChange={onChangeHandlder}
-                variant="filled"
-            >
-                {templates.map((template, index) => (
-                    <option key={index} value={template}>{template}</option>
-                ))}
-            </Select>
-        );
     }
 
     const createRevocationTokens = () => {
@@ -100,17 +95,8 @@ export default function Issuer() {
         setIssuedCredential(JSON.stringify(issuedCredential, null, 4));
     }
 
-    const createDIDs = async () => {
-        let issuerKey = await custodian.generateKey("ECDSA_Secp256k1");
-        let issuerDID = await custodian.createDID("key", issuerKey);
-        let subjectKey = await custodian.generateKey("ECDSA_Secp256k1");
-        let subjectDID = await custodian.createDID("key", subjectKey);
-        setIssuerDID(issuerDID);
-        setSubjectDID(subjectDID);
-    }
-
     useEffect(() => {
-        initTemplates();
+        fetchData();
     } ,[])
 
     useEffect(() => {
@@ -119,99 +105,109 @@ export default function Issuer() {
 
     return (
         <VStack>
-            <Nav/>
+            {/* <Nav/> */}
             <VStack id='main-container'>
-                <HStack w="100%">
-                    <Box id='IssueCredentialForm' w='100%' mr='1em'>
-                        <Heading as='h3' mb='0.5em'>
-                            Issue a credential
-                        </Heading>
-                        <Text mt='1em'>* Select Template ID:</Text>
-                        {selectTemplate(handleInputChangeGetTemplate)}
-                        <Button onClick={() => createDIDs()}
+                <form method='post' onSubmit={issueCredential}>
+                    <HStack w="100%">
+                        <Box id='IssueCredentialForm' w='100%' mr='1em'>
+                            <FormControl isRequired>
+                                <Heading as='h3' mb='0.5em'>
+                                    Issue a credential
+                                </Heading>
+                                <FormLabel mt='1em'>Select Template ID:</FormLabel>
+                                <Select 
+                                    w='50%'
+                                    onChange={handleInputChangeGetTemplate}
+                                    variant="filled"
+                                >
+                                    {templates.map((template, index) => (
+                                        <option key={index} value={template}>{template}</option>
+                                    ))}
+                                </Select>
+                                <FormLabel mt='1em'>Your DID:</FormLabel>
+                                <Select
+                                    value={issuerDID}
+                                    onChange={(e) => setIssuerDID(e.target.value)}
+                                    width='50%'
+                                    variant="filled"
+                                >
+                                    {userDIDs.map((did, index) => (
+                                        <option key={index} value={did}>{truncateDid(did)}</option>
+                                    ))}
+                                </Select>
+                                <FormLabel mt='1em'>Subject DID:</FormLabel>
+                                <Input 
+                                    value={subjectDID}
+                                    onChange={(e) => setSubjectDID(e.target.value)}
+                                    placeholder='did:example:123456789' 
+                                    width='50%'
+                                    variant="filled"
+                                />
+                                <FormLabel mt='1em'>Select a Proof Type:</FormLabel>
+                                <Select
+                                    value={proofType}
+                                    onChange={(e) => setProofType(e.target.value as utils.ProofType)}
+                                    w='50%'
+                                    variant="filled"
+                                >
+                                    <option value='LD_PROOF'>LD_PROOF</option>
+                                    <option value='JWT'>JWT</option>
+                                </Select>
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel mt='1em'>Proof Config parameters:</FormLabel>
+                                <Textarea
+                                    value={proofConfig}
+                                    onChange={(e) => setProofConfig(e.target.value)}
+                                    h='21em'
+                                    variant="filled"
+                                />
+                                <FormLabel mt='1em'>Other credential data:</FormLabel>
+                                <Button onClick={() => createRevocationTokens()}>
+                                    Create revocation tokens
+                                </Button>
+                                <Input 
+                                    isReadOnly 
+                                    value={privateRevocationToken}
+                                    placeholder='Your private revocation token (save it)'
+                                    isDisabled={privateRevocationToken?false:true}
+                                    mt='0.5em'
+                                    variant="filled"
+                                />
+                                <Textarea
+                                    value={credentialData}
+                                    onChange={(e) => setCredentialData(e.target.value)}
+                                    mt='0.5em' h='20em'
+                                    variant="filled"
+                                />
+                            </FormControl>
+                        </Box>
+                        <Box id='template-and-issued' w='100%' ml='1em'>
+                            <Box>
+                                <Heading as='h3' mb='0.5em'>
+                                    Selected template
+                                </Heading>
+                                <Textarea defaultValue={templateGet}
+                                    mt='0.5em' h='30em'
+                                    variant="filled"
+                                />
+                            </Box>
+                            <Box>
+                                <Heading as='h3' mb='0.5em' mt='1em'>
+                                    Issued credential:
+                                </Heading>
+                                <Textarea defaultValue={issuedCredential} variant="filled" h='30em'/>
+                            </Box>
+                        </Box>
+                    </HStack>
+                    <Box w="100%">
+                        <Button type="submit"
                             colorScheme='blue' mt='1em' w='8em' size='lg'
                         >
-                            Create DIDs
+                            Issue
                         </Button>
-                        <Text mt='1em'>* Your DID:</Text>
-                        <Input 
-                            value={issuerDID}
-                            onChange={(e) => setIssuerDID(e.target.value)}
-                            placeholder='did:example:123456789' 
-                            mt='0.5em' width='50%'
-                            variant="filled"
-                        />
-                        <Text mt='1em'>* Subject DID:</Text>
-                        <Input 
-                            value={subjectDID}
-                            onChange={(e) => setSubjectDID(e.target.value)}
-                            placeholder='did:example:123456789' 
-                            mt='0.5em'width='50%'
-                            variant="filled"
-                        />
-                        <Text mt='1em'>* Select a Proof Type:</Text>
-                        <Select
-                            value={proofType}
-                            onChange={(e) => setProofType(e.target.value as utils.ProofType)}
-                            w='50%' mt='0.5em'
-                            variant="filled"
-                        >
-                            <option value='LD_PROOF'>LD_PROOF</option>
-                            <option value='JWT'>JWT</option>
-                        </Select>
-                        <Text mt='1em'>Proof Config parameters:</Text>
-                        <Textarea
-                            value={proofConfig}
-                            onChange={(e) => setProofConfig(e.target.value)}
-                            mt='0.5em' h='21em'
-                            variant="filled"
-                        />
-                        <Text mt='1em'>Other credential data:</Text>
-                        <Button onClick={() => createRevocationTokens()}
-                            mt='0.5em'
-                        >
-                            Create revocation tokens
-                        </Button>
-                        <Input 
-                            isReadOnly 
-                            value={privateRevocationToken}
-                            placeholder='Your private revocation token (save it)'
-                            isDisabled={privateRevocationToken?false:true}
-                            mt='0.5em'
-                            variant="filled"
-                        />
-                        <Textarea
-                            value={credentialData}
-                            onChange={(e) => setCredentialData(e.target.value)}
-                            mt='0.5em' h='20em'
-                            variant="filled"
-                        />
                     </Box>
-                    <Box id='template-and-issued' w='100%' ml='1em'>
-                        <Box>
-                            <Heading as='h3' mb='0.5em'>
-                                Selected template
-                            </Heading>
-                            <Textarea defaultValue={templateGet}
-                                mt='0.5em' h='35em'
-                                variant="filled"
-                            />
-                        </Box>
-                        <Box>
-                            <Heading as='h3' mb='0.5em' mt='1em'>
-                                Issued credential:
-                            </Heading>
-                            <Textarea defaultValue={issuedCredential} variant="filled" h='35em'/>
-                        </Box>
-                    </Box>
-                </HStack>
-                <Box w="100%">
-                    <Button onClick={() => issueCredential()}
-                        colorScheme='blue' mt='1em' w='8em' size='lg'
-                    >
-                        Issue
-                    </Button>
-                </Box>
+                </form>
             </VStack>
         </VStack>
     );

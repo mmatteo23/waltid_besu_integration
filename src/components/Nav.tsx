@@ -1,7 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Box, Flex, Heading } from "@chakra-ui/react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 export default function Nav() {
 
@@ -9,23 +9,27 @@ export default function Nav() {
     let currentPage = "inactive-link";
       
     return (
-        <nav>
-            <Flex justifyContent="space-between">
-                <Box>
-                    <Heading as='h1'>Besu & walt.id integration</Heading>
+        <>
+            <nav>
+                <Flex justifyContent="space-between">
+                    <Box>
+                        <Heading as='h1'>Besu & walt.id integration</Heading>
+                    </Box>
+                    <Box className="connect-wallet-box">
+                        <ColorModeSwitcher />
+                        <ConnectButton />
+                    </Box>
+                </Flex>
+                <Box mt="1em" id="menu">
+                    <NavLink to="/holder" className={({isActive}) => isActive ? currentPage : otherPages}>Holder</NavLink>
+                    <NavLink to="/issuer" className={({isActive}) => isActive ? currentPage : otherPages}>Issuer</NavLink>
+                    <NavLink to="/verifier" className={({isActive}) => isActive ? currentPage : otherPages}>Verifier</NavLink>
+                    <NavLink to="/contracts" className={({isActive}) => isActive ? currentPage : otherPages}>Contracts</NavLink>
+                    <NavLink to="/diploma" className={({isActive}) => isActive ? currentPage : otherPages}>Diploma</NavLink>
                 </Box>
-                <Box className="connect-wallet-box">
-                    <ColorModeSwitcher />
-                    <ConnectButton />
-                </Box>
-            </Flex>
-            <Box mt="1em" id="main-menu">
-                <NavLink to="/holder" className={({isActive}) => isActive ? currentPage : otherPages}>Holder</NavLink>
-                <NavLink to="/issuer" className={({isActive}) => isActive ? currentPage : otherPages}>Issuer</NavLink>
-                <NavLink to="/verifier" className={({isActive}) => isActive ? currentPage : otherPages}>Verifier</NavLink>
-                <NavLink to="/contracts" className={({isActive}) => isActive ? currentPage : otherPages}>Contracts</NavLink>
-                <NavLink to="/diploma" className={({isActive}) => isActive ? currentPage : otherPages}>Diploma</NavLink>
-            </Box>
-        </nav>
+            </nav>
+            <Outlet/>
+        </>
+
     )
 }

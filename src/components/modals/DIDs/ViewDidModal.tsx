@@ -9,19 +9,13 @@ import {
     ModalCloseButton,
     Button,
     useDisclosure,
-    Text,
-    FormControl,
-    FormLabel,
     IconButton,
-    RadioGroup,
-    Radio,
-    Stack,
     Textarea,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { Custodian, utils } from 'ssikit-sdk';
+import { Custodian } from 'ssikit-sdk';
 
-export function ViewDidModal(props: {didToView: string}) {
+export default function ViewDidModal(props: {didToView: string}) {
 
     const custodian = Custodian.Custodian;
 

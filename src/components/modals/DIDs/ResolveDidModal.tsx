@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { Custodian, utils } from 'ssikit-sdk';
 
 // TODO
-export function ResolveDidModal() {
+export default function ResolveDidModal() {
 
     const custodian = Custodian.Custodian;
 

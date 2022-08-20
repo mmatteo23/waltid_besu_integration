@@ -9,12 +9,9 @@ import Nav from './Nav';
 export function TrustedContracts(){
     
     return (
-        <VStack>
-            <Nav/>
-            <VStack id='main-container'>
-                <AddTrustedContract />
-                <SearchTrustedContractFromAddressController />
-            </VStack>
+        <VStack id='main-container'>
+            <AddTrustedContract />
+            <SearchTrustedContractFromAddressController />
         </VStack>
     )
 

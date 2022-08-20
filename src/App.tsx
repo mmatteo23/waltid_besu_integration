@@ -3,9 +3,6 @@ import { WagmiConfig } from 'wagmi';
 import { wagmiClient, chains } from './utils/WagmiClient';
 import './styles/App.css';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import Nav from './components/Nav';
-import MyBreadcrumb from './components/MyBreadcrumb';
-import TabsMenu from './components/TabsMenu';
 import {
   BrowserRouter,
   Routes,
@@ -17,6 +14,7 @@ import Issuer from './components/Issuer';
 import Verifier from './components/Verifier';
 import TrustedContracts from './components/TrustedContracts';
 import DiplomaUseCase from './components/DiplomaUseCase';
+import Nav from './components/Nav';
 
 function App() {
   return (
@@ -25,17 +23,18 @@ function App() {
         <RainbowKitProvider chains={chains}>
           <BrowserRouter>
             <Routes>
-                <Route path="*" element={<Navigate to="/holder" replace={true} />}/>
-                <Route path="holder" element={<Holder />} />
-                <Route path="issuer" element={<Issuer />} />
-                <Route path="verifier" element={<Verifier />} />
-                <Route path="contracts" element={<TrustedContracts />} />
-                <Route path="diploma" element={<DiplomaUseCase />} />
+                <Route path="*" element={<Navigate to="/holder/keys" replace={true} />}/>
+                <Route path="/" element={<Nav/>}>
+                  <Route path="" element={<Navigate to="/holder/keys" replace={true} />} />
+                  <Route path="holder/*" element={<Holder />} />
+                  <Route path="issuer" element={<Issuer />} />
+                  <Route path="verifier" element={<Verifier />} />
+                  <Route path="contracts" element={<TrustedContracts />} />
+                  <Route path="diploma" element={<DiplomaUseCase />} />
+                </Route>
             </Routes>
           </BrowserRouter>
-          {/* <Nav /> */}
           {/* <MyBreadcrumb /> */}
-          {/* <TabsMenu /> */}
         </RainbowKitProvider>
       </WagmiConfig>
     </ChakraProvider>

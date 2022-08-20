@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react'
 import { BiImport } from 'react-icons/bi';
 import { Custodian } from 'ssikit-sdk';
 
-export function ImportVcModal(props: {updateVcs: Promise<void>}) {
+export default function ImportVcModal(props: {updateVcs: Promise<void>}) {
 
     const custodian = Custodian.Custodian;
 
@@ -47,30 +47,31 @@ export function ImportVcModal(props: {updateVcs: Promise<void>}) {
                 Import Credential
             </Button>
 
-            <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
+            <Modal size="xl" blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Import a credential</ModalHeader>
                     <ModalCloseButton />
                     <form method='post' onSubmit={handleSubmit}>
                         <ModalBody>
-                                <FormControl isRequired>
-                                    <FormLabel>Alias (name) of your credential</FormLabel>
-                                    <Input 
-                                        value={credentialAlias}
-                                        onChange={ e => setCredentialAlias(e.target.value) }
-                                        placeholder='E.g. Passport'
-                                        variant="filled"
-                                    />
-                                    <FormLabel mt="1em">Credential to import</FormLabel>
-                                    <Textarea
-                                        value={credentialToImport}
-                                        onChange={ e => setCredentialToImport(e.target.value) }
-                                        placeholder='Place here your credential'
-                                        size='sm'
-                                        variant="filled"
-                                    />
-                                </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel>Alias (name) of your credential</FormLabel>
+                                <Input 
+                                    value={credentialAlias}
+                                    onChange={ e => setCredentialAlias(e.target.value) }
+                                    placeholder='E.g. Passport'
+                                    variant="filled"
+                                />
+                                <FormLabel mt="1em">Credential to import</FormLabel>
+                                <Textarea
+                                    value={credentialToImport}
+                                    onChange={ e => setCredentialToImport(e.target.value) }
+                                    placeholder='Place here your credential'
+                                    size='sm'
+                                    variant="filled"
+                                    height="30em"
+                                />
+                            </FormControl>
                         </ModalBody>
 
                         <ModalFooter>
