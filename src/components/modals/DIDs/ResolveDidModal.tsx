@@ -72,11 +72,11 @@ export default function ResolveDidModal() {
                                     Close
                                 </Button>
                                 <Button type='submit' size='sm' colorScheme='green'>
-                                    Export
+                                    Resolve
                                 </Button>
                             </Box>
                             <Box w="100%">                         
-                                <Text mt='2em'>Verifiable Presentation:</Text>
+                                <Text mt='2em'>Resolved DID:</Text>
                                 <Textarea isDisabled={resolvedDid.length===0}
                                     mt='0.5em' mb="1em" 
                                     height="15em" value={resolvedDid} variant="filled"
