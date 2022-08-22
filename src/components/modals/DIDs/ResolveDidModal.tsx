@@ -19,7 +19,6 @@ import {
 import { useEffect, useState } from 'react'
 import { Custodian } from 'ssikit-sdk';
 
-// TODO
 export default function ResolveDidModal() {
 
     const custodian = Custodian.Custodian;
@@ -27,15 +26,6 @@ export default function ResolveDidModal() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ didToResolve, setDidToResolve ] = useState<string>("");
     const [ resolvedDid, setResolvedDid ] = useState<string>("");
-
-    const loadDid = async () => {
-        try {
-            // let didData = await custodian.getDID(props.didToView);
-            // setDid(JSON.stringify(didData, null, 4));
-        } catch (error) {
-            alert(error);
-        }
-    }
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -48,7 +38,8 @@ export default function ResolveDidModal() {
     }
 
     useEffect(() => {
-        loadDid();
+        setDidToResolve("");
+        setResolvedDid("");
     } , [isOpen]);
 
     return (
