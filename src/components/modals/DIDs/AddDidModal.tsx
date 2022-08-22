@@ -20,8 +20,6 @@ import { Custodian, utils } from 'ssikit-sdk';
 
 export default function AddDidModal(props: {keys: utils.Key[], dids: string[], updateDids: Promise<void>}) {
 
-    const custodian = Custodian.Custodian;
-
     const methods: utils.DIDMethod[] = ["key", "web", "ebsi"]
 
     const defaultMethod: utils.DIDMethod = methods[0];
@@ -40,7 +38,7 @@ export default function AddDidModal(props: {keys: utils.Key[], dids: string[], u
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            let result: any = await custodian.createDID(method, key, webDomain, didWebPath);
+            let result: any = await Custodian.createDID(method, key, webDomain, didWebPath);
             if (!result) {
                 setError(true);
                 return;

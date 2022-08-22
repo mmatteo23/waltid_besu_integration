@@ -24,8 +24,6 @@ import { Custodian, utils } from 'ssikit-sdk';
 
 export default function ExportKeyModal(props: {keyToExport: utils.Key}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ keyFormat, setKeyFormat ] = useState<utils.KeyFormat>("JWK");
     const [ exportPrivate, setExportPrivate ] = useState<string>('true');
@@ -36,7 +34,7 @@ export default function ExportKeyModal(props: {keyToExport: utils.Key}) {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            let exported = await custodian.exportKey(props.keyToExport, keyFormat, exportPrivate as unknown as boolean);
+            let exported = await Custodian.exportKey(props.keyToExport, keyFormat, exportPrivate as unknown as boolean);
             setExported(JSON.stringify(exported, null, 2));
         } catch (error) {
             alert(error);

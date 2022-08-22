@@ -6,9 +6,6 @@ import { Custodian, Signatory, utils } from "ssikit-sdk";
 
 export default function Issuer() {
 
-    const signatory = Signatory.Signatory;
-    const custodian = Custodian.Custodian;
-
     let [privateRevocationToken, setPrivateRevocationToken] = useState<string>("");
     let [publicRevocationToken, setPublicRevocationToken] = useState<string>("");
 
@@ -45,12 +42,12 @@ export default function Issuer() {
     let [issuedCredential, setIssuedCredential] = useState<string>("");
 
     const mySetVCTemplate = async (templateId: string) => {
-        let template = await signatory.getVCTemplate(templateId);
+        let template = await Signatory.getVCTemplate(templateId);
         setTemplateGet(JSON.stringify(template, null, 4));
     }
 
     const fetchData = async () => {
-        let vcTemplates = await signatory.getVCTemplateIDs();
+        let vcTemplates = await Signatory.getVCTemplateIDs();
         setTemplates(vcTemplates);
         setTemplateForm(vcTemplates[0]);
         await mySetVCTemplate(vcTemplates[0]);
@@ -62,7 +59,7 @@ export default function Issuer() {
     }
 
     const initUserDIDs = async () => {
-        let userDIDs = await custodian.getDIDs();
+        let userDIDs = await Custodian.getDIDs();
         setUserDIDs(userDIDs);
     }
 
@@ -91,7 +88,7 @@ export default function Issuer() {
             config: pcObject as utils.ProofConfig,
             credentialData: credentialDataField,
         } as utils.IssueCredentialRequest;
-        let issuedCredential = await signatory.issueCredential(request);
+        let issuedCredential = await Signatory.issueCredential(request);
         setIssuedCredential(JSON.stringify(issuedCredential, null, 4));
     }
 

@@ -19,8 +19,6 @@ import { Custodian } from 'ssikit-sdk';
 
 export default function ImportVcModal(props: {updateVcs: Promise<void>}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ credentialAlias, setCredentialAlias ] = useState<string>("");
     const [ credentialToImport, setCredentialToImport ] = useState<string>("");
@@ -28,7 +26,7 @@ export default function ImportVcModal(props: {updateVcs: Promise<void>}) {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.storeCredential(credentialAlias, JSON.parse(credentialToImport));
+            await Custodian.storeCredential(credentialAlias, JSON.parse(credentialToImport));
             onClose();
             await props.updateVcs;
         } catch (error) {

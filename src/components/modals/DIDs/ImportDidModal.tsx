@@ -18,15 +18,13 @@ import { Custodian } from 'ssikit-sdk';
 
 export default function ImportDidModal(props: {updateDids: Promise<void>}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ didToImport, setDidToImport ] = useState<string>("");
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.importDID(didToImport);
+            await Custodian.importDID(didToImport);
             onClose();
             await props.updateDids;
         } catch (error) {

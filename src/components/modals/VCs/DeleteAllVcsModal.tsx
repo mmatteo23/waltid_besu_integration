@@ -15,14 +15,12 @@ import { DeleteIcon } from '@chakra-ui/icons';
 
 export default function DeleteAllVcsModal(props: {updateVcs: Promise<void>}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.deleteAllCredentials();
+            await Custodian.deleteAllCredentials();
             onClose();
             await props.updateVcs;
         } catch (error) {

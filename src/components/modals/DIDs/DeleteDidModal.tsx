@@ -16,14 +16,12 @@ import { Custodian } from 'ssikit-sdk';
 
 export default function DeleteDidModal(props: {didToDelete: string, updateDids: Promise<void>}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.deleteDID(props.didToDelete);
+            await Custodian.deleteDID(props.didToDelete);
             onClose();
             await props.updateDids;
         } catch (error) {

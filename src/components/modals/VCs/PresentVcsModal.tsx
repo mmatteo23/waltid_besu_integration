@@ -22,8 +22,6 @@ import { Custodian, utils } from 'ssikit-sdk';
 
 export default function PresentVcsModal(props: {updateVcs: Promise<void>, vcsToPresent: string[], dids: string[]}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ presentation, setPresentation ] = useState<string>("");
     const [ holderDID, setHolderDID ] = useState<string>(props.dids[0]);
@@ -46,7 +44,7 @@ export default function PresentVcsModal(props: {updateVcs: Promise<void>, vcsToP
                 domain: domain,
                 challenge: challenge
             } as utils.PresentationRequest;
-            vp = await custodian.presentCredentials(request);
+            vp = await Custodian.presentCredentials(request);
         } catch (error) {
             alert(error);
         }

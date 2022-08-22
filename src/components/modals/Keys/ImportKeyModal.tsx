@@ -18,15 +18,13 @@ import { Custodian } from 'ssikit-sdk';
 
 export default function ImportKeyModal(props: {updateKeys: Promise<void>}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ keyToImport, setKeyToImport ] = useState<string>("");
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.importKey(keyToImport as unknown as object);
+            await Custodian.importKey(keyToImport as unknown as object);
             onClose();
             await props.updateKeys;
         } catch (error) {

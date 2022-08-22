@@ -16,14 +16,12 @@ import { Custodian, utils } from 'ssikit-sdk';
 
 export default function DeleteKeyModal(props: {keyToDelete: utils.Key, updateKeys: Promise<void>}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.deleteKey(props.keyToDelete);
+            await Custodian.deleteKey(props.keyToDelete);
             onClose();
             await props.updateKeys;
         } catch (error) {

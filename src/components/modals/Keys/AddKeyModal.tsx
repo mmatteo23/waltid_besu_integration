@@ -18,8 +18,6 @@ import { Custodian, utils } from 'ssikit-sdk';
 
 export default function AddKeyModal(props: {updateKeys: Promise<void>}) {
 
-    const custodian = Custodian.Custodian;
-
     const algorithms: utils.KeyAlgorithm[] = ["RSA", "EdDSA_Ed25519", "ECDSA_Secp256k1"]
     const defaultAlgorithm: utils.KeyAlgorithm = algorithms[0];
 
@@ -29,7 +27,7 @@ export default function AddKeyModal(props: {updateKeys: Promise<void>}) {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.generateKey(algorithm);
+            await Custodian.generateKey(algorithm);
             onClose();
             await props.updateKeys;
         } catch (error) {

@@ -8,25 +8,23 @@ import NavHolder from './NavHolder';
 
 export default function Holder() {
 
-    const custodian = Custodian.Custodian;
-
     const [keys, setKeys] = useState<utils.Key[]>([]);
     const [dids, setDids] = useState<string[]>([]);
     const [vcs, setVcs] = useState<string[]>([]);
     const [vcsToPresent, setVcsToPresent] = useState<string[]>([]);
     
     const updateKeys = async () => {
-        let keys = await custodian.getKeys();
+        let keys = await Custodian.getKeys();
         setKeys(keys.reverse());
     }
 
     const updateDids = async () => {
-        let dids = await custodian.getDIDs();
+        let dids = await Custodian.getDIDs();
         setDids(dids.reverse());
     }
 
     const updateVcs = async () => {
-        let vcs = await custodian.getCredentialIDs();
+        let vcs = await Custodian.getCredentialIDs();
         setVcs(vcs.reverse());
     }
 

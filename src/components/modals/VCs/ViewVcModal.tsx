@@ -17,14 +17,12 @@ import { Custodian } from 'ssikit-sdk';
 
 export default function ViewVcModal(props: {vcToView: string}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ vc, setVc ] = useState<string>(props.vcToView);
 
     const loadVc = async () => {
         try {
-            let vcData = await custodian.getCredential(props.vcToView);
+            let vcData = await Custodian.getCredential(props.vcToView);
             setVc(JSON.stringify(vcData, null, 4));
         } catch (error) {
             alert(error);

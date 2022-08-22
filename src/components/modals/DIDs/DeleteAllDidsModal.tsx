@@ -15,14 +15,12 @@ import { DeleteIcon } from '@chakra-ui/icons';
 
 export default function DeleteAllDidsModal(props: {updateDids: Promise<void>}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.deleteAllDIDs();
+            await Custodian.deleteAllDIDs();
             onClose();
             await props.updateDids;
         } catch (error) {

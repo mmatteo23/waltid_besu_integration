@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 import { Custodian, lib } from "ssikit-sdk";
 
 export default function Ebsi(){
-
-    const custodian = Custodian.Custodian;
-
     const [ bearerToken, setBearToken ] = useState<string>("");
     const [ didsList, setDidsList ] = useState<string[]>([]);
     const [ did, setDid ] = useState<string>("");
@@ -14,7 +11,7 @@ export default function Ebsi(){
     const [ loading, setLoading ] = useState<boolean>(false);
 
     const initDidsList = async () => {
-        let didsList = await custodian.getDIDs();
+        let didsList = await Custodian.getDIDs();
         didsList = didsList.filter(did => did.includes("ebsi"));
         setDidsList(didsList);
         setDid(didsList[0]);

@@ -16,14 +16,12 @@ import { Custodian } from 'ssikit-sdk';
 
 export default function DeleteVcModal(props: {vcToDelete: string, updateVcs: Promise<void>}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            await custodian.deleteCredential(props.vcToDelete);
+            await Custodian.deleteCredential(props.vcToDelete);
             onClose();
             await props.updateVcs;
         } catch (error) {

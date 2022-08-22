@@ -17,14 +17,12 @@ import { Custodian } from 'ssikit-sdk';
 
 export default function ViewDidModal(props: {didToView: string}) {
 
-    const custodian = Custodian.Custodian;
-
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ did, setDid ] = useState<string>(props.didToView);
 
     const loadDid = async () => {
         try {
-            let didData = await custodian.getDID(props.didToView);
+            let didData = await Custodian.getDID(props.didToView);
             setDid(JSON.stringify(didData, null, 4));
         } catch (error) {
             alert(error);
