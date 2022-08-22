@@ -51,7 +51,7 @@ export default function ViewDidModal(props: {didToView: string}) {
                     <ModalHeader>View DID</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Textarea height="50em" value={did} variant="filled"/>
+                        <Textarea height="50em" value={did} variant="filled" readOnly/>
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>

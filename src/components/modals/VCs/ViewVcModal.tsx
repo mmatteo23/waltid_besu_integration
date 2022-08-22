@@ -51,7 +51,7 @@ export default function ViewVcModal(props: {vcToView: string}) {
                     <ModalHeader>View Credential</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Textarea height="50em" value={vc} variant="filled"/>
+                        <Textarea height="50em" value={vc} variant="filled" readOnly/>
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>
