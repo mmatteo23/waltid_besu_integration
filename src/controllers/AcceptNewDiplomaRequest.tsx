@@ -1,4 +1,5 @@
 import { Button, Heading, useDisclosure } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import { AddTrustedContractModalController } from ".";
@@ -8,6 +9,9 @@ import { AcceptNewDiplomaRequestView } from "../views";
 const AcceptNewDiplomaRequestController = () => {
 
     const tokenURI = "ipfs://QmW7aofc5AHLHQQ4V3kwojYPW316j7ybgGgx3Var2DJTvo";
+
+    const [startRequest, setStartRequest] = useState(false);
+    const [prepareErrorShort, setPrepareErrorShort] = useState("");
 
     // bypass pinata upload for now
 
@@ -21,21 +25,26 @@ const AcceptNewDiplomaRequestController = () => {
         ...contract,
         functionName: 'acceptNewDiplomaRequest',
         args: [tokenURI],
+        onError(error) {
+            setPrepareErrorShort(error.message.split('(reason="execution reverted: ')[1].split('", method')[0]);
+            //throw (error)
+        },
     });
-
+    
+    const { data, isLoading: isLoadingWrite, error: writeError, isError: isWriteError, write } = useContractWrite(config);
+    
+    /*
     console.log(
         "CAUSE:", prepareError?.cause, 
         "NAME: ", prepareError?.name, 
         "STACK: ", prepareError?.stack,
         "MESSAGE: ", prepareError?.message,
     );
-
-    const { data, isLoading: isLoadingWrite, error: writeError, isError: isWriteError, write } = useContractWrite(config);
-
     console.log(
         "WRITE ERROR:", writeError, 
         "isWriteError: ", isWriteError,
     );
+    */
 
     // using the useWaitForTransaction we can show feedback on the status of the transaction
     const { isLoading: isLoadingTx, isSuccess: isSuccessTx } = useWaitForTransaction({
@@ -53,9 +62,11 @@ const AcceptNewDiplomaRequestController = () => {
         isPrepareError={isPrepareError}
         isError={isWriteError}
         prepareError={prepareError}
+        prepareErrorShort={prepareErrorShort}
         error={writeError}
         handleClick={handleClick}
         txHash={data?.hash}
+        setStartRequest={setStartRequest}
     />;
 }
 

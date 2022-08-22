@@ -1,6 +1,6 @@
 import { Button, Heading, useDisclosure } from "@chakra-ui/react";
 import { BigNumber, ethers } from "ethers";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { isNumberObject } from "util/types";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
@@ -12,6 +12,8 @@ import { AcceptNewDiplomaRequestView, ConsumeTokenView } from "../views";
 const ConsumeTokenController = () => {
 
     const [tokenId, setTokenId] = useState("");
+    const [prepareErrorShort, setPrepareErrorShort] = useState("");
+    const [prepareErrorERC721Short, setPrepareErrorERC721Short] = useState(""); 
 
     /***************************
      *      Contract Data
@@ -22,9 +24,14 @@ const ConsumeTokenController = () => {
     const { config, error: prepareError, isError: isPrepareError } = usePrepareContractWrite({
         ...contract,
         functionName: 'consumeDiplomaAccessToken',
-        enabled: (+tokenId)>=0,
+        enabled: (tokenId!="" && (+tokenId)>=0),
         args: [+tokenId],
+        onError(error) {
+            setPrepareErrorShort(error.message.split('(reason="execution reverted: ')[1].split('", method')[0])
+        }
     });
+
+    console.log("Condizione: ", (tokenId!="" && (+tokenId)>=0), "\nisPrepareError: ", isPrepareError, "\n", prepareError);
 
     const { data, isLoading: isLoadingWrite, error: writeError, isError: isWriteError, write } = useContractWrite(config);
 
@@ -42,8 +49,11 @@ const ConsumeTokenController = () => {
     const { config: configERC721, error: prepareERC721Error, isError: isPrepareERC721Error } = usePrepareContractWrite({
         ...contractERC721,
         functionName: 'approve',
-        enabled: (+tokenId)>=0,
+        enabled: (tokenId!="" && (+tokenId)>=0),
         args: [contract_address, +tokenId],
+        onError(error) {
+            setPrepareErrorERC721Short(error.message.split('(reason="execution reverted: ')[1].split('", method')[0])
+        }
     });
 
     const { data: dataERC721, isLoading: isLoadingERC721Write, error: writeERC721Error, isError: isWriteERC721Error, write: writeERC721 } = useContractWrite(configERC721);
@@ -77,6 +87,8 @@ const ConsumeTokenController = () => {
         errorERC721={writeERC721Error}
         handleERC721Click={handleERC721Click}
         txHashERC721={dataERC721?.hash}
+        prepareErrorShort={prepareErrorShort}
+        prepareErrorERC721Short={prepareErrorERC721Short}
     />;
 
 }

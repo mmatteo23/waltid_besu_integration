@@ -2,9 +2,6 @@ import {
     Box, Button, ButtonGroup, Heading,
     NumberInput,
     NumberInputField,
-    NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
     FormControl,
     FormLabel,
 } from "@chakra-ui/react";
@@ -30,6 +27,8 @@ const ConsumeTokenView = ({
     isERC721Error,
     errorERC721,
     txHashERC721,
+    prepareErrorShort,
+    prepareErrorERC721Short
 }: {
     handleClick: () => void,
     isLoadingWrite: boolean,
@@ -50,6 +49,8 @@ const ConsumeTokenView = ({
     isERC721Error: boolean,
     errorERC721: Error | null,
     txHashERC721: string | undefined,
+    prepareErrorShort: string,
+    prepareErrorERC721Short: string
 }) => {
 
     return <>
@@ -67,31 +68,41 @@ const ConsumeTokenView = ({
 
         <ButtonGroup mt={4}>
 
-            <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingTx || isLoadingWrite || isPrepareError} colorScheme='green' onClick={() => handleClick()}>Consume NFT</Button>
+            <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingTx || isLoadingWrite || isPrepareError} colorScheme='green' onClick={() => {
+                //setStartConsume(true)
+                handleClick()
+            }}>
+                Consume NFT
+            </Button>
             
-            <Button isLoading={isLoadingERC721Write || isLoadingERC721Tx} loadingText="Approving" variant='solid' size='sm' disabled={isLoadingERC721Tx || isLoadingERC721Write || isPrepareERC721Error} colorScheme='yellow' onClick={() => handleERC721Click()}>Approve</Button>
+            <Button isLoading={isLoadingERC721Write || isLoadingERC721Tx} loadingText="Approving" variant='solid' size='sm' disabled={isLoadingERC721Tx || isLoadingERC721Write || isPrepareERC721Error} colorScheme='yellow' onClick={() => {
+                //setStartApprove(true)
+                handleERC721Click()
+            }}>
+                Approve
+            </Button>
             
         </ButtonGroup>
 
-        {isLoadingWrite && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Check your wallet to complete the procedure...</Box>}
-        {isLoadingTx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Please wait for the transaction to be mined...</Box>}
+        {isLoadingWrite && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg" width="50%">Check your wallet to complete the procedure...</Box>}
+        {isLoadingTx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg" width="50%">Please wait for the transaction to be mined...</Box>}
         {isSuccessTx &&
             <Box mt="1em" p={4} bg="green" borderRadius="lg">
                 Transaction mined with success.
                 <p><a href={'https://goerli.etherscan.io/tx/'+txHash} /></p>
             </Box>}
-        {isError && <Box mt="1em" p={4} bg="tomato" borderRadius="lg">Error: {error?.message}</Box>}
-        {isPrepareError && <Box mt="1em" p={4} bg="tomato" borderRadius="lg">Prepare error: {prepareError?.message}</Box>}
+        {isError && <Box mt="1em" p={4} bg="tomato" borderRadius="lg" width="50%">Consume Error: {error?.message}</Box>}
+        {isPrepareError && <Box mt="1em" p={4} bg="tomato" borderRadius="lg" width="50%">Consume Prepare error: {prepareErrorShort}</Box>}
     
-        {isLoadingERC721Write && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Check your wallet to complete the procedure...</Box>}
-        {isLoadingERC721Tx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Please wait for the transaction to be mined...</Box>}
+        {isLoadingERC721Write && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg" width="50%">Check your wallet to complete the procedure...</Box>}
+        {isLoadingERC721Tx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg" width="50%">Please wait for the transaction to be mined...</Box>}
         {isSuccessERC721Tx &&
             <Box mt="1em" p={4} bg="green" borderRadius="lg">
                 Transaction mined with success.
                 <p><a href={'https://goerli.etherscan.io/tx/'+txHashERC721} /></p>
             </Box>}
-        {isERC721Error && <Box mt="1em" p={4} bg="tomato" borderRadius="lg">Error: {errorERC721?.message}</Box>}
-        {isPrepareERC721Error && <Box mt="1em" p={4} bg="tomato" borderRadius="lg">Prepare error: {prepareERC721Error?.message}</Box>}
+        {isERC721Error && <Box mt="1em" p={4} bg="tomato" borderRadius="lg" width="50%">Error: {errorERC721?.message}</Box>}
+        {isPrepareERC721Error && <Box mt="1em" p={4} bg="tomato" borderRadius="lg" width="50%">ERC721 Prepare error: {prepareErrorERC721Short}</Box>}
     </>;
 
 }
