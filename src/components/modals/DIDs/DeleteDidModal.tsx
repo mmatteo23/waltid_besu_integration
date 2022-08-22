@@ -12,7 +12,7 @@ import {
     Text,
     IconButton,
 } from '@chakra-ui/react'
-import { Custodian, utils } from 'ssikit-sdk';
+import { Custodian } from 'ssikit-sdk';
 
 export default function DeleteDidModal(props: {didToDelete: string, updateDids: Promise<void>}) {
 

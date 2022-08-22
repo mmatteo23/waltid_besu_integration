@@ -1,5 +1,4 @@
 import AddVerifierModal from './modals/AddVerifierModal'
-
 import { 
     SearchVerifierFromAddressController, 
     VerificationRecordCountController, 
@@ -7,8 +6,7 @@ import {
     AddVerificationModalController, 
     SearchVerificationRecordsController 
 } from '../controllers';
-import Nav from './Nav';
-import { Box, Flex, HStack, VStack } from '@chakra-ui/react';
+import { Box, HStack, VStack } from '@chakra-ui/react';
 
 export function Verifier(){
     

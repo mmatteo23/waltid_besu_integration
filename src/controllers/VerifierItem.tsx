@@ -1,5 +1,4 @@
 import { Result } from "ethers/lib/utils";
-import { useState } from "react";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
 import { VerifierItemView } from "../views";

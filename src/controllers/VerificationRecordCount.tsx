@@ -1,9 +1,7 @@
 
-import { useEffect, useState } from "react";
 import { useContractRead } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
 import WidgetCountView from "../views/WidgetCountView";
-import { FaUserCheck } from 'react-icons/fa';
 
 const VerificationRecordCountController = () => {
 

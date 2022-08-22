@@ -1,7 +1,7 @@
 
 import { Contract, ContractInterface } from 'ethers';
 import { useCallback } from 'react';
-import { useAccount, useContract, useContractRead } from 'wagmi'
+import { useAccount, useContract } from 'wagmi'
 import VR from '../abis/VerificationRegistry.json';
 
 const verificationRegistryAddress = "0xE9a5A31088DFe5d64C1783aCD154D1484A99ff56";

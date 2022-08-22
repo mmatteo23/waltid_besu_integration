@@ -2,7 +2,6 @@ import {
     Button,
     useDisclosure
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
 import { FaPlus } from 'react-icons/fa';
 import AddNewVerifierModal from './AddNewVerifierModal';
 

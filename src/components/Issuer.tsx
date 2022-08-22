@@ -105,7 +105,6 @@ export default function Issuer() {
 
     return (
         <VStack>
-            {/* <Nav/> */}
             <VStack id='main-container'>
                 <form method='post' onSubmit={issueCredential}>
                     <HStack w="100%">

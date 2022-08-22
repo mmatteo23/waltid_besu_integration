@@ -4,7 +4,6 @@ import {
     SearchTrustedContractFromAddressController,
     AddTrustedContract
 } from '../controllers';
-import Nav from './Nav';
 
 export function TrustedContracts(){
     

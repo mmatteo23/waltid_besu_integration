@@ -1,8 +1,5 @@
-import { Button, Heading, useDisclosure } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { useState } from "react";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
-import { AddTrustedContractModalController } from ".";
 import useDiplomaIssuerManagerData from "../hooks/useDiplomaIssuerManagerData";
 import { AcceptNewDiplomaRequestView } from "../views";
 

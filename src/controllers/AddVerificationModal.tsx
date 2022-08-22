@@ -100,14 +100,12 @@ const AddVerificationModal = () => {
                                 try {
                                     signTypedData();
                                 } catch( error ) {
-                                    console.log("Passo per di qua");
                                     console.log("Try catch error: ", error);
                                 }
                             }}>
                                 {isLoadingSignature ? "Check Wallet" : "Create Signature"}
                             </Button>
                             <Button size='sm' colorScheme={isLoading ? 'yellow' : 'green'} disabled={!write} onClick={() => {
-                                console.log("Write passo per qua");
                                 write?.()
                             }}>
                                 {isLoading ? "Confirm tx" : "Confirm"}

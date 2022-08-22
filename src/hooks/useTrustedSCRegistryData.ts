@@ -1,6 +1,4 @@
 import { ContractInterface } from "ethers";
-import { domAnimation } from "framer-motion";
-import { useNetwork } from "wagmi";
 import VR from '../abis/TrustedSmartContractRegistry.json';
 
 const useTrustedSCRegistryData = (): [

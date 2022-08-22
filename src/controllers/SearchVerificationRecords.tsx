@@ -68,7 +68,6 @@ const SearchVerificationRecordsController = () => {
 
     let verificationRecords;
     if (uuid) {
-        console.log(verificationRecords1)
         // this is a Result so we have to wrap it in an array.
         verificationRecords = [verificationRecords1];
     }

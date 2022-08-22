@@ -31,8 +31,6 @@ const ConsumeTokenController = () => {
         }
     });
 
-    console.log("Condizione: ", (tokenId!="" && (+tokenId)>=0), "\nisPrepareError: ", isPrepareError, "\n", prepareError);
-
     const { data, isLoading: isLoadingWrite, error: writeError, isError: isWriteError, write } = useContractWrite(config);
 
     // using the useWaitForTransaction we can show feedback on the status of the transaction

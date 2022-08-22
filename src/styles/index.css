@@ -138,6 +138,7 @@ form {
 #menu > a.inactive-link {
   text-decoration: none;
   pointer-events: none;
+  color: #90cdf4;
 }
 
 #main-container {

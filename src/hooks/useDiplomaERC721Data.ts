@@ -1,6 +1,4 @@
 import { ContractInterface } from "ethers";
-import { domAnimation } from "framer-motion";
-import { useNetwork } from "wagmi";
 import VR from '../abis/DiplomaERC721.json';
 
 const useDiplomaERC721Data = (): [

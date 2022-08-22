@@ -2,10 +2,9 @@ import {
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbLink,
-    BreadcrumbSeparator,
 } from '@chakra-ui/react'
 import { FaAngleRight } from 'react-icons/fa';
-import React, { Component } from "react";
+import { Component } from "react";
 
 class MyBreadcrumb extends Component {
     
