@@ -1,7 +1,7 @@
 
 import { Box, Button, FormControl, FormLabel, Heading, HStack, Input, Link, Select, Spinner, Text, Textarea } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Custodian, lib, ESSIF } from "ssikit-sdk";
+import { Custodian, lib } from "ssikit-sdk";
 
 export default function Ebsi(){
 

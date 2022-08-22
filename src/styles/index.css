@@ -172,8 +172,7 @@ form {
 }
 
 #holder-nav > #menu > a.inactive-link {
-  /* font-weight: bold; */
-  /* color: #90cdf4; */
+  border-left: 2px solid #ffffff00;
 }
 
 #holder-nav > #menu > a.active-link {

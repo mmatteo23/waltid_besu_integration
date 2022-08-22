@@ -15,6 +15,8 @@ import {
     RadioGroup,
     Radio,
     Stack,
+    Box,
+    Textarea,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BiExport } from 'react-icons/bi';
@@ -27,7 +29,7 @@ export default function ExportKeyModal(props: {keyToExport: utils.Key}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ keyFormat, setKeyFormat ] = useState<utils.KeyFormat>("JWK");
     const [ exportPrivate, setExportPrivate ] = useState<string>('true');
-    const [ success, setSuccess ] = useState<boolean>(false);
+    const [ exported, setExported ] = useState<string>("");
 
     const keyFormats: utils.KeyFormat[] = ["JWK", "PEM"] as utils.KeyFormat[];
 
@@ -35,20 +37,16 @@ export default function ExportKeyModal(props: {keyToExport: utils.Key}) {
         event.preventDefault();
         try {
             let exported = await custodian.exportKey(props.keyToExport, keyFormat, exportPrivate as unknown as boolean);
-            navigator.clipboard.writeText(JSON.stringify(exported))
-            setSuccess(true)
+            setExported(JSON.stringify(exported, null, 2));
         } catch (error) {
             alert(error);
         }
     };
 
     useEffect(() => {
-        setSuccess(false);
-    } , [isOpen, keyFormat, exportPrivate]);
-
-    useEffect(() => {
         setKeyFormat("JWK");
         setExportPrivate("true");
+        setExported("");
     } , [isOpen]);
 
     return (
@@ -61,7 +59,7 @@ export default function ExportKeyModal(props: {keyToExport: utils.Key}) {
                 icon={<BiExport/>}
                 mr='1em'
             />
-            <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
+            <Modal size="xl" blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Export key</ModalHeader>
@@ -95,20 +93,22 @@ export default function ExportKeyModal(props: {keyToExport: utils.Key}) {
                                 </FormControl>
                         </ModalBody>
 
-                        <ModalFooter>
-                            {
-                                success 
-                                &&
-                                <Text mr='auto'>
-                                    Key copied to the clipboard!
-                                </Text>
-                            }
-                            <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>
-                                Close
-                            </Button>
-                            <Button type='submit' size='sm' colorScheme='green'>
-                                Export
-                            </Button>
+                        <ModalFooter display="flex" flexDir="column">
+                            <Box ml="auto">
+                                <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>
+                                    Close
+                                </Button>
+                                <Button type='submit' size='sm' colorScheme='green'>
+                                    Export
+                                </Button>
+                            </Box>
+                            <Box w="100%">                         
+                                <Text mt='2em'>Exported Key:</Text>
+                                <Textarea isDisabled={exported.length===0}
+                                    mt='0.5em' mb="1em" 
+                                    height="15em" value={exported} variant="filled"
+                                />
+                            </Box>
                         </ModalFooter>
                     </form>
                 </ModalContent>

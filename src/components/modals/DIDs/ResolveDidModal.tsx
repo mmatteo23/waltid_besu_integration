@@ -9,11 +9,15 @@ import {
     ModalCloseButton,
     Button,
     useDisclosure,
-    IconButton,
+    FormControl,
+    FormLabel,
+    Input,
+    Box,
+    Text,
     Textarea,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { Custodian, utils } from 'ssikit-sdk';
+import { Custodian } from 'ssikit-sdk';
 
 // TODO
 export default function ResolveDidModal() {
@@ -21,11 +25,23 @@ export default function ResolveDidModal() {
     const custodian = Custodian.Custodian;
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [ didToResolve, setDidToResolve ] = useState<string>("");
+    const [ resolvedDid, setResolvedDid ] = useState<string>("");
 
     const loadDid = async () => {
         try {
             // let didData = await custodian.getDID(props.didToView);
             // setDid(JSON.stringify(didData, null, 4));
+        } catch (error) {
+            alert(error);
+        }
+    }
+
+    const handleSubmit = async (event: any) => {
+        event.preventDefault();
+        try {
+            let resolved = await custodian.resolveDID(didToResolve);
+            setResolvedDid(JSON.stringify(resolved, null, 4));
         } catch (error) {
             alert(error);
         }
@@ -41,19 +57,42 @@ export default function ResolveDidModal() {
                 Resolve DID
             </Button>
 
-            <Modal size="full" blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
+            <Modal size="xl" blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Resolve DID</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
-                        <Textarea height="50em" variant="filled"/>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>
-                            Close
-                        </Button>
-                    </ModalFooter>
+                    <form method='post' onSubmit={handleSubmit}>
+                        <ModalBody>
+                            <FormControl isRequired>
+                                <FormLabel>DID to resolve:</FormLabel>
+                                <Input
+                                    variant="filled" 
+                                    placeholder='did:example:123456789abcdefghi'
+                                    name='webDomain'
+                                    onChange={ e => setDidToResolve(e.currentTarget.value) }
+                                    value={didToResolve}
+                                />
+                            </FormControl>
+                        </ModalBody>
+                        <ModalFooter display="flex" flexDir="column">
+                            <Box ml="auto">
+                                <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>
+                                    Close
+                                </Button>
+                                <Button type='submit' size='sm' colorScheme='green'>
+                                    Export
+                                </Button>
+                            </Box>
+                            <Box w="100%">                         
+                                <Text mt='2em'>Verifiable Presentation:</Text>
+                                <Textarea isDisabled={resolvedDid.length===0}
+                                    mt='0.5em' mb="1em" 
+                                    height="15em" value={resolvedDid} variant="filled"
+                                />
+                            </Box>
+                        </ModalFooter>
+                    </form>
                 </ModalContent>
             </Modal>
         </>
