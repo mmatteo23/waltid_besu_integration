@@ -26,6 +26,7 @@ export default function Nav() {
                     <NavLink to="/verifier" className={({isActive}) => isActive ? currentPage : otherPages}>Verifier</NavLink>
                     <NavLink to="/contracts" className={({isActive}) => isActive ? currentPage : otherPages}>Contracts</NavLink>
                     <NavLink to="/diploma" className={({isActive}) => isActive ? currentPage : otherPages}>Diploma</NavLink>
+                    <NavLink to="/ebsi" className={({isActive}) => isActive ? currentPage : otherPages}>EBSI</NavLink>
                 </Box>
             </nav>
             <Outlet/>

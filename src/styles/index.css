@@ -167,8 +167,6 @@ form {
 #holder-nav > #menu > a {
   margin-right: 0;
   padding: 0.4em;
-  transition: background-color 0.2s;
-  transition: color 0.2s;
 }
 
 #holder-nav > #menu > a.inactive-link {
@@ -178,6 +176,7 @@ form {
 
 #holder-nav > #menu > a.active-link {
   border-bottom: none;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 #holder-nav > #menu > a.active-link:hover {
@@ -187,4 +186,15 @@ form {
 
 #main-container.holder-content {
   margin-left: 4em;
+}
+
+a.link {
+  text-decoration: underline;
+  color: #90cdf4;
+  transition: color 0.2s;
+}
+
+a.link:hover {
+  text-decoration: underline;
+  color: #3f90c2;
 }

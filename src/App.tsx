@@ -14,6 +14,7 @@ import Issuer from './components/Issuer';
 import Verifier from './components/Verifier';
 import TrustedContracts from './components/TrustedContracts';
 import DiplomaUseCase from './components/DiplomaUseCase';
+import Ebsi from './components/Ebsi';
 import Nav from './components/Nav';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                   <Route path="verifier" element={<Verifier />} />
                   <Route path="contracts" element={<TrustedContracts />} />
                   <Route path="diploma" element={<DiplomaUseCase />} />
+                  <Route path="ebsi" element={<Ebsi />} />
                 </Route>
             </Routes>
           </BrowserRouter>
