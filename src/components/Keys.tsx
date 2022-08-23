@@ -6,7 +6,7 @@ import { utils } from 'ssikit-sdk';
 export default function Keys(props:{updateKeys: Function, keys: utils.Key[]}) {
     
     return (
-        <Box id='main-container' className="holder-content">
+        <Box id='main-container' className="with-navbar">
             <Heading as='h2' mb='1em'>
                 Keys Management
             </Heading>

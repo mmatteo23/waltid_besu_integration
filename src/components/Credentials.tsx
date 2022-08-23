@@ -10,7 +10,7 @@ export default function Credentials(props:{
     setVcsToPresent: Function
 }) {
     return (
-        <Box id='main-container' className="holder-content">
+        <Box id='main-container' className="with-navbar">
             <Heading as='h2' mb='1em'>
                 Credentials Management
             </Heading>

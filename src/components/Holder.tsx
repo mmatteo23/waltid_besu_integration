@@ -4,7 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Keys from './Keys';
 import Dids from './Dids';
 import Credentials from './Credentials';
-import NavHolder from './NavHolder';
+import SideNav from './SideNav';
 
 export default function Holder() {
 
@@ -34,9 +34,15 @@ export default function Holder() {
         updateVcs();
     }, []);
 
+    const links: {[key: string]: string;} = {
+        "keys": "Keys",
+        "dids": "DIDs",
+        "credentials": "Credentials"
+    }
+
     return (
         <Routes>
-            <Route path="/" element={<NavHolder/>}>
+            <Route path="/" element={<SideNav links={links}/>}>
                 <Route path="*" element={<Navigate to="keys" replace={true} />}/>
                 <Route path="" element={<Navigate to="keys" replace={true} />} />
                 <Route path="keys" element={<Keys updateKeys={updateKeys} keys={keys} />}/>

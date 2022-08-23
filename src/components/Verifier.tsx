@@ -1,31 +1,23 @@
-import AddVerifierModal from './modals/AddVerifierModal'
-import { 
-    SearchVerifierFromAddressController, 
-    VerificationRecordCountController, 
-    VerifierCountController, 
-    AddVerificationModalController, 
-    SearchVerificationRecordsController 
-} from '../controllers';
-import { Box, HStack, VStack } from '@chakra-ui/react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import SideNav from './SideNav';
+import VerifierOnChain from './VerifierOnChain';
+import VerifierOffChain from './VerifierOffChain';
 
-export function Verifier(){
-    
+export default function Issuer() {
+
+    const links: {[key: string]: string;} = {
+        "verifier-offchain": "Off-Chain",
+        "verifier-onchain": "On-Chain"
+    }
+
     return (
-            <VStack id='main-container'>
-                <HStack mr="auto">
-                    <AddVerifierModal />
-                    <AddVerificationModalController />
-                </HStack>
-                <Box className="widget-box">
-                    <VerifierCountController />
-                    <VerificationRecordCountController />
-                </Box>
-                <SearchVerifierFromAddressController />
-                <SearchVerificationRecordsController />
-            </VStack>
+        <Routes>
+            <Route path="/" element={<SideNav links={links}/>}>
+                <Route path="*" element={<Navigate to="verifier-offchain" replace={true} />}/>
+                <Route path="" element={<Navigate to="verifier-offchain" replace={true} />} />
+                <Route path="verifier-offchain" element={<VerifierOffChain />} />
+                <Route path="verifier-onchain" element={<VerifierOnChain />}/>
+            </Route>
+        </Routes>
     );
-
 }
-
-
-export default Verifier

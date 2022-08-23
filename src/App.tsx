@@ -28,8 +28,8 @@ function App() {
                 <Route path="/" element={<Nav/>}>
                   <Route path="" element={<Navigate to="/holder/keys" replace={true} />} />
                   <Route path="holder/*" element={<Holder />} />
-                  <Route path="issuer" element={<Issuer />} />
-                  <Route path="verifier" element={<Verifier />} />
+                  <Route path="issuer/*" element={<Issuer />} />
+                  <Route path="verifier/*" element={<Verifier />} />
                   <Route path="contracts" element={<TrustedContracts />} />
                   <Route path="diploma" element={<DiplomaUseCase />} />
                   <Route path="ebsi" element={<Ebsi />} />

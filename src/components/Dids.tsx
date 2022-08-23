@@ -6,7 +6,7 @@ import { DidsTable } from './DidsTable';
 export default function Dids(props:{updateDids: Function, keys: utils.Key[], dids: string[]}) {
     
     return (
-        <Box id='main-container' className="holder-content">
+        <Box id='main-container' className="with-navbar">
             <Heading as='h2' mb='1em'>
                 DIDs Management
             </Heading>
