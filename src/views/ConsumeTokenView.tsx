@@ -91,8 +91,8 @@ const ConsumeTokenView = ({
                 Transaction mined with success.
                 <p><a href={'https://goerli.etherscan.io/tx/'+txHash} /></p>
             </Box>}
-        {isError && <Box mt="1em" p={4} bg="tomato" borderRadius="lg" width="50%">Consume Error: {error?.message}</Box>}
-        {isPrepareError && <Box mt="1em" p={4} bg="tomato" borderRadius="lg" width="50%">Consume Prepare error: {prepareErrorShort}</Box>}
+        {isError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">Consume Error: {error?.message}</Box>}
+        {isPrepareError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">Consume Prepare error: {prepareErrorShort}</Box>}
     
         {isLoadingERC721Write && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg" width="50%">Check your wallet to complete the procedure...</Box>}
         {isLoadingERC721Tx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg" width="50%">Please wait for the transaction to be mined...</Box>}
@@ -101,8 +101,8 @@ const ConsumeTokenView = ({
                 Transaction mined with success.
                 <p><a href={'https://goerli.etherscan.io/tx/'+txHashERC721} /></p>
             </Box>}
-        {isERC721Error && <Box mt="1em" p={4} bg="tomato" borderRadius="lg" width="50%">Error: {errorERC721?.message}</Box>}
-        {isPrepareERC721Error && <Box mt="1em" p={4} bg="tomato" borderRadius="lg" width="50%">ERC721 Prepare error: {prepareErrorERC721Short}</Box>}
+        {isERC721Error && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">Error: {errorERC721?.message}</Box>}
+        {isPrepareERC721Error && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">ERC721 Prepare error: {prepareErrorERC721Short}</Box>}
     </>;
 
 }

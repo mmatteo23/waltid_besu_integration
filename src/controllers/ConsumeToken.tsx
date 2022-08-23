@@ -11,7 +11,7 @@ import { AcceptNewDiplomaRequestView, ConsumeTokenView } from "../views";
 
 const ConsumeTokenController = () => {
 
-    const [tokenId, setTokenId] = useState("");
+    const [tokenId, setTokenId] = useState("-1");
     const [prepareErrorShort, setPrepareErrorShort] = useState("");
     const [prepareErrorERC721Short, setPrepareErrorERC721Short] = useState(""); 
 
@@ -24,7 +24,7 @@ const ConsumeTokenController = () => {
     const { config, error: prepareError, isError: isPrepareError } = usePrepareContractWrite({
         ...contract,
         functionName: 'consumeDiplomaAccessToken',
-        enabled: (tokenId!="" && (+tokenId)>=0),
+        enabled: (tokenId!="-1" && (+tokenId)>=0),
         args: [+tokenId],
         onError(error) {
             setPrepareErrorShort(error.message.split('(reason="execution reverted: ')[1].split('", method')[0])
