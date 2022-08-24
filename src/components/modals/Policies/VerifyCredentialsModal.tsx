@@ -14,6 +14,7 @@ import {
     FormLabel,
     Textarea,
     Box,
+    HStack,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { Auditor, utils } from 'ssikit-sdk';
@@ -24,6 +25,7 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
 
     const [credentialsToVerify, setCredentialsToVerify] = useState<string>("[\n\n]");
     const [result, setResult] = useState<string>("");
+    const [error, setError] = useState<string>("");
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -38,7 +40,11 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                     policies
                 };
                 let result = await Auditor.verifyCredential(request);
-                setResult(JSON.stringify(result, null, 4));
+                if (result) {
+                    setResult(JSON.stringify(result, null, 4));
+                } else {
+                    setError("Error: couldn't verify credentials (probably not valid)")
+                }
             }
         } catch (error) {
             alert(error);
@@ -47,7 +53,13 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
 
     useEffect(() => {
         setCredentialsToVerify("[\n\n]");
+        setResult("");
+        setError("");
     }, [isOpen]);
+
+    useEffect(() => {
+        setError("");
+    }, [credentialsToVerify]);
 
     return (
         <>
@@ -76,14 +88,17 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                             </FormControl>
                         </ModalBody>
                         <ModalFooter display="flex" flexDir="column">
-                            <Box ml="auto">
-                                <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>
-                                    Close
-                                </Button>
-                                <Button type='submit' size='sm' colorScheme='green'>
-                                    Verify
-                                </Button>
-                            </Box>
+                            <HStack w="100%">
+                                {error && <Text mr="auto" color="red.200">{error}</Text>}
+                                <Box ml="auto">
+                                    <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>
+                                        Close
+                                    </Button>
+                                    <Button type='submit' size='sm' colorScheme='green'>
+                                        Verify
+                                    </Button>
+                                </Box>
+                            </HStack>
                             <Box w="100%">                         
                                 <Text mt='2em'>Verification result:</Text>
                                 <Textarea isDisabled={result.length===0}
