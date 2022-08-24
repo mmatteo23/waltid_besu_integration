@@ -1,6 +1,6 @@
 import { Box, Heading } from '@chakra-ui/react';
 import { ImportVcModal, PresentVcsModal, DeleteAllVcsModal } from './modals/VCs';
-import { VcsTable } from './VcsTable';
+import { VcsTable } from './tables';
 
 export default function Credentials(props:{
     updateVcs: Function,

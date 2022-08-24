@@ -11,9 +11,9 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { utils } from 'ssikit-sdk';
-import { DeletePolicyModal } from './modals/Policies';
+import { DeletePolicyModal } from '../modals/Policies';
 
-export function PoliciesTable(props: { 
+export default function PoliciesTable(props: { 
     data: utils.VerificationPolicy[], 
     updatePolicies: Promise<void>,
     policiesToUse: string[],

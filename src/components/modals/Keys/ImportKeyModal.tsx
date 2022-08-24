@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { BiImport } from 'react-icons/bi';
 import { Custodian } from 'ssikit-sdk';
 
-export default function ImportKeyModal(props: {updateKeys: Promise<void>}) {
+export default function ImportKeyModal(props: {updateKeys: () => Promise<void>}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ keyToImport, setKeyToImport ] = useState<string>("");

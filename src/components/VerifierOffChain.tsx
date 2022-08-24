@@ -1,6 +1,6 @@
 import { Box, Heading } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { PoliciesTable } from './PoliciesTable';
+import { PoliciesTable } from './tables';
 import { Auditor, utils } from 'ssikit-sdk';
 import { AddPolicyModal, VerifyCredentialsModal } from './modals/Policies';
 

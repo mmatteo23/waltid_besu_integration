@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa';
 import { Custodian, utils } from 'ssikit-sdk';
 
-export default function AddKeyModal(props: {updateKeys: Promise<void>}) {
+export default function AddKeyModal(props: {updateKeys: () => Promise<void>}) {
 
     const algorithms: utils.KeyAlgorithm[] = ["RSA", "EdDSA_Ed25519", "ECDSA_Secp256k1"]
     const defaultAlgorithm: utils.KeyAlgorithm = algorithms[0];
@@ -29,7 +29,7 @@ export default function AddKeyModal(props: {updateKeys: Promise<void>}) {
         try {
             await Custodian.generateKey(algorithm);
             onClose();
-            await props.updateKeys;
+            await props.updateKeys();
         } catch (error) {
             alert(error);
         }

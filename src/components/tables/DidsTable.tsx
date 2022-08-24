@@ -15,9 +15,9 @@ import {
     PopoverArrow,
     PopoverCloseButton,
 } from '@chakra-ui/react';
-import { DeleteDidModal, ViewDidModal } from './modals/DIDs';
+import { DeleteDidModal, ViewDidModal } from '../modals/DIDs';
 
-export function DidsTable(props: { data: string[], updateDids: Promise<void>, caption: string }) {
+export default function DidsTable(props: { data: string[], updateDids: Promise<void>, caption: string }) {
 
     const truncateDid = (did: string) => {
         return did.substring(0, 20) + ' ... ' + did.substring(did.length - 10);

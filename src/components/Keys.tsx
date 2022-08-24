@@ -1,9 +1,9 @@
 import { Box, Heading } from '@chakra-ui/react';
 import { AddKeyModal, ImportKeyModal, DeleteAllKeysModal } from './modals/Keys';
-import { KeysTable } from './KeysTable';
+import { KeysTable } from './tables';
 import { utils } from 'ssikit-sdk';
 
-export default function Keys(props:{updateKeys: Function, keys: utils.Key[]}) {
+export default function Keys(props:{updateKeys: () => Promise<void>, keys: utils.Key[]}) {
     
     return (
         <Box id='main-container' className="with-navbar">
@@ -12,12 +12,12 @@ export default function Keys(props:{updateKeys: Function, keys: utils.Key[]}) {
             </Heading>
             <Box display='flex' justifyContent='space-between' mb='2em'>
                 <Box>
-                    <AddKeyModal updateKeys={props.updateKeys()}/>
-                    <ImportKeyModal updateKeys={props.updateKeys()}/>
+                    <AddKeyModal updateKeys={props.updateKeys}/>
+                    <ImportKeyModal updateKeys={props.updateKeys}/>
                 </Box>             
-                <DeleteAllKeysModal updateKeys={props.updateKeys()}/>
+                <DeleteAllKeysModal updateKeys={props.updateKeys}/>
             </Box>
-            <KeysTable data={props.keys} updateKeys={props.updateKeys()} caption='Your keys'/>
+            <KeysTable data={props.keys} updateKeys={props.updateKeys} caption='Your keys'/>
         </Box>
     );
 

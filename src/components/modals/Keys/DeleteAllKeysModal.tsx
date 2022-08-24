@@ -13,7 +13,7 @@ import {
 import { Custodian } from 'ssikit-sdk';
 import { DeleteIcon } from '@chakra-ui/icons';
 
-export default function DeleteAllKeysModal(props: {updateKeys: Promise<void>}) {
+export default function DeleteAllKeysModal(props: {updateKeys: () => Promise<void>}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 

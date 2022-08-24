@@ -9,9 +9,9 @@ import {
     TableContainer,
     Checkbox,
 } from '@chakra-ui/react';
-import { ViewVcModal, DeleteVcModal } from './modals/VCs';
+import { ViewVcModal, DeleteVcModal } from '../modals/VCs';
 
-export function VcsTable(props: { 
+export default function VcsTable(props: { 
     data: string[], 
     updateVcs: Promise<void>, 
     vcsToPresent: string[],

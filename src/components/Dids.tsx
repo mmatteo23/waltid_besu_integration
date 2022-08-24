@@ -1,7 +1,7 @@
 import { Box, Heading } from '@chakra-ui/react';
 import { utils } from 'ssikit-sdk';
 import { AddDidModal, ImportDidModal, ResolveDidModal, DeleteAllDidsModal } from './modals/DIDs';
-import { DidsTable } from './DidsTable';
+import { DidsTable } from './tables';
 
 export default function Dids(props:{updateDids: Function, keys: utils.Key[], dids: string[]}) {
     
