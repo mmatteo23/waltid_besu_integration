@@ -3,7 +3,7 @@ import { VStack } from '@chakra-ui/react';
 import { 
     SearchTrustedContractFromAddressController,
     AddTrustedContract
-} from '../controllers';
+} from '../../controllers';
 
 export function TrustedContracts(){
     

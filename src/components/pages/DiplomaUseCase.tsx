@@ -1,6 +1,6 @@
 
 import { Box, Divider } from "@chakra-ui/react";
-import { AcceptNewDiplomaRequestController, ConsumeTokenController, ShowPersonalNFTsController } from "../controllers";
+import { AcceptNewDiplomaRequestController, ConsumeTokenController, ShowPersonalNFTsController } from "../../controllers";
 
 export function DiplomaUseCase(){
     

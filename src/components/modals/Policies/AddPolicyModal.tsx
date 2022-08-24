@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { Auditor, utils } from 'ssikit-sdk';
 
-export default function AddPolicyModal(props: {updatePolicies: Promise<void>, policies: utils.VerificationPolicy[]}) {
+export default function AddPolicyModal(props: {updatePolicies: () => Promise<void>, policies: utils.VerificationPolicy[]}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -59,7 +59,7 @@ export default function AddPolicyModal(props: {updatePolicies: Promise<void>, po
                     setError("Error: Policy creation failed.");
                 } else {
                     onClose();
-                    await props.updatePolicies;
+                    await props.updatePolicies();
                 }
             }
         } catch (error) {

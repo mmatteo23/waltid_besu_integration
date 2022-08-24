@@ -1,5 +1,5 @@
 import { 
-    Select, Textarea, Heading, Input, Button, Box, VStack, HStack, FormControl, FormLabel,
+    Select, Textarea, Heading, Input, Button, Box, HStack, FormControl, FormLabel,
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { Custodian, Signatory, utils } from "ssikit-sdk";

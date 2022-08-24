@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react'
 import { BiExport } from 'react-icons/bi';
 import { Custodian, utils } from 'ssikit-sdk';
 
-export default function PresentVcsModal(props: {updateVcs: Promise<void>, vcsToPresent: string[], dids: string[]}) {
+export default function PresentVcsModal(props: {updateVcs: () => Promise<void>, vcsToPresent: string[], dids: string[]}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ presentation, setPresentation ] = useState<string>("");

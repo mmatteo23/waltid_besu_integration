@@ -4,17 +4,11 @@ import { wagmiClient, chains } from './utils/WagmiClient';
 import './styles/App.css';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
+  BrowserRouter, Routes, Route, Navigate,
 } from "react-router-dom";
-import Holder from './components/Holder';
-import Issuer from './components/Issuer';
-import Verifier from './components/Verifier';
-import TrustedContracts from './components/TrustedContracts';
-import DiplomaUseCase from './components/DiplomaUseCase';
-import Ebsi from './components/Ebsi';
+import { 
+  Holder, Issuer, Verifier, TrustedContracts, DiplomaUseCase, Ebsi,
+} from './components/pages';
 import Nav from './components/Nav';
 
 function App() {
@@ -36,7 +30,6 @@ function App() {
                 </Route>
             </Routes>
           </BrowserRouter>
-          {/* <MyBreadcrumb /> */}
         </RainbowKitProvider>
       </WagmiConfig>
     </ChakraProvider>

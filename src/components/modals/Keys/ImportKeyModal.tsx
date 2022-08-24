@@ -26,7 +26,7 @@ export default function ImportKeyModal(props: {updateKeys: () => Promise<void>})
         try {
             await Custodian.importKey(keyToImport as unknown as object);
             onClose();
-            await props.updateKeys;
+            await props.updateKeys();
         } catch (error) {
             alert(error);
         }

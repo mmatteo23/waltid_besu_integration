@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import SideNav from './SideNav';
-import VerifierOnChain from './VerifierOnChain';
-import VerifierOffChain from './VerifierOffChain';
+import SideNav from '../SideNav';
+import VerifierOnChain from './subpages/VerifierOnChain';
+import VerifierOffChain from './subpages/VerifierOffChain';
 
 export default function Issuer() {
 

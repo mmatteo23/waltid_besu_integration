@@ -23,7 +23,7 @@ export default function DeleteKeyModal(props: {keyToDelete: utils.Key, updateKey
         try {
             await Custodian.deleteKey(props.keyToDelete);
             onClose();
-            await props.updateKeys;
+            await props.updateKeys();
         } catch (error) {
             alert(error);
         }

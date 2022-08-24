@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Custodian, utils } from "ssikit-sdk";
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Keys from './Keys';
-import Dids from './Dids';
-import Credentials from './Credentials';
-import SideNav from './SideNav';
+import { Keys, Dids, Credentials} from './subpages';
+import SideNav from '../SideNav';
 
 export default function Holder() {
 

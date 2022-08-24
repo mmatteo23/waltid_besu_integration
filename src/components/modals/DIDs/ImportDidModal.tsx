@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { BiImport } from 'react-icons/bi';
 import { Custodian } from 'ssikit-sdk';
 
-export default function ImportDidModal(props: {updateDids: Promise<void>}) {
+export default function ImportDidModal(props: {updateDids: () => Promise<void>}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ didToImport, setDidToImport ] = useState<string>("");
@@ -26,7 +26,7 @@ export default function ImportDidModal(props: {updateDids: Promise<void>}) {
         try {
             await Custodian.importDID(didToImport);
             onClose();
-            await props.updateDids;
+            await props.updateDids();
         } catch (error) {
             alert(error);
         }

@@ -13,9 +13,9 @@ import { ViewVcModal, DeleteVcModal } from '../modals/VCs';
 
 export default function VcsTable(props: { 
     data: string[], 
-    updateVcs: Promise<void>, 
+    updateVcs: () => Promise<void>, 
     vcsToPresent: string[],
-    setVcsToPresent: Function,
+    setVcsToPresent: React.Dispatch<React.SetStateAction<string[]>>,
     caption: string 
 }) {
     

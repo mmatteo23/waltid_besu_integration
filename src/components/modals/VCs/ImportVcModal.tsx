@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react'
 import { BiImport } from 'react-icons/bi';
 import { Custodian } from 'ssikit-sdk';
 
-export default function ImportVcModal(props: {updateVcs: Promise<void>}) {
+export default function ImportVcModal(props: {updateVcs: () => Promise<void>}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ credentialAlias, setCredentialAlias ] = useState<string>("");
@@ -28,7 +28,7 @@ export default function ImportVcModal(props: {updateVcs: Promise<void>}) {
         try {
             await Custodian.storeCredential(credentialAlias, JSON.parse(credentialToImport));
             onClose();
-            await props.updateVcs;
+            await props.updateVcs();
         } catch (error) {
             alert(error);
         }

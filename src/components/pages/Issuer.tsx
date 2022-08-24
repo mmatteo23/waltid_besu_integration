@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import SideNav from './SideNav';
-import IssueCredential from './IssueCredential';
-import Revocations from './Revocations';
+import SideNav from '../SideNav';
+import IssueCredential from './subpages/IssueCredential';
+import Revocations from './subpages/Revocations';
 
 export default function Issuer() {
 

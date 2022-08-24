@@ -1,13 +1,13 @@
 import { Box, Heading } from '@chakra-ui/react';
-import { ImportVcModal, PresentVcsModal, DeleteAllVcsModal } from './modals/VCs';
-import { VcsTable } from './tables';
+import { ImportVcModal, PresentVcsModal, DeleteAllVcsModal } from '../../modals/VCs';
+import { VcsTable } from '../../tables';
 
 export default function Credentials(props:{
-    updateVcs: Function,
+    updateVcs: () => Promise<void>,
     dids: string[],
     vcs: string[],
     vcsToPresent: string[],
-    setVcsToPresent: Function
+    setVcsToPresent: React.Dispatch<React.SetStateAction<string[]>>
 }) {
     return (
         <Box id='main-container' className="with-navbar">
@@ -16,14 +16,14 @@ export default function Credentials(props:{
             </Heading>
             <Box display='flex' justifyContent='space-between' mb='2em'>
                 <Box>
-                    <ImportVcModal updateVcs={props.updateVcs()}/>
-                    <PresentVcsModal updateVcs={props.updateVcs()} vcsToPresent={props.vcsToPresent} dids={props.dids}/>
+                    <ImportVcModal updateVcs={props.updateVcs}/>
+                    <PresentVcsModal updateVcs={props.updateVcs} vcsToPresent={props.vcsToPresent} dids={props.dids}/>
                 </Box>             
-                <DeleteAllVcsModal updateVcs={props.updateVcs()}/>
+                <DeleteAllVcsModal updateVcs={props.updateVcs}/>
             </Box>
             <VcsTable 
                 data={props.vcs} 
-                updateVcs={props.updateVcs()} 
+                updateVcs={props.updateVcs} 
                 vcsToPresent={props.vcsToPresent}
                 setVcsToPresent={props.setVcsToPresent}
                 caption='Your Credentials'

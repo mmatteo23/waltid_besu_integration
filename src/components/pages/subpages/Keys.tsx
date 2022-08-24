@@ -1,6 +1,6 @@
 import { Box, Heading } from '@chakra-ui/react';
-import { AddKeyModal, ImportKeyModal, DeleteAllKeysModal } from './modals/Keys';
-import { KeysTable } from './tables';
+import { AddKeyModal, ImportKeyModal, DeleteAllKeysModal } from '../../modals/Keys';
+import { KeysTable } from '../../tables';
 import { utils } from 'ssikit-sdk';
 
 export default function Keys(props:{updateKeys: () => Promise<void>, keys: utils.Key[]}) {

@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { Custodian } from 'ssikit-sdk';
 
-export default function DeleteDidModal(props: {didToDelete: string, updateDids: Promise<void>}) {
+export default function DeleteDidModal(props: {didToDelete: string, updateDids: () => Promise<void>}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -23,7 +23,7 @@ export default function DeleteDidModal(props: {didToDelete: string, updateDids: 
         try {
             await Custodian.deleteDID(props.didToDelete);
             onClose();
-            await props.updateDids;
+            await props.updateDids();
         } catch (error) {
             alert(error);
         }

@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { Custodian } from 'ssikit-sdk';
 
-export default function DeleteVcModal(props: {vcToDelete: string, updateVcs: Promise<void>}) {
+export default function DeleteVcModal(props: {vcToDelete: string, updateVcs: () => Promise<void>}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -23,7 +23,7 @@ export default function DeleteVcModal(props: {vcToDelete: string, updateVcs: Pro
         try {
             await Custodian.deleteCredential(props.vcToDelete);
             onClose();
-            await props.updateVcs;
+            await props.updateVcs();
         } catch (error) {
             alert(error);
         }

@@ -22,7 +22,7 @@ export default function DeleteAllKeysModal(props: {updateKeys: () => Promise<voi
         try {
             await Custodian.deleteAllKeys();
             onClose();
-            await props.updateKeys;
+            await props.updateKeys();
         } catch (error) {
             alert(error);
         }

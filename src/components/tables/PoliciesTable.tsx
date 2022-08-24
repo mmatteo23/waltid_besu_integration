@@ -15,9 +15,9 @@ import { DeletePolicyModal } from '../modals/Policies';
 
 export default function PoliciesTable(props: { 
     data: utils.VerificationPolicy[], 
-    updatePolicies: Promise<void>,
+    updatePolicies: () => Promise<void>,
     policiesToUse: string[],
-    setPoliciesToUse: Function,
+    setPoliciesToUse: React.Dispatch<React.SetStateAction<string[]>>,
     caption: string 
 }){
 

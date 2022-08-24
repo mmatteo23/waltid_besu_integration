@@ -1,11 +1,11 @@
-import AddVerifierModal from './modals/AddVerifierModal'
+import AddVerifierModal from '../../modals/AddVerifierModal'
 import { 
     SearchVerifierFromAddressController, 
     VerificationRecordCountController, 
     VerifierCountController, 
     AddVerificationModalController, 
     SearchVerificationRecordsController 
-} from '../controllers';
+} from '../../../controllers';
 import { Box, Heading, HStack } from '@chakra-ui/react';
 
 export default function VerifierOnChain(){

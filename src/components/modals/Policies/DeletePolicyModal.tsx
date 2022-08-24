@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { Auditor } from 'ssikit-sdk';
 
-export default function DeletePolicyModal(props: {policyToDelete: string, updatePolicies: Promise<void>}) {
+export default function DeletePolicyModal(props: {policyToDelete: string, updatePolicies: () => Promise<void>}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -23,7 +23,7 @@ export default function DeletePolicyModal(props: {policyToDelete: string, update
         try {
             await Auditor.deleteDynamicVerificationPolicy(props.policyToDelete);
             onClose();
-            await props.updatePolicies;
+            await props.updatePolicies();
         } catch (error) {
             alert(error);
         }

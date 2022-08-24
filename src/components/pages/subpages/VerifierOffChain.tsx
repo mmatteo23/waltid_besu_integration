@@ -1,8 +1,8 @@
 import { Box, Heading } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { PoliciesTable } from './tables';
+import { PoliciesTable } from '../../tables';
 import { Auditor, utils } from 'ssikit-sdk';
-import { AddPolicyModal, VerifyCredentialsModal } from './modals/Policies';
+import { AddPolicyModal, VerifyCredentialsModal } from '../../modals/Policies';
 
 export default function VerifierOffChain(){
 
@@ -24,13 +24,13 @@ export default function VerifierOffChain(){
                 Off-chain Verification
             </Heading>
             <Box mb='2em'>
-                <AddPolicyModal updatePolicies={updatePolicies()} policies={policies}/>
+                <AddPolicyModal updatePolicies={updatePolicies} policies={policies}/>
                 <VerifyCredentialsModal policiesToUse={policiesToUse}/>
             </Box>
             <Heading as="h3" size="md" mb="1em">List of verification policies</Heading>
             <PoliciesTable 
                 data={policies}
-                updatePolicies={updatePolicies()} 
+                updatePolicies={updatePolicies} 
                 policiesToUse={policiesToUse}
                 setPoliciesToUse={setPoliciesToUse}
                 caption='Verification Policies'
