@@ -16,8 +16,9 @@ export function VcsTable(props: {
     updateVcs: Promise<void>, 
     vcsToPresent: string[],
     setVcsToPresent: Function,
-    caption: string }) 
-{
+    caption: string 
+}) {
+    
     const check = (active: boolean, vc: string) => {
         if (active) {
             props.setVcsToPresent([...props.vcsToPresent, vc]);

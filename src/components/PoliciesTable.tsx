@@ -7,10 +7,28 @@ import {
     Td,
     TableCaption,
     TableContainer,
+    Checkbox,
+    Text,
 } from '@chakra-ui/react';
 import { utils } from 'ssikit-sdk';
+import { DeletePolicyModal } from './modals/Policies';
 
-export function PoliciesTable(props: { data: utils.VerificationPolicy[], updatePolicies: Promise<void>, caption: string }) {    
+export function PoliciesTable(props: { 
+    data: utils.VerificationPolicy[], 
+    updatePolicies: Promise<void>,
+    policiesToUse: string[],
+    setPoliciesToUse: Function,
+    caption: string 
+}){
+
+    const check = (active: boolean, policy: string) => {
+        if (active) {
+            props.setPoliciesToUse([...props.policiesToUse, policy]);
+        } else {
+            props.setPoliciesToUse(props.policiesToUse.filter(x => x !== policy));
+        }
+    }
+
     return <TableContainer>
         <Table variant='simple' colorScheme='teal'>
             <TableCaption>{props.caption}</TableCaption>
@@ -19,17 +37,24 @@ export function PoliciesTable(props: { data: utils.VerificationPolicy[], updateP
                     <Th>Id</Th>
                     <Th>Description</Th>
                     <Th>Actions</Th>
+                    <Th>Policies to use</Th>
                 </Tr>
             </Thead>
             <Tbody>
-                {props.data.map(key => {
+                {props.data.map(policy => {
                     return (
-                        <Tr key={key.id}>
-                            <Td w='50%'>{key.id}</Td>
-                            <Td>{key.description}</Td>
+                        <Tr key={policy.id}>
+                            <Td w='50%'>{policy.id}</Td>
+                            <Td>{policy.description}</Td>
                             <Td>
-                                {/* <ExportKeyModal keyToExport={key}/> */}
-                                {/* <DeleteKeyModal keyToDelete={key} updateKeys={props.updateKeys}/> */}
+                                {policy.isMutable ? 
+                                    <DeletePolicyModal policyToDelete={policy.id} updatePolicies={props.updatePolicies}/>
+                                    :
+                                    <Text>-</Text>
+                                }
+                            </Td>
+                            <Td>
+                                <Checkbox onChange={e => check(e.target.checked, policy.id)} size='lg'/>
                             </Td>
                         </Tr>
                     )

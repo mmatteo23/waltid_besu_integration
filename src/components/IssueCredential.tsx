@@ -185,13 +185,18 @@ export default function IssueCredential() {
                         <Textarea defaultValue={templateGet}
                             mt='0.5em' h='30em'
                             variant="filled"
+                            readOnly
                         />
                     </Box>
                     <Box>
                         <Heading as='h3' mb='0.5em' mt='1em'>
                             Issued credential:
                         </Heading>
-                        <Textarea defaultValue={issuedCredential} variant="filled" h='30em'/>
+                        <Textarea defaultValue={issuedCredential} 
+                            variant="filled" 
+                            h='30em'
+                            readOnly
+                        />
                     </Box>
                 </Box>
             </HStack>
