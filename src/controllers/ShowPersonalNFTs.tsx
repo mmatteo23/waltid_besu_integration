@@ -66,6 +66,7 @@ const ShowPersonalNFTsController = () => {
     const { loading, error, data } = useQuery(GET_NFTs);
 
     var tokens = data?.tokens;
+    //console.log(tokens);
 
     return <ShowPersonalNFTsView 
         tokens={tokens}

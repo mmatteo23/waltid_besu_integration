@@ -1,4 +1,11 @@
-import { Box, Button, ButtonGroup, Heading } from "@chakra-ui/react";
+import { 
+    Box, 
+    Button, 
+    ButtonGroup, 
+    Heading, 
+    Textarea,
+    Text 
+} from "@chakra-ui/react";
 
 
 const AcceptNewDiplomaRequestView = ({
@@ -12,7 +19,10 @@ const AcceptNewDiplomaRequestView = ({
     isError,
     error,
     txHash,
-    setStartRequest
+    setStartRequest,
+    defaultMetadata,
+    setMetadata,
+    uploadedIPFS
 } : {
     handleClick: () => void,
     isLoadingWrite: boolean,
@@ -24,16 +34,35 @@ const AcceptNewDiplomaRequestView = ({
     isError: boolean,
     error: Error | null,
     txHash: string | undefined,
-    setStartRequest: (start: boolean) => void
+    setStartRequest: (start: boolean) => void,
+    defaultMetadata: string,
+    setMetadata: (metadata: string) => void,
+    uploadedIPFS: boolean
 }) => {
 
     return <>
         <Heading>New diploma request</Heading>
-        <p>Hi Student! Provide your informations for receiving your NFT.</p>
+        <Text>Hi Student! Provide your informations for receiving your NFT.</Text>
+
+        <Text mt="1em" mb="8px" fontSize="2xl">NFT metadata:</Text>
+        <Textarea
+            defaultValue={defaultMetadata}
+            onChange={ (e) => {
+                setMetadata(e.target.value)
+            }}
+            size='md'
+            height="xs"
+        />
 
         <ButtonGroup mt={4}>
 
-            <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingTx || isLoadingWrite || isPrepareError} colorScheme='green' onClick={() => {
+            <Button variant='solid' size='sm' colorScheme="orange" disabled={uploadedIPFS} onClick={() => {
+                setStartRequest(true);
+            }}>
+                {uploadedIPFS ? "Uploaded" : "Upload to IPFS" }
+            </Button>
+
+            <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" variant='solid' size='sm' disabled={isLoadingTx || isLoadingWrite || isPrepareError || !uploadedIPFS} colorScheme='green' onClick={() => {
                 //setStartRequest(true)
                 handleClick()
             }}>

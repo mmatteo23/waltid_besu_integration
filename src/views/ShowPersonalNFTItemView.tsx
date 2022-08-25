@@ -16,6 +16,7 @@ import {
     Stack,
     Button,
     Flex,
+    Spinner,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { updateLanguageServiceSourceFile } from "typescript";
@@ -76,7 +77,13 @@ const ShowPersonalNFTItemView = ({
         }, []);
     */
 
-    if (!(metadata && decodedDetails)) return <div>Loading...</div>
+    if (!(metadata && decodedDetails)) return <Spinner
+                                        thickness='4px'
+                                        speed='0.65s'
+                                        emptyColor='gray.200'
+                                        color='blue.500'
+                                        size='xl'
+                                    />
     
     return (
         <>
@@ -113,21 +120,24 @@ const ShowPersonalNFTItemView = ({
                             <Stack spacing={3} direction="row" mt="0.5em">
                                 <Text fontWeight="bold">Mint time:</Text> <Moment unix>{token.mintTime}</Moment>
                             </Stack>
-                            <Stack>
-                                <Text fontWeight="bold" mt="1em" fontSize="xl">Metadata details:</Text>
-                                <Flex justifyContent="space-between">
-                                    <Text fontWeight="bold">DID:</Text>
-                                    <span>{decodedDetails[0]}</span>
-                                </Flex>
-                                <Flex justifyContent="space-between">
-                                    <Text fontWeight="bold">Corso:</Text> 
-                                    <span>{decodedDetails[1]}</span>
-                                </Flex>
-                                <Flex justifyContent="space-between">
-                                    <Text fontWeight="bold">Schema:</Text> 
-                                    <span>{decodedDetails[2]}</span>
-                                </Flex>
-                            </Stack>
+                            {   decodedDetails.length ?
+                                <Stack>
+                                    <Text fontWeight="bold" mt="1em" fontSize="xl">Metadata details:</Text>
+                                    <Flex justifyContent="space-between">
+                                        <Text fontWeight="bold">DID:</Text>
+                                        <span>{decodedDetails[0]}</span>
+                                    </Flex>
+                                    <Flex justifyContent="space-between">
+                                        <Text fontWeight="bold">Corso:</Text> 
+                                        <span>{decodedDetails[1]}</span>
+                                    </Flex>
+                                    <Flex justifyContent="space-between">
+                                        <Text fontWeight="bold">Schema:</Text> 
+                                        <span>{decodedDetails[2]}</span>
+                                    </Flex>
+                                </Stack>
+                                : null
+                            }
                         </PopoverBody>
                     </PopoverContent>
                 </Popover>

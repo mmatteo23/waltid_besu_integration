@@ -3,14 +3,39 @@ import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from
 import useDiplomaIssuerManagerData from "../hooks/useDiplomaIssuerManagerData";
 import { AcceptNewDiplomaRequestView } from "../views";
 
+import { pinJSONToIPFS } from "../utils/pinata";
+
+const defaultMetadata = `{
+    "name" : "",
+    "description" : "",
+    "image" : "https://gateway.pinata.cloud/ipfs/QmNkus5BdawNLFvHrE5wc4dW5wpvDjCxESj3oVKWBdwqbZ",
+    "details" : ""
+}`;
+
 const AcceptNewDiplomaRequestController = () => {
-
-    const tokenURI = "ipfs://QmW7aofc5AHLHQQ4V3kwojYPW316j7ybgGgx3Var2DJTvo";
-
+    
     const [startRequest, setStartRequest] = useState(false);
     const [prepareErrorShort, setPrepareErrorShort] = useState("");
+    const [metadata, setMetadata] = useState(defaultMetadata);
+    const [tokenURIipfs, setTokenURIipfs] = useState("");
+    const [uploadedIPFS, setUploadedIPFS] = useState(false);
+
 
     // bypass pinata upload for now
+    const tokenURI = "ipfs://QmW7aofc5AHLHQQ4V3kwojYPW316j7ybgGgx3Var2DJTvo";
+
+    // pinata pin request
+    if(startRequest){
+        console.log(metadata, JSON.parse(metadata));
+        pinJSONToIPFS(JSON.parse(metadata))
+            .then(response => {
+                console.log(response);
+                setTokenURIipfs(response.pinataUrl);
+                setUploadedIPFS(true);
+            })
+        setStartRequest(false);
+    }
+
 
     /***************************
      *      Contract Data
@@ -21,7 +46,8 @@ const AcceptNewDiplomaRequestController = () => {
     const { config, error: prepareError, isError: isPrepareError } = usePrepareContractWrite({
         ...contract,
         functionName: 'acceptNewDiplomaRequest',
-        args: [tokenURI],
+        args: [tokenURIipfs],
+        enabled: uploadedIPFS,
         onError(error) {
             setPrepareErrorShort(error.message.split('(reason="execution reverted: ')[1].split('", method')[0]);
             //throw (error)
@@ -64,6 +90,9 @@ const AcceptNewDiplomaRequestController = () => {
         handleClick={handleClick}
         txHash={data?.hash}
         setStartRequest={setStartRequest}
+        defaultMetadata={defaultMetadata}
+        setMetadata={setMetadata}
+        uploadedIPFS={uploadedIPFS}
     />;
 }
 

@@ -2,7 +2,8 @@ declare interface IVerifier {
     name: string,
     did: string,
     url: string,
-    signer: string | undefined
+    signer: string | undefined,
+    proof: string
 }
 
 declare interface IVerificationResult {

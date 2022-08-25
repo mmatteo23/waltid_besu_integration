@@ -28,12 +28,14 @@ export function AddNewVerifierModal(props: {
     const [did, setDid] = useState('');
     const [url, setUrl] = useState('');
     const [inputAddress, setAddress] = useState('');
+    const [proof, setProof] = useState('');
 
     const verifierInfo: IVerifier = {
         name: ethers.utils.formatBytes32String(inputName),
         did: did,
         url: url,
-        signer: inputAddress
+        signer: inputAddress,
+        proof: proof
     }
     //console.log(verifierInfo)
     const { config } = usePrepareContractWrite({
@@ -78,6 +80,13 @@ export function AddNewVerifierModal(props: {
                         <Input variant='filled' mt='.2em' name='address' onChange={event =>
                             setAddress(event.currentTarget.value)
                         } placeholder='0x123...'
+                        />
+                    </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel mt='.5em'>Proof</FormLabel>
+                        <Input variant='filled' mt='.2em' name='address' onChange={event =>
+                            setProof(event.currentTarget.value)
+                        } placeholder='0x54af578786...'
                         />
                     </FormControl>
 

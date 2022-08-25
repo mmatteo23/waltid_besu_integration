@@ -20,14 +20,16 @@ export function ShowPersonalNFTItemController({
         the metadata uploaded to IPFS are slow to catch up.
     */
     useEffect(() => {
-        axios.get(
-            token.tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")
-        ).then((meta) => {
-            const metadata = meta.data;
-            setMetadata(metadata);
-            const decodedString = atob(metadata.details);
-            setDecodedDetails(decodedString.split(';'));
-        });
+        if(token.tokenURI){
+            axios.get(
+                token.tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")
+            ).then((meta) => {
+                const metadata = meta.data;
+                setMetadata(metadata);
+                const decodedString = atob(metadata.details);
+                setDecodedDetails(decodedString.split(';'));
+            });
+        }
     }, []);
 
     const [contract_addressERC721, contract_abiERC721, contractERC721] = useDiplomaERC721Data();
