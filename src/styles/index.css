@@ -78,7 +78,7 @@ li.card-item {
 }
 
 li.nft-card {
-
+  max-width: 18em;
 }
 
 div.verification-record-box {

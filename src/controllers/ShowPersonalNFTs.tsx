@@ -1,23 +1,45 @@
 import { gql, useQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { ShowPersonalNFTsView } from "../views";
-
 import axios from "axios";
 
-function extractNFTsMetadata(tokens: IERC721Token[]) {
-    if(tokens === undefined) 
-        return [];
+const testAxios = () => {
+    var tokens: IERC721Token[] = [];
+    axios.post(
+        'https://api.thegraph.com/subgraphs/name/mmatteo23/monokee_thegraph',
+        {
+            query: `
+            {
+                tokens(first: 5) {
+                    id
+                    contract {
+                        id
+                    }
+                    tokenID
+                    owner {
+                        id
+                    }
+                    mintTime
+                    tokenURI
+                }
+            }`
+        }
+    )
+    .then((result) => {
+        //console.log(result);
+        //console.log(result.data.data.tokens);
+        const data = result.data.data.tokens;
 
-    var results: IERC721Metadata[] = [];
-    tokens.map(async (token, key) => {
-        const res = await fetch(token.tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/"));
-        const json = await res.json();
-        
-        results.push(json);
+        tokens[0] = data[0];
+        tokens[1] = data[1];
+        //console.log(tokens);
+    })
+    .catch((error) => {
+        console.log(error);
     });
 
-    return results;
+    console.log(tokens);
+    return tokens;
 }
 
 const ShowPersonalNFTsController = () => {
@@ -26,7 +48,7 @@ const ShowPersonalNFTsController = () => {
 
     const GET_NFTs = gql`
         query GetNFTs {
-            tokens(first: 5) {
+            tokens(where: {owner_: {id: "${address?.toLowerCase()}"}}) {
                 id
                 contract {
                     id
@@ -44,16 +66,11 @@ const ShowPersonalNFTsController = () => {
     const { loading, error, data } = useQuery(GET_NFTs);
 
     var tokens = data?.tokens;
-    console.log(tokens);
-
-    const metadata = extractNFTsMetadata(tokens);
-    console.log(metadata);
 
     return <ShowPersonalNFTsView 
         tokens={tokens}
         loading={loading}
         error={error}
-        metadata={metadata}
     />;
 }
 

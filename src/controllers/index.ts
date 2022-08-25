@@ -13,3 +13,4 @@ export { default as TrustedContractItemController } from "./TrustedContractItem"
 export { default as AcceptNewDiplomaRequestController } from "./AcceptNewDiplomaRequest";
 export { default as ConsumeTokenController } from "./ConsumeToken";
 export { default as ShowPersonalNFTsController } from "./ShowPersonalNFTs";
+export { default as ShowPersonalNFTItemController } from "./ShowPersonalNFTItem";

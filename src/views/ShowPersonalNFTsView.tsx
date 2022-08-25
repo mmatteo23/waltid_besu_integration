@@ -1,42 +1,66 @@
 import { ApolloError } from "@apollo/client";
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Box, Center, Heading, Spinner, Text } from "@chakra-ui/react";
 import Moment from 'react-moment';
+import axios from "axios";
+import { lazy } from "react";
+import { ShowPersonalNFTItemView } from "../views";
+import { ShowPersonalNFTItemController } from "../controllers";
+
 Moment.globalFormat = 'YYYY-MM-DD HH:mm:ss';
+
+
+/* Old metadata extraction
+function extractNFTsMetadata(tokens: IERC721Token[]) {
+    if (tokens === undefined)
+        return [];
+
+    var results: IERC721Metadata[] = [];
+    tokens.map(async (token, key) => {
+        const res = await fetch(token.tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/"));
+        const json = await res.json();
+
+        console.log("JSON #", key, json);
+        results[key] = (JSON.parse(JSON.stringify(json))) as IERC721Metadata;
+    });
+
+    return results;
+}
+*/
 
 const ShowPersonalNFTsView = ({
     tokens,
     loading,
-    error,
-    metadata
+    error
 }: {
-    tokens: IERC721Token[];
-    loading: boolean;
-    error: ApolloError | undefined;
-    metadata: IERC721Metadata[];
+    tokens: IERC721Token[],
+    loading: boolean,
+    error: ApolloError | undefined
 }) => {
 
     return <>
         <Heading>Your minted NFTs</Heading>
 
-        {loading && <div>Loading...</div>}
+        {
+            loading && 
+                <Center>
+                    <Spinner
+                        thickness='5px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                        />
+                </Center>
+        }
         {error && <div>Error: {error.message}</div>}
+        
         <ul className="nft-list">
             {
-                tokens ? (
+                tokens?.length ? (
                     tokens.map((token, key) => {
-                        return <li key={key} className="card-item nft-card">
-                            <Text fontSize="sm">
-                                Token #{token.tokenID}
-                            </Text>
-                            <p>
-                                Mint time: <Moment unix>{token.mintTime}</Moment>
-                            </p>
-                            <p>
-                                {token.tokenURI}
-                            </p>
-                        </li>
+                        return <ShowPersonalNFTItemController token={token} key={key} />
                     })
-                ) : null
+                ) : <p>Seems you don't have any tokens</p>
             }
         </ul>
     </>;
