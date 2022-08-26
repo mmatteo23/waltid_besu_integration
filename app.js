@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+
+import "./apis/theGraph";
   
 app.post("/post", (req, res) => {
   console.log("Connected to React");

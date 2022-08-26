@@ -26,8 +26,19 @@ export function ShowPersonalNFTItemController({
             ).then((meta) => {
                 const metadata = meta.data;
                 setMetadata(metadata);
-                const decodedString = atob(metadata.details);
-                setDecodedDetails(decodedString.split(';'));
+                try {
+                    metadata.details = atob(metadata.details);
+                } catch (error) {
+                    console.log(`Token #${token.tokenID}'s metadata details aren't BASE64 encoded`);
+                }
+                setDecodedDetails(metadata.details.split(';'));
+            });
+        } else {
+            setMetadata({
+                name: "Generic Token",
+                description: "This token has no metadata",
+                image: "",
+                details: ""
             });
         }
     }, []);

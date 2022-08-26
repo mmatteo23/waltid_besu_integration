@@ -61,12 +61,13 @@ div.widget .widget-icon {
  *  Verification Record
  */
 
- ul.nft-list {
+ul.nft-list {
   display: flex;
+  flex-wrap: wrap;
 }
 
 ul.nft-list :not(:last-child) {
-  margin-right: 1em;
+  /* margin-right: 1em; */
 }
 
 li.card-item {
@@ -79,6 +80,8 @@ li.card-item {
 
 li.nft-card {
   max-width: 18em;
+  /* min-width: 16em; */
+  margin-right: 1em;
 }
 
 div.verification-record-box {

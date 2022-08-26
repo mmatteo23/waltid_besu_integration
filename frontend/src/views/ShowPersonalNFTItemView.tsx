@@ -17,6 +17,7 @@ import {
     Button,
     Flex,
     Spinner,
+    ButtonGroup,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { updateLanguageServiceSourceFile } from "typescript";
@@ -53,44 +54,21 @@ const ShowPersonalNFTItemView = ({
     decodedDetails: Array<string>
 }) => {
 
-
-    /*
-    const [metadata, setMetadata] = useState<IERC721Metadata>();
-    var metadata2: IERC721Metadata | undefined;
-    axios.get(
-        token.tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")
-    ).then((result) => {
-        console.log(result.data);
-        metadata2 = result.data;
-    });
-    */
-
-    /*
-        Note: this is a necessary workaround for the fact that
-        the metadata uploaded to IPFS are slow to catch up.
-        useEffect(() => {
-            axios.get(
-                token.tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")
-            ).then((meta) => {
-                setMetadata(meta.data);
-            });
-        }, []);
-    */
-
-    if (!(metadata && decodedDetails)) return <Spinner
-                                        thickness='4px'
-                                        speed='0.65s'
-                                        emptyColor='gray.200'
-                                        color='blue.500'
-                                        size='xl'
-                                    />
+    if (!(metadata && decodedDetails)) 
+        return <Spinner
+                    thickness='4px'
+                    speed='0.65s'
+                    emptyColor='gray.200'
+                    color='blue.500'
+                    size='xl'
+                />
     
     return (
         <>
             <li className="card-item nft-card">
                 <Center mb="1em">
                     <Image
-                        src={metadata.image}
+                        src={metadata.image ? metadata.image : "https://via.placeholder.com/200"}
                         alt={metadata.name}
                         boxSize="200px"
                         borderRadius="16px" />
@@ -101,52 +79,57 @@ const ShowPersonalNFTItemView = ({
                         Token #{token.tokenID}
                     </Text>
                 </Box>
-                <Popover>
-                    <PopoverTrigger>
-                        <Button colorScheme="blue" size="sm">Read more</Button>
-                    </PopoverTrigger>
-                    <PopoverContent width="md">
-                        <PopoverArrow />
-                        <PopoverCloseButton />
-                        <PopoverHeader>More details:</PopoverHeader>
-                        <PopoverBody>
-                            <Stack spacing={2} direction="column" mb="0.5em">
-                                <Text fontWeight="bold">Description:</Text>
-                                <span>{metadata.description}</span>
-                            </Stack>
-                            <Stack spacing={2} direction="column" mb="0.5em">
-                                <Text fontWeight="bold">Owner:</Text> <span>{token.owner.id}</span>
-                            </Stack>
-                            <Stack spacing={3} direction="row" mt="0.5em">
-                                <Text fontWeight="bold">Mint time:</Text> <Moment unix>{token.mintTime}</Moment>
-                            </Stack>
-                            {   decodedDetails.length ?
-                                <Stack>
-                                    <Text fontWeight="bold" mt="1em" fontSize="xl">Metadata details:</Text>
-                                    <Flex justifyContent="space-between">
-                                        <Text fontWeight="bold">DID:</Text>
-                                        <span>{decodedDetails[0]}</span>
-                                    </Flex>
-                                    <Flex justifyContent="space-between">
-                                        <Text fontWeight="bold">Corso:</Text> 
-                                        <span>{decodedDetails[1]}</span>
-                                    </Flex>
-                                    <Flex justifyContent="space-between">
-                                        <Text fontWeight="bold">Schema:</Text> 
-                                        <span>{decodedDetails[2]}</span>
-                                    </Flex>
+                <ButtonGroup variant='outline' spacing='3'>
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button variant='solid' colorScheme="blue" size="sm">Read more</Button>
+                        </PopoverTrigger>
+                        <PopoverContent width="md">
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>More details:</PopoverHeader>
+                            <PopoverBody>
+                                <Stack spacing={2} direction="column" mb="0.5em">
+                                    <Text fontWeight="bold">Description:</Text>
+                                    <span>{metadata.description}</span>
                                 </Stack>
-                                : null
-                            }
-                        </PopoverBody>
-                    </PopoverContent>
-                </Popover>
-                <Button isLoading={isLoadingERC721Write || isLoadingERC721Tx} loadingText="Approving" variant='solid' size='sm' disabled={isLoadingERC721Tx || isLoadingERC721Write || isPrepareERC721Error} colorScheme='yellow' onClick={() => {
-                    handleERC721Click()
-                }}>
-                    Approve
-                </Button>
+                                <Stack spacing={2} direction="column" mb="0.5em">
+                                    <Text fontWeight="bold">Owner:</Text> <span>{token.owner.id}</span>
+                                </Stack>
+                                <Stack spacing={3} direction="row" mt="0.5em">
+                                    <Text fontWeight="bold">Mint time:</Text> <Moment unix>{token.mintTime}</Moment>
+                                </Stack>
+                                {   decodedDetails.length ?
+                                    <Stack>
+                                        <Text fontWeight="bold" mt="1em" fontSize="xl">Metadata details:</Text>
+                                        <Flex justifyContent="space-between">
+                                            <Text fontWeight="bold">DID:</Text>
+                                            <span>{decodedDetails[0]}</span>
+                                        </Flex>
+                                        <Flex justifyContent="space-between">
+                                            <Text fontWeight="bold">Corso:</Text> 
+                                            <span>{decodedDetails[1]}</span>
+                                        </Flex>
+                                        <Flex justifyContent="space-between">
+                                            <Text fontWeight="bold">Schema:</Text> 
+                                            <span>{decodedDetails[2]}</span>
+                                        </Flex>
+                                    </Stack>
+                                    : null
+                                }
+                            </PopoverBody>
+                        </PopoverContent>
+                    </Popover>
+                    
+                    <Button isLoading={isLoadingERC721Write || isLoadingERC721Tx} loadingText="Approving" variant='solid' size='sm' disabled={isLoadingERC721Tx || isLoadingERC721Write || isPrepareERC721Error} colorScheme='yellow' onClick={() => {
+                        handleERC721Click()
+                    }}>
+                        Approve
+                    </Button>
+                </ButtonGroup>
                 
+
+
                 {isLoadingERC721Write && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Check your wallet to complete the procedure...</Box>}
                 {isLoadingERC721Tx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Please wait for the transaction to be mined...</Box>}
                 {isSuccessERC721Tx &&
