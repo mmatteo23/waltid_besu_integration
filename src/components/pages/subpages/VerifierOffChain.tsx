@@ -11,7 +11,7 @@ export default function VerifierOffChain(){
 
     const updatePolicies = async () => {
         let policies = await Auditor.getVerificationPolicies();
-        setPolicies(policies.reverse());
+        setPolicies(policies);
     }
 
     useEffect(() => {
