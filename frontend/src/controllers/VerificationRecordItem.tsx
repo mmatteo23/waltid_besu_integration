@@ -1,4 +1,5 @@
 import { Result } from "ethers/lib/utils";
+import { useState } from "react";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
 import VerificationRecordItemView from "../views/VerificationRecordItemView";
@@ -9,6 +10,9 @@ const VerificationRecordItemController = ({
 } : {
     record: Result
 }) => {
+
+    const [prepareRevokeErrorShort, setPrepareRevokeErrorShort] = useState("");
+    const [prepareRemoveErrorShort, setPrepareRemoveErrorShort] = useState("");
 
     /**
      * Contract Data
@@ -29,12 +33,20 @@ const VerificationRecordItemController = ({
         ...contract,
         functionName: 'revokeVerification',
         args: [record.uuid],
+        onError(error) {
+            setPrepareRevokeErrorShort(error.message.split('(reason="execution reverted: ')[1].split('", method')[0])
+        }
     });
 
     const { data: revokeData, error: revokeError, isError: isRevokeError, write: revokeWrite } = useContractWrite(revokeConfig);
 
     // using the useWaitForTransaction we can show feedback on the status of the transaction
     const { isLoading: isLoadingRevoke, isSuccess: isSuccessRevoke } = useWaitForTransaction({
+        hash: revokeData?.hash,
+    });
+
+    // using the useWaitForTransaction we can show feedback on the status of the transaction
+    const { isLoading: isLoadingRevokeTx, isSuccess: isSuccessRevokeTx } = useWaitForTransaction({
         hash: revokeData?.hash,
     });
 
@@ -48,12 +60,20 @@ const VerificationRecordItemController = ({
         ...contract,
         functionName: 'removeVerification',
         args: [record.uuid],
+        onError(error) {
+            setPrepareRemoveErrorShort(error.message.split('(reason="execution reverted: ')[1].split('", method')[0])
+        }
     });
 
     const { data: removeData, error: removeError, isError: isRemoveError, write: removeWrite } = useContractWrite(removeConfig);
 
     // using the useWaitForTransaction we can show feedback on the status of the transaction
     const { isLoading: isLoadingRemove, isSuccess: isSuccessRemove } = useWaitForTransaction({
+        hash: removeData?.hash,
+    });
+
+    // using the useWaitForTransaction we can show feedback on the status of the transaction
+    const { isLoading: isLoadingRemoveTx, isSuccess: isSuccessRemoveTx } = useWaitForTransaction({
         hash: removeData?.hash,
     });
 
@@ -69,14 +89,22 @@ const VerificationRecordItemController = ({
         isPrepareRevokeError={isPrepareRevokeError}
         isRevokeError={isRevokeError}
         prepareRevokeError={prepareRevokeError}
+        prepareRevokeErrorShort={prepareRevokeErrorShort}
         revokeError={revokeError}
+        txHashRevoke={revokeData?.hash}
+        isLoadingRevokeTx={isLoadingRevokeTx}
+        isSuccessRevokeTx={isSuccessRevokeTx}
         handleClickRemove={handleClickRemove}
         isLoadingRemove={isLoadingRemove}
         isSuccessRemove={isSuccessRemove}
         isPrepareRemoveError={isPrepareRemoveError}
         isRemoveError={isRemoveError}
         prepareRemoveError={prepareRemoveError}
+        prepareRemoveErrorShort={prepareRemoveErrorShort}
         removeError={removeError}
+        txHashRemove={removeData?.hash}
+        isLoadingRemoveTx={isLoadingRemoveTx}
+        isSuccessRemoveTx={isSuccessRemoveTx}
     />
 }
 

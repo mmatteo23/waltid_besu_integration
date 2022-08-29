@@ -1,25 +1,33 @@
 import { CloseIcon, DeleteIcon } from "@chakra-ui/icons";
-import { Badge, Button, ButtonGroup } from "@chakra-ui/react";
+import { Badge, Box, Button, ButtonGroup } from "@chakra-ui/react";
 import { Result } from "ethers/lib/utils";
 import Moment from 'react-moment';
 Moment.globalFormat = 'YYYY-MM-DD HH:mm:ss';
 
 const VerificationRecordItemView = ({
     record,
-    handleClickRevoke, 
-    isLoadingRevoke, 
+    handleClickRevoke,
+    isLoadingRevoke,
     isSuccessRevoke,
     isPrepareRevokeError,
     isRevokeError,
-    prepareRevokeError, 
+    prepareRevokeError,
+    prepareRevokeErrorShort,
     revokeError,
-    handleClickRemove, 
-    isLoadingRemove, 
+    txHashRevoke,
+    isLoadingRevokeTx,
+    isSuccessRevokeTx,
+    handleClickRemove,
+    isLoadingRemove,
     isSuccessRemove,
     isPrepareRemoveError,
     isRemoveError,
-    prepareRemoveError, 
-    removeError
+    prepareRemoveError,
+    prepareRemoveErrorShort,
+    removeError,
+    txHashRemove,
+    isLoadingRemoveTx,
+    isSuccessRemoveTx,
 }: {
     record: Result,
     handleClickRevoke: () => void,
@@ -28,14 +36,22 @@ const VerificationRecordItemView = ({
     isPrepareRevokeError: boolean,
     isRevokeError: boolean,
     prepareRevokeError: Error | null,
+    prepareRevokeErrorShort: string,
     revokeError: Error | null,
+    txHashRevoke: string | undefined,
+    isLoadingRevokeTx: boolean,
+    isSuccessRevokeTx: boolean,
     handleClickRemove: () => void,
     isLoadingRemove: boolean,
     isSuccessRemove: boolean,
     isPrepareRemoveError: boolean,
     isRemoveError: boolean,
     prepareRemoveError: Error | null,
-    removeError: Error | null
+    prepareRemoveErrorShort: string,
+    removeError: Error | null,
+    txHashRemove: string | undefined,
+    isLoadingRemoveTx: boolean,
+    isSuccessRemoveTx: boolean,
 }) => {
     return <li className="card-item">
         <div className="verification-record-box">
@@ -58,28 +74,55 @@ const VerificationRecordItemView = ({
                 </p>
             </div>
 
+            {
+                isPrepareRevokeError && isPrepareRemoveError ?
 
-            <ButtonGroup variant='outline' spacing='6' mt='1em'>
-                {!record.revoked ?
-                    <Button isLoading={isLoadingRevoke} loadingText="Revoking" leftIcon={<CloseIcon />} colorScheme='yellow' variant='solid' disabled={isLoadingRevoke || isLoadingRemove} onClick={() => {      
-                        handleClickRevoke()
-                    }}>
-                        Revoke
-                    </Button>
-                    : null}
+                    <Box display="inline-block" mt="1em" p={4} bg="orange.200" color="black" borderRadius="lg">
+                        This account cannot perform actions to this record.
+                    </Box>
+
+                    : <>
+                        < ButtonGroup variant='outline' spacing='6' mt='1em'>
+                            {!record.revoked ?
+                                <Button isLoading={isLoadingRevoke} loadingText="Revoking" leftIcon={<CloseIcon />} colorScheme='yellow' variant='solid' disabled={isLoadingRevoke || isLoadingRemove || isPrepareRevokeError} onClick={() => {
+                                    handleClickRevoke()
+                                }}>
+                                    Revoke
+                                </Button>
+                                : null}
 
 
-                <Button isLoading={isLoadingRemove} loadingText="Removing" leftIcon={<DeleteIcon />} colorScheme='red' variant='solid' disabled={isLoadingRevoke || isLoadingRemove} onClick={() => {
-                    handleClickRemove()
-                }}>
-                    Remove
-                </Button>
-            </ButtonGroup>
-            {(isRevokeError || isRemoveError) && (
-                <div>Error: {(revokeError || removeError)?.message}</div>
-            )}
+                            <Button isLoading={isLoadingRemove} loadingText="Removing" leftIcon={<DeleteIcon />} colorScheme='red' variant='solid' disabled={isLoadingRevoke || isLoadingRemove || isPrepareRemoveError} onClick={() => {
+                                handleClickRemove()
+                            }}>
+                                Remove
+                            </Button>
+                        </ButtonGroup>
+
+                        {isLoadingRevoke && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg" width="50%">Check your wallet to complete the procedure...</Box>}
+                        {isLoadingRevokeTx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg" width="50%">Please wait for the transaction to be mined...</Box>}
+                        {isSuccessRevokeTx &&
+                            <Box mt="1em" p={4} bg="green" borderRadius="lg">
+                                Transaction mined with success.
+                                <p><a href={'https://goerli.etherscan.io/tx/' + txHashRevoke} /></p>
+                            </Box>}
+                        {isRevokeError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">{revokeError?.message}</Box>}
+                        {isPrepareRevokeError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">{prepareRevokeErrorShort}</Box>}
+
+                        {isLoadingRemove && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg" width="50%">Check your wallet to complete the procedure...</Box>}
+                        {isLoadingRemoveTx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg" width="50%">Please wait for the transaction to be mined...</Box>}
+                        {isSuccessRemoveTx &&
+                            <Box mt="1em" p={4} bg="green" borderRadius="lg">
+                                Transaction mined with success.
+                                <p><a href={'https://goerli.etherscan.io/tx/' + txHashRemove} /></p>
+                            </Box>}
+                        {isRemoveError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">{removeError?.message}</Box>}
+                        {isPrepareRemoveError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">{prepareRemoveErrorShort}</Box>}
+                    </>
+            }
+
         </div>
-    </li>
+    </li >
 };
 
 export default VerificationRecordItemView;
