@@ -18,6 +18,8 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { Auditor, utils } from 'ssikit-sdk';
+import axios from 'axios';
+import { Request } from 'express';
 
 export default function VerifyCredentialsModal(props: {policiesToUse: string[]}) {
 
@@ -25,6 +27,7 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
 
     const [credentialsToVerify, setCredentialsToVerify] = useState<string>("[\n\n]");
     const [result, setResult] = useState<string>("");
+    const [verified, setVerified] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
     const handleSubmit = async (event: any) => {
@@ -42,6 +45,7 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                 let result = await Auditor.verifyCredential(request);
                 if (result) {
                     setResult(JSON.stringify(result, null, 4));
+                    result?.valid ? setVerified(true) : setVerified(false);
                 } else {
                     setError("Error: couldn't verify credentials (probably not valid)")
                 }
@@ -51,15 +55,42 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
         }
     };
 
+    interface signatureRequest {
+        verifierDid: string;
+        keyId: string;
+        message: string;
+    }
+
+    const crypto = async () => {
+        const data: signatureRequest = {
+            message: "Hello Dio",
+            verifierDid: "did:ebsi:zjj7Uqib2dZGU9vJSZFR9TG",
+            keyId: "5e2ae8c7b65e4a26b3b860d43da6a732"
+        }
+        let result = await axios.post("/createSignature", {data:data});
+        console.log(result.data)
+    }
+
+    const reset = () => {
+        setCredentialsToVerify("[\n\n]");
+    }
+
     useEffect(() => {
         setCredentialsToVerify("[\n\n]");
         setResult("");
         setError("");
+        setVerified(false);
     }, [isOpen]);
 
     useEffect(() => {
         setError("");
+        setResult("");
+        setVerified(false);
     }, [credentialsToVerify]);
+
+    useEffect(() => {
+        crypto();
+    }, []);
 
     return (
         <>
@@ -82,7 +113,7 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                                 <Textarea
                                     value={credentialsToVerify}
                                     onChange={(e) => setCredentialsToVerify(e.target.value)}
-                                    h='20em'
+                                    h='15em'
                                     variant="filled"
                                 />
                             </FormControl>
@@ -90,6 +121,14 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                         <ModalFooter display="flex" flexDir="column">
                             <HStack w="100%">
                                 {error && <Text mr="auto" color="red.200">{error}</Text>}
+                                <Box mr="auto">
+                                    {
+                                        !error &&
+                                        <Button onClick={reset} size='sm' colorScheme='orange'>
+                                            Reset
+                                        </Button>
+                                    }
+                                </Box>
                                 <Box ml="auto">
                                     <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>
                                         Close
@@ -105,6 +144,13 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                                     mt='0.5em' mb="1em" 
                                     height="15em" value={result} variant="filled"
                                 />
+                            </Box>
+                            <Box ml="auto">
+                                <Button onClick={crypto} isDisabled={!verified}
+                                    size='sm' colorScheme='green'
+                                >
+                                    Register On-chain
+                                </Button>
                             </Box>
                         </ModalFooter>
                     </form>

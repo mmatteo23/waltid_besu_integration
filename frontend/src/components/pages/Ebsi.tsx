@@ -79,8 +79,8 @@ export default function Ebsi(){
                             <Button type="submit"
                                 colorScheme='blue' mt='2em' w='8em'
                             >
+                                {loading && <Spinner mr="0.5em" size='xs' />}
                                 Register
-                                {loading && <Spinner ml="0.5em" size='xs' />}
                             </Button>
                         </FormControl>
                     </form>

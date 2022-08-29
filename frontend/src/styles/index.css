@@ -214,3 +214,7 @@ a.link:hover {
   text-decoration: underline;
   color: #3f90c2;
 }
+
+.monospace {
+  font-family: monospace;
+}

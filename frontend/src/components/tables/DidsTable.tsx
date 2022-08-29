@@ -20,7 +20,7 @@ import { DeleteDidModal, ViewDidModal } from '../modals/DIDs';
 export default function DidsTable(props: { data: string[], updateDids: () => Promise<void>, caption: string }) {
 
     const truncateDid = (did: string) => {
-        return did.substring(0, 20) + ' ... ' + did.substring(did.length - 10);
+        return did.substring(0, 20) + '...' + did.substring(did.length - 10);
     }
 
     return <TableContainer>
@@ -39,7 +39,11 @@ export default function DidsTable(props: { data: string[], updateDids: () => Pro
                             <Td>
                                 <Popover>
                                     <PopoverTrigger>
-                                        <Button onClick={() => navigator.clipboard.writeText(did)}>{truncateDid(did)}</Button>
+                                        <Button onClick={() => navigator.clipboard.writeText(did)}
+                                            className="monospace"
+                                        >
+                                            {truncateDid(did)}
+                                        </Button>
                                     </PopoverTrigger>
                                     <PopoverContent>
                                         <PopoverArrow />
