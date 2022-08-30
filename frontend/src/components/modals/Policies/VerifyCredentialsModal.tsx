@@ -15,11 +15,14 @@ import {
     Textarea,
     Box,
     HStack,
+    Select,
+    Input,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
-import { Auditor, utils } from 'ssikit-sdk';
+import { Custodian, Auditor, Signatory, utils } from 'ssikit-sdk';
 import axios from 'axios';
-import { Request } from 'express';
+import * as jose from 'jose';
+import { Buffer } from "buffer";
 
 export default function VerifyCredentialsModal(props: {policiesToUse: string[]}) {
 
@@ -28,26 +31,53 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
     const [credentialsToVerify, setCredentialsToVerify] = useState<string>("[\n\n]");
     const [result, setResult] = useState<string>("");
     const [verified, setVerified] = useState<boolean>(false);
+    const [keys, setKeys] = useState<utils.Key[]>([]);
+    const [subject, setSubject] = useState<string>("");
+    const [verifierKey, setVerifierKey] = useState<string>("");
+    const [expiration, setExpiration] = useState<string>("");
     const [error, setError] = useState<string>("");
 
-    const handleSubmit = async (event: any) => {
+    const checkIfCredsRevoked = async (credentials: any[]) => {
+        let revoked = await Promise.all(credentials.map(async cred => {
+            if (cred?.credentialStatus && cred?.credentialStatus?.type === "SimpleCredentialStatus2022") {
+                let id = cred?.credentialStatus?.id
+                let index = id?.indexOf("/revocations/")
+                let token = ""
+                if (index !== -1) {
+                    token = id?.substring(index + "/revocations/".length)
+                }
+                let isRevoked = (await Signatory.isRevoked(token)).isRevoked;
+                if (isRevoked) {
+                    return cred
+                }
+            }
+        }));
+        return revoked;
+    }
+
+    const checkIfValid = async (event: any) => {
         event.preventDefault();
         try {
-            if (props.policiesToUse.length !== 0 && credentialsToVerify !== "[\n\n]") {
-                let policies = props.policiesToUse.map(policy => {
-                    return { policy: policy };
-                });
-                let credentials = JSON.parse(credentialsToVerify);
-                let request: utils.VerificationRequest = {
-                    credentials,
-                    policies
-                };
-                let result = await Auditor.verifyCredential(request);
-                if (result) {
-                    setResult(JSON.stringify(result, null, 4));
-                    result?.valid ? setVerified(true) : setVerified(false);
-                } else {
-                    setError("Error: couldn't verify credentials (probably not valid)")
+            let credentials: any[] = JSON.parse(credentialsToVerify);
+            let revoked = await checkIfCredsRevoked(credentials);
+            if (revoked.some(cred => cred !== undefined)) {
+                throw new Error("Error: one or more credentials are revoked")
+            } else {
+                if (props.policiesToUse.length !== 0 && credentialsToVerify !== "[\n\n]") {
+                    let policies = props.policiesToUse.map(policy => {
+                        return { policy: policy };
+                    });
+                    let request: utils.VerificationRequest = {
+                        credentials,
+                        policies
+                    };
+                    let result = await Auditor.verifyCredential(request);
+                    if (result) {
+                        setResult(JSON.stringify(result, null, 4));
+                        result?.valid ? setVerified(true) : setVerified(false);
+                    } else {
+                        setError("Error: couldn't verify credentials (probably not valid)")
+                    }
                 }
             }
         } catch (error) {
@@ -56,23 +86,46 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
     };
 
     interface signatureRequest {
-        verifierDid: string;
         keyId: string;
         message: string;
     }
 
-    const crypto = async () => {
-        const data: signatureRequest = {
-            message: "Hello Dio",
-            verifierDid: "did:ebsi:zjj7Uqib2dZGU9vJSZFR9TG",
-            keyId: "5e2ae8c7b65e4a26b3b860d43da6a732"
+    interface verificationRequest {
+        verifierDid: string;
+        message: jose.GeneralJWSInput;
+    }
+
+    const registerVerificationRecord = async (e:any) => {
+        e.preventDefault();
+        let messageString = JSON.stringify({
+            subject: subject,
+            expiration: expiration,
+            jsonResult: JSON.parse(result),
+            useCase: "diploma"
+        });
+        let encoded = Buffer.from(messageString).toString('base64');
+        const request: signatureRequest = {
+            keyId: verifierKey,
+            message: encoded
         }
-        let result = await axios.post("/createSignature", {data:data});
-        console.log(result.data)
+        let signature = (await axios.post("/createSignature", {data:request})).data;
+        const verifyRequest: verificationRequest = {
+            verifierDid: "did:ebsi:zzavU6gDCnf4U3bX2gfn6qs",
+            message: signature
+        }
+        let verify = (await axios.post("/verifySignature", {data:verifyRequest})).data;
+        let decoded = Buffer.from(verify, 'base64').toString('ascii');
+        console.log(JSON.stringify(JSON.parse(decoded),null,4))
     }
 
     const reset = () => {
         setCredentialsToVerify("[\n\n]");
+    }
+
+    const initKeys = async () => {
+        let keys = await Custodian.getKeys();
+        setKeys(keys);
+        setVerifierKey(keys[0].keyId.id);
     }
 
     useEffect(() => {
@@ -80,6 +133,7 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
         setResult("");
         setError("");
         setVerified(false);
+        initKeys();
     }, [isOpen]);
 
     useEffect(() => {
@@ -87,10 +141,6 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
         setResult("");
         setVerified(false);
     }, [credentialsToVerify]);
-
-    useEffect(() => {
-        crypto();
-    }, []);
 
     return (
         <>
@@ -100,12 +150,12 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                 Verify Credentials
             </Button>
 
-            <Modal size="xl" blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
+            <Modal size="2xl" blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Verify credentials</ModalHeader>
                     <ModalCloseButton />
-                    <form method='post' onSubmit={handleSubmit}>
+                    <form onSubmit={registerVerificationRecord}>
                         <ModalBody>
                             <FormControl isRequired>
                                 <FormLabel>Credential(s) to verify (VCs/VPs)</FormLabel>
@@ -130,28 +180,68 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                                     }
                                 </Box>
                                 <Box ml="auto">
-                                    <Button onClick={onClose} size='sm' colorScheme='red' mr={3}>
-                                        Close
-                                    </Button>
-                                    <Button type='submit' size='sm' colorScheme='green'>
+                                    <Button onClick={checkIfValid} size='sm' colorScheme='green'>
                                         Verify
                                     </Button>
                                 </Box>
                             </HStack>
-                            <Box w="100%">                         
-                                <Text mt='2em'>Verification result:</Text>
-                                <Textarea isDisabled={result.length===0}
-                                    mt='0.5em' mb="1em" 
-                                    height="15em" value={result} variant="filled"
-                                />
+                            <Box w="100%">
+                                <FormControl isRequired>              
+                                    <FormLabel mt='2em'>Verification result:</FormLabel>
+                                    <Textarea isDisabled={result.length===0}
+                                        mt='0.5em' mb="1em" 
+                                        height="15em" value={result} variant="filled"
+                                    />
+                                </FormControl>
                             </Box>
-                            <Box ml="auto">
-                                <Button onClick={crypto} isDisabled={!verified}
-                                    size='sm' colorScheme='green'
+                            <Box w="100%">
+                                <FormControl isRequired>
+                                    <FormLabel mt="1em">Subject address</FormLabel>
+                                    <Input
+                                        isDisabled={!verified}
+                                        value={subject}
+                                        onChange={(e) => setSubject(e.target.value)}
+                                        className="monospace"
+                                        w="60%"
+                                    />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel mt="1em">Key linked to the Verifier DID</FormLabel>
+                                    <Select
+                                        isDisabled={!verified}
+                                        value={verifierKey}
+                                        onChange={(e) => setVerifierKey(e.target.value)}
+                                        className="monospace"
+                                        w="60%"
+                                    >
+                                        {keys.map(myKey => {
+                                            return <option className="monospace" key={myKey.keyId.id} value={myKey.keyId.id}>
+                                                {myKey.keyId.id}
+                                            </option>
+                                        })}
+                                    </Select>
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel mt="1em">Expiration date</FormLabel>
+                                    <Input type="date"
+                                        isDisabled={!verified}
+                                        value={expiration}
+                                        onChange={(e) => setExpiration(e.target.value)}
+                                        className="monospace"
+                                        w="60%"
+                                    />
+                                </FormControl>
+                            </Box>
+                            <HStack ml="auto" mt="1.5em">
+                                <Button onClick={onClose} size='md' colorScheme='red' mr={3}>
+                                    Close
+                                </Button>
+                                <Button type="submit" isDisabled={!verified}
+                                    size='md' colorScheme='green' 
                                 >
                                     Register On-chain
                                 </Button>
-                            </Box>
+                            </HStack>
                         </ModalFooter>
                     </form>
                 </ModalContent>

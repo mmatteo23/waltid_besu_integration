@@ -3,7 +3,7 @@ import SideNav from '../SideNav';
 import VerifierOnChain from './subpages/VerifierOnChain';
 import VerifierOffChain from './subpages/VerifierOffChain';
 
-export default function Issuer() {
+export default function Verifier() {
 
     const links: {[key: string]: string;} = {
         "verifier-offchain": "Off-Chain",
