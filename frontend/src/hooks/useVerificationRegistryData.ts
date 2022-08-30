@@ -27,12 +27,22 @@ const useVerificationRegistryData = (): [
         verifyingContract: verificationRegistryAddress
     }
 
+    // const types = {
+    //     VerificationResult: [
+    //         { name: "schema", type: "string" },
+    //         { name: "subject", type: "address" },
+    //         { name: "expiration", type: "uint256" }
+    //     ]
+    // }
+
     const types = {
         VerificationResult: [
-            { name: "schema", type: "string" },
             { name: "subject", type: "address" },
-            { name: "expiration", type: "uint256" }
-        ]
+            { name: "expiration", type: "uint256" },
+            { name: "signature", type: "string"},
+            { name: "jsonResult", type: "string" },
+            { name: "useCase", type: "string" }
+        ] 
     }
 
     const contract = {

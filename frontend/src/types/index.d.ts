@@ -7,9 +7,11 @@ declare interface IVerifier {
 }
 
 declare interface IVerificationResult {
-    schema: string,
     subject: string,
-    expiration: number
+    expiration: number,
+    jsonResult: string,
+    useCase: string,
+    signature: string,
 }
 
 declare interface ITokenContract {
@@ -41,4 +43,14 @@ declare interface IERC721Metadata {
     description: string,
     image: string,
     details: string
+}
+
+declare interface signatureRequest {
+    keyId: string;
+    message: string;
+}
+
+declare interface verificationRequest {
+    verifierDid: string;
+    message: jose.GeneralJWSInput;
 }

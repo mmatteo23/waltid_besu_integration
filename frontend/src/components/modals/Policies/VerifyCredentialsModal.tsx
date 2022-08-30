@@ -21,12 +21,15 @@ import {
 import { useEffect, useState } from 'react';
 import { Custodian, Auditor, Signatory, utils } from 'ssikit-sdk';
 import axios from 'axios';
-import * as jose from 'jose';
 import { Buffer } from "buffer";
+import useVerificationRegistryData from '../../../hooks/useVerificationRegistryData';
+import { useContractWrite, usePrepareContractWrite, useSignTypedData } from 'wagmi';
+import { ethers } from 'ethers';
 
 export default function VerifyCredentialsModal(props: {policiesToUse: string[]}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [vr_address, vr_abi, domain, types] = useVerificationRegistryData();
 
     const [credentialsToVerify, setCredentialsToVerify] = useState<string>("[\n\n]");
     const [result, setResult] = useState<string>("");
@@ -35,7 +38,36 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
     const [subject, setSubject] = useState<string>("");
     const [verifierKey, setVerifierKey] = useState<string>("");
     const [expiration, setExpiration] = useState<string>("");
+    const [didSignature, setDidSignature] = useState<string>("");
     const [error, setError] = useState<string>("");
+
+    const verificationResult: IVerificationResult = {
+        subject: subject,
+        expiration: (new Date(expiration))?.getTime() / 1000,
+        jsonResult: result,
+        useCase: "diploma",
+        signature: didSignature
+    };
+
+    const { data: signature, error: signError, isError, isLoading: isLoadingSignature, isSuccess: isSuccessSignature, signTypedData } =
+        useSignTypedData({
+            domain,
+            types,
+            value: verificationResult
+        });
+
+    const { config, error: prepareError } = usePrepareContractWrite({
+        addressOrName: vr_address,
+        contractInterface: vr_abi,
+        functionName: 'registerVerification',
+        enabled: (ethers.utils.isAddress(subject)),
+        args: [verificationResult, signature],
+        onError(error) {
+            console.log('Error', error)
+        },
+    })
+
+    const { data, error: writeError, isLoading, isSuccess, write } = useContractWrite(config);
 
     const checkIfCredsRevoked = async (credentials: any[]) => {
         let revoked = await Promise.all(credentials.map(async cred => {
@@ -73,7 +105,7 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                     };
                     let result = await Auditor.verifyCredential(request);
                     if (result) {
-                        setResult(JSON.stringify(result, null, 4));
+                        setResult(JSON.stringify(result));
                         result?.valid ? setVerified(true) : setVerified(false);
                     } else {
                         setError("Error: couldn't verify credentials (probably not valid)")
@@ -85,22 +117,11 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
         }
     };
 
-    interface signatureRequest {
-        keyId: string;
-        message: string;
-    }
-
-    interface verificationRequest {
-        verifierDid: string;
-        message: jose.GeneralJWSInput;
-    }
-
-    const registerVerificationRecord = async (e:any) => {
-        e.preventDefault();
+    const registerVerificationRecord = async () => {
         let messageString = JSON.stringify({
             subject: subject,
             expiration: expiration,
-            jsonResult: JSON.parse(result),
+            jsonResult: result,
             useCase: "diploma"
         });
         let encoded = Buffer.from(messageString).toString('base64');
@@ -108,14 +129,8 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
             keyId: verifierKey,
             message: encoded
         }
-        let signature = (await axios.post("/createSignature", {data:request})).data;
-        const verifyRequest: verificationRequest = {
-            verifierDid: "did:ebsi:zzavU6gDCnf4U3bX2gfn6qs",
-            message: signature
-        }
-        let verify = (await axios.post("/verifySignature", {data:verifyRequest})).data;
-        let decoded = Buffer.from(verify, 'base64').toString('ascii');
-        console.log(JSON.stringify(JSON.parse(decoded),null,4))
+        let didSignature = (await axios.post("/createSignature", {data:request})).data;
+        setDidSignature(JSON.stringify(didSignature));
     }
 
     const reset = () => {
@@ -125,7 +140,7 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
     const initKeys = async () => {
         let keys = await Custodian.getKeys();
         setKeys(keys);
-        setVerifierKey(keys[0].keyId.id);
+        setVerifierKey(keys[0]?.keyId?.id);
     }
 
     useEffect(() => {
@@ -142,6 +157,14 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
         setVerified(false);
     }, [credentialsToVerify]);
 
+    useEffect(() => {
+        if (didSignature) {
+            signTypedData();
+        }
+    }, [didSignature])
+
+    console.log(prepareError)
+
     return (
         <>
             <Button isDisabled={props.policiesToUse.length===0}
@@ -155,7 +178,7 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                 <ModalContent>
                     <ModalHeader>Verify credentials</ModalHeader>
                     <ModalCloseButton />
-                    <form onSubmit={registerVerificationRecord}>
+                    <form>
                         <ModalBody>
                             <FormControl isRequired>
                                 <FormLabel>Credential(s) to verify (VCs/VPs)</FormLabel>
@@ -188,9 +211,13 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                             <Box w="100%">
                                 <FormControl isRequired>              
                                     <FormLabel mt='2em'>Verification result:</FormLabel>
-                                    <Textarea isDisabled={result.length===0}
+                                    <Textarea isDisabled={result?.length===0}
                                         mt='0.5em' mb="1em" 
-                                        height="15em" value={result} variant="filled"
+                                        height="15em" value={
+                                            result ? 
+                                                JSON.stringify(JSON.parse(result), null, 4)
+                                            : ""
+                                        } variant="filled"
                                     />
                                 </FormControl>
                             </Box>
@@ -231,15 +258,25 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                                         w="60%"
                                     />
                                 </FormControl>
+                                {signError ? <Text mt="1em" mb="0.5em" bg="red">{signError?.message}</Text> : null}
                             </Box>
                             <HStack ml="auto" mt="1.5em">
-                                <Button onClick={onClose} size='md' colorScheme='red' mr={3}>
+                                <Button onClick={onClose} size='md' colorScheme='red'>
                                     Close
                                 </Button>
-                                <Button type="submit" isDisabled={!verified}
-                                    size='md' colorScheme='green' 
-                                >
-                                    Register On-chain
+                                <Button size='md' colorScheme={isLoadingSignature ? 'yellow' : 'blue'} disabled={isLoadingSignature || !verified} mr={3} onClick={() => {
+                                    try {
+                                        registerVerificationRecord();
+                                    } catch( error ) {
+                                        console.log("Try catch error: ", error);
+                                    }
+                                }}>
+                                    {isLoadingSignature ? "Check Wallet" : "Create Signature"}
+                                </Button>
+                                <Button size='md' colorScheme={isLoading ? 'yellow' : 'green'} disabled={!write} onClick={() => {
+                                    write?.()
+                                }}>
+                                    {isLoading ? "Confirm tx" : "Confirm"}
                                 </Button>
                             </HStack>
                         </ModalFooter>

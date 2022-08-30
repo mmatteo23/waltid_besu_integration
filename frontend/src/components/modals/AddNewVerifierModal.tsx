@@ -10,11 +10,14 @@ import {
     FormControl,
     FormLabel,
     Input,
+    Select,
 } from '@chakra-ui/react'
-import { ethers } from 'ethers';
-import { useState } from 'react'
+import { ethers, utils } from 'ethers';
+import { useEffect, useState } from 'react'
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import useVerificationRegistryData from '../../hooks/useVerificationRegistryData';
+import * as ssikit from 'ssikit-sdk';
+import axios from 'axios';
 
 export function AddNewVerifierModal(props: {
     isOpen: boolean,
@@ -29,6 +32,9 @@ export function AddNewVerifierModal(props: {
     const [url, setUrl] = useState('');
     const [inputAddress, setAddress] = useState('');
     const [proof, setProof] = useState('');
+    const [keys, setKeys] = useState<ssikit.utils.Key[]>([]);
+    const [verifierKey, setVerifierKey] = useState<string>(keys[0]?.keyId?.id);
+    const [didSignature, setDidSignature] = useState<string>('');
 
     const verifierInfo: IVerifier = {
         name: ethers.utils.formatBytes32String(inputName),
@@ -37,7 +43,7 @@ export function AddNewVerifierModal(props: {
         signer: inputAddress,
         proof: proof
     }
-    //console.log(verifierInfo)
+
     const { config } = usePrepareContractWrite({
         addressOrName: vr_address,
         contractInterface: vr_abi,
@@ -48,12 +54,44 @@ export function AddNewVerifierModal(props: {
 
     const { data, isLoading, isSuccess, write } = useContractWrite(config)
 
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        const recordFields = JSON.stringify({
+            name: inputName,
+            did: did,
+            url: url,
+            signer: inputAddress,
+        });
+        const request: signatureRequest = {
+            keyId: verifierKey,
+            message: recordFields
+        }
+        let didSignature = (await axios.post("/createSignature", {data:request})).data;
+        setDidSignature(didSignature);
+    }
+
+    const initKeys = async () => {
+        let keys = await ssikit.Custodian.getKeys();
+        setKeys(keys);
+        setVerifierKey(keys[0]?.keyId?.id);
+    }
+
+    useEffect(() => {
+        if (didSignature) {
+            write?.();
+        }
+    }, [didSignature]);
+
+    useEffect(() => {
+        initKeys();
+    }, [])
+
     return <Modal blockScrollOnMount={false} isOpen={props.isOpen} onClose={props.onClose}>
         <ModalOverlay />
         <ModalContent>
             <ModalHeader>Please provide the following fields:</ModalHeader>
             <ModalCloseButton />
-
+            <form onSubmit={handleSubmit}>
                 <ModalBody>
                     <FormControl isRequired>
                         <FormLabel>Name</FormLabel>
@@ -83,11 +121,16 @@ export function AddNewVerifierModal(props: {
                         />
                     </FormControl>
                     <FormControl isRequired>
-                        <FormLabel mt='.5em'>Proof</FormLabel>
-                        <Input variant='filled' mt='.2em' name='address' onChange={event =>
-                            setProof(event.currentTarget.value)
-                        } placeholder='0x54af578786...'
-                        />
+                        <FormLabel mt='.5em'>Verifier DID private key ID</FormLabel>
+                        <Select variant='filled' mt='.2em' name='address' onChange={event =>
+                            setVerifierKey(event.currentTarget.value)
+                        } value={verifierKey} className="monospace">
+                            {keys.map(key => 
+                                <option key={key.keyId.id} value={key.keyId.id} className="monospace">
+                                    {key.keyId.id}
+                                </option>
+                            )}
+                        </Select>
                     </FormControl>
 
                     {isLoading && <p>Please check your wallet to complete the procedure...</p>}
@@ -98,9 +141,9 @@ export function AddNewVerifierModal(props: {
                     <Button size='sm' colorScheme='red' mr={3} disabled={isLoading} onClick={props.onClose}>
                         Close
                     </Button>
-                    <Button isLoading={isLoading} loadingText="Confirming" size='sm' colorScheme='green' disabled={!write} onClick={() => write?.()}>Confirm</Button>
+                    <Button isLoading={isLoading} loadingText="Confirming" size='sm' colorScheme='green' type="submit">Confirm</Button>
                 </ModalFooter>
-
+            </form>
         </ModalContent>
     </Modal>
 }

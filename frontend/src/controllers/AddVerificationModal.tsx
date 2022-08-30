@@ -27,9 +27,11 @@ const AddVerificationModal = () => {
 
 
     const verificationResult: IVerificationResult = {
-        schema: schema,
         subject: subject,
         expiration: (new Date(expiration))?.getTime() / 1000,
+        jsonResult: "",
+        useCase: "diploma",
+        signature: ""
     };
 
     //console.log(domain, types, verificationResult);
@@ -43,7 +45,7 @@ const AddVerificationModal = () => {
             value: verificationResult
         });
 
-    const { config } = usePrepareContractWrite({
+    const { config, error } = usePrepareContractWrite({
         addressOrName: vr_address,
         contractInterface: vr_abi,
         functionName: 'registerVerification',
