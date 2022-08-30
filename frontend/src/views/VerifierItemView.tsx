@@ -8,7 +8,6 @@ import { UpdateVerifierModalController } from "../controllers";
 
 const VerifierItemView = ({
     verifier,
-    index,
     handleClickRemove, 
     isLoadingRemove, 
     isSuccessRemove,
@@ -17,8 +16,7 @@ const VerifierItemView = ({
     prepareRemoveError, 
     removeError,
 }: {
-    verifier: Result,
-    index: number,
+    verifier: IVerifier,
     handleClickRemove: () => void,
     isLoadingRemove: boolean,
     isSuccessRemove: boolean,
@@ -29,10 +27,10 @@ const VerifierItemView = ({
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    return <li key={index} className="card-item">
+    return <li className="card-item">
         <Stack spacing="20px">
             <p>
-                <Text fontSize='3xl'>{ethers.utils.parseBytes32String(verifier?.name)}</Text>
+                <Text fontSize='3xl'>{verifier.name}</Text>
             </p>
             <p>
                 <span className="fieldname">DID:</span> {verifier.did}
@@ -43,21 +41,32 @@ const VerifierItemView = ({
             <p>
                 <span className="fieldname">Signer:</span> {verifier.signer}
             </p>
+            <p>
+                <span className="fieldname">Proof:</span> <span>{verifier.proof}</span>
+            </p>
 
-            <ButtonGroup variant='outline' spacing='6' mt='1em'>
-                <Button onClick={onOpen} leftIcon={<FaPen />} colorScheme='yellow' variant='solid' alignSelf='right'>
-                    Update
-                </Button>
+            {
+                isPrepareRemoveError ?
+                    <Box display="inline-block" width="50%" mt="1em" p={4} bg="orange.200" color="black" borderRadius="lg">
+                        This account cannot perform actions to this record.
+                    </Box>
+                :
+                    <ButtonGroup variant='outline' spacing='6' mt='1em'>
+                        <Button onClick={onOpen} leftIcon={<FaPen />} colorScheme='yellow' variant='solid' alignSelf='right'>
+                            Update
+                        </Button>
 
-                <UpdateVerifierModalController isOpen={isOpen} onOpen={onOpen} onClose={onClose} verifier={verifier} />
+                        <UpdateVerifierModalController isOpen={isOpen} onOpen={onOpen} onClose={onClose} verifier={verifier} />
 
-                <Button isLoading={isLoadingRemove} loadingText="Removing" leftIcon={<DeleteIcon />} colorScheme='red' variant='solid' onClick={() => {
-                    handleClickRemove()
-                }}>
-                    Remove
-                </Button>
-                
-            </ButtonGroup>
+                        <Button isLoading={isLoadingRemove} loadingText="Removing" leftIcon={<DeleteIcon />} colorScheme='red' variant='solid' onClick={() => {
+                            handleClickRemove()
+                        }}>
+                            Remove
+                        </Button>
+                        
+                    </ButtonGroup>
+            }
+            
             {(isRemoveError) && (
                 <Box bg="tomato" p={4} borderRadius="lg">Error: {(removeError)?.message}</Box>
             )}

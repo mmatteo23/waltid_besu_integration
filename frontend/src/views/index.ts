@@ -11,3 +11,4 @@ export { default as AcceptNewDiplomaRequestView } from "./AcceptNewDiplomaReques
 export { default as ConsumeTokenView } from "./ConsumeTokenView";
 export { default as ShowPersonalNFTsView } from "./ShowPersonalNFTsView";
 export { default as ShowPersonalNFTItemView } from "./ShowPersonalNFTItemView";
+export { default as ShowVerifiersView } from "./ShowVerifiersView";

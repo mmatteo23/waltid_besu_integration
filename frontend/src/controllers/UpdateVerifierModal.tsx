@@ -14,16 +14,16 @@ export function UpdateVerifierModal({
     isOpen: boolean,
     onOpen: () => void,
     onClose: () => void,
-    verifier: Result
+    verifier: IVerifier
 }) {
 
-    const [verifierName, setVerifierName] = useState(ethers.utils.parseBytes32String(oldVerifier.name));
+    const [verifierName, setVerifierName] = useState(oldVerifier.name);
     const [verifierDid, setVerifierDid] = useState(oldVerifier.did);
     const [verifierUrl, setVerifierUrl] = useState(oldVerifier.url);
     const [verifierAddress, setVerifierAddress] = useState(oldVerifier.signer);
 
     const newVerifierInfo = {
-        name: ethers.utils.formatBytes32String(verifierName),
+        name: verifierName,
         did: verifierDid,
         url: verifierUrl,
         signer: verifierAddress,

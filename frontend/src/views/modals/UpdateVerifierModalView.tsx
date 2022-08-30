@@ -36,7 +36,7 @@ const UpdateVerifierModalView = ({
     isOpen: boolean,
     onOpen: () => void,
     onClose: () => void,
-    oldData: Result,
+    oldData: IVerifier,
     handleClick: () => void,
     isLoadingWrite: boolean,
     isLoadingTx: boolean,
@@ -59,7 +59,7 @@ const UpdateVerifierModalView = ({
                 <ModalBody>
                     <FormControl isRequired>
                         <FormLabel>Name</FormLabel>
-                        <Input variant='filled' defaultValue={ethers.utils.parseBytes32String(oldData.name)} mt='.2em' name='name' onChange={event =>
+                        <Input variant='filled' defaultValue={oldData.name} mt='.2em' name='name' onChange={event =>
                             setVerifierName(event.currentTarget.value)}
                         />
                     </FormControl>

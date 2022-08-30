@@ -1,15 +1,12 @@
-import { Result } from "ethers/lib/utils";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
 import { VerifierItemView } from "../views";
 
 
 const VerifierItemController = ({
-    verifier,
-    index
+    verifier
 } : {
-    verifier: Result,
-    index: number
+    verifier: IVerifier
 }) => {
 
     /***************************
@@ -42,8 +39,7 @@ const VerifierItemController = ({
     }
 
     return <VerifierItemView 
-        verifier={verifier} 
-        index={index}
+        verifier={verifier}
         handleClickRemove={handleClickRemove}
         isLoadingRemove={isLoadingRemove}
         isSuccessRemove={isSuccessRemove}

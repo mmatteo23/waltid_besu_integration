@@ -24,16 +24,6 @@ const SearchVerifierView = ({
                     } />
                 </FormControl>
             </Box>
-            
-            {verifier ?
-                <Box mb="1em">
-                    <ul>
-                        <VerifierItemController verifier={verifier} index={1} />
-                    </ul>
-                </Box>
-
-                : null
-            }
         </Box>
     )
 };

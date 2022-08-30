@@ -1,14 +1,15 @@
+import axios, { AxiosError } from "axios";
 import { ethers } from "ethers";
-import { useState } from "react";
-import { useContractRead } from "wagmi";
+import { useEffect, useState } from "react";
+import { useAccount, useContractRead } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
-import { SearchVerifierView } from "../views";
+import { SearchVerifierView, ShowVerifiersView } from "../views";
 
 
 const SearchVerifierFromAddressController = () => {
 
     const [verifierAddress, setVerifierAddress] = useState("");
-
+    /*
     const [vr_address, vr_abi] = useVerificationRegistryData();
 
     const { data: verifierInfo, isError, isLoading } = useContractRead({
@@ -21,8 +22,50 @@ const SearchVerifierFromAddressController = () => {
             console.log(error);
         }
     })
+    */
 
-    return <SearchVerifierView verifier={verifierInfo} setVerifierAddress={setVerifierAddress} />
+    const { address, isConnecting, isDisconnected } = useAccount();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<AxiosError>();
+    const [verifiers, setVerifiers] = useState<IVerifier[]>([]);
+    const [filterDid, setFilterDid] = useState("");
+
+
+    
+    useEffect(() => {
+        axios.post(
+            'https://api.thegraph.com/subgraphs/name/mmatteo23/monokee_thegraph',
+            {
+                query: `
+                {
+                    verifiers(orderBy: name, where: {did_contains: "${filterDid}", address_contains: "${verifierAddress.toLowerCase()}"}) {
+                        did
+                        address
+                        name
+                        id
+                        signer
+                        url
+                    }
+                }
+                `
+            }
+        )
+        .then((result) => {
+            //console.log(result);
+            setVerifiers(result.data.data.verifiers);
+            setLoading(false);
+        })
+        .catch((error) => {
+            console.log(error);
+            setError(error);
+        });
+    }, [verifierAddress, filterDid]);
+
+    return <ShowVerifiersView
+        verifiers={verifiers} 
+        setVerifierAddress={setVerifierAddress}
+        setFilterDid={setFilterDid}
+    />
 };
 
 export default SearchVerifierFromAddressController;
