@@ -46,6 +46,7 @@ const SearchVerifierFromAddressController = () => {
                         id
                         signer
                         url
+                        proof
                     }
                 }
                 `

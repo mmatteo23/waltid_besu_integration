@@ -78,8 +78,6 @@ const SearchVerificationRecordsController = () => {
         verificationRecords = verificationRecords3;
     }
 
-    console.log(verificationRecords1, verificationRecords2, verificationRecords3);
-
     return <SearchVerificationRecordsView 
         verificationRecords={verificationRecords} 
         setUuid={setUuid} 

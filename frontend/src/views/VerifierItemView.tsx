@@ -29,21 +29,21 @@ const VerifierItemView = ({
 
     return <li className="card-item">
         <Stack spacing="20px">
-            <p>
+            <Box>
                 <Text fontSize='3xl'>{verifier.name}</Text>
-            </p>
-            <p>
+            </Box>
+            <Box>
                 <span className="fieldname">DID:</span> {verifier.did}
-            </p>
-            <p>
+            </Box>
+            <Box>
                 <span className="fieldname">url:</span> <Link color='teal.500' href={verifier.url}>{verifier.url}</Link>
-            </p>
-            <p>
+            </Box>
+            <Box>
                 <span className="fieldname">Signer:</span> {verifier.signer}
-            </p>
-            <p>
+            </Box>
+            <Box>
                 <span className="fieldname">Proof:</span> <span>{verifier.proof}</span>
-            </p>
+            </Box>
 
             {
                 isPrepareRemoveError ?

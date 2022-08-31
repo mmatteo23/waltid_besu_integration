@@ -2,7 +2,7 @@ export { default as VerifierCountController } from "./VerifierCount";
 export { default as VerificationRecordCountController } from "./VerificationRecordCount";
 export { default as VerificationRecordItemController } from "./VerificationRecordItem";
 export { default as AddVerificationModalController } from "./AddVerificationModal";
-export { default as SearchVerifierFromAddressController } from "./SearchVerifierFromAddress";
+export { default as SearchVerifierFromAddressController } from "./SearchVerifiers";
 export { default as SearchVerificationRecordsController } from "./SearchVerificationRecords";
 export { default as VerifierItemController } from "./VerifierItem";
 export { default as UpdateVerifierModalController } from "./UpdateVerifierModal";
