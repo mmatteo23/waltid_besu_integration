@@ -15,8 +15,8 @@ const SearchVerificationRecordsView = ({
 }) => {
     return (
         <Box width="100%" mr="auto">
-            <Heading as='h2' size='xl' mt="1em">Search a Verification Record</Heading>
-            <Flex mt="2em" mb="2em">
+            <Heading as='h2' size='xl' mt="2em">Search a Verification Record</Heading>
+            <Flex mt="1.5em" mb="2em">
                 <Box mr="2em" width="33%">
                     <FormControl>
                         <FormLabel htmlFor="uuid">UUID:</FormLabel>

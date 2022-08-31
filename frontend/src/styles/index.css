@@ -218,3 +218,9 @@ a.link:hover {
 .monospace {
   font-family: monospace;
 }
+
+.scrollable-table {
+  overflow-y: scroll;
+  height: 15em;
+  display: block;
+}

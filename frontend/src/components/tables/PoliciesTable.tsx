@@ -30,7 +30,7 @@ export default function PoliciesTable(props: {
     }
 
     return <TableContainer>
-        <Table variant='simple' colorScheme='teal'>
+        <Table variant='simple' colorScheme='teal' className='scrollable-table'>
             <TableCaption>{props.caption}</TableCaption>
             <Thead>
                 <Tr>

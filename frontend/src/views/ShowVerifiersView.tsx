@@ -24,8 +24,6 @@ const ShowVerifiersView = ({
 }) => {
     return (
         <Box width="100%" mr="auto">
-            <Heading as='h2' size='xl' mt="1em">On-Chain Verifiers</Heading>
-            <Text fontSize="2xl">Search a verifier</Text>
             <Stack mb="2em" spacing="1em" direction="row">
                 <FormControl>
                     <FormLabel htmlFor="address">Address:</FormLabel>
