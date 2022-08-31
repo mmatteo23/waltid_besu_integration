@@ -12,10 +12,11 @@ import {
     Input,
     Select,
     ButtonGroup,
+    Box,
 } from '@chakra-ui/react'
 import { ethers, utils } from 'ethers';
 import { useEffect, useState } from 'react'
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import useVerificationRegistryData from '../../hooks/useVerificationRegistryData';
 import { Buffer } from 'buffer';
 import * as ssikit from 'ssikit-sdk';
@@ -36,6 +37,7 @@ export function AddNewVerifierModal(props: {
     const [keys, setKeys] = useState<ssikit.utils.Key[]>([]);
     const [verifierKey, setVerifierKey] = useState<string>(keys[0]?.keyId?.id);
     const [didSignature, setDidSignature] = useState<string>('');
+    const [prepareErrorShort, setPrepareErrorShort] = useState('');
 
     const verifierInfo: IVerifier = {
         name: ethers.utils.formatBytes32String(inputName),
@@ -45,15 +47,23 @@ export function AddNewVerifierModal(props: {
         proof: didSignature
     }
 
-    const { config } = usePrepareContractWrite({
+    const { config, isError: isPrepareError, error: prepareError } = usePrepareContractWrite({
         addressOrName: vr_address,
         contractInterface: vr_abi,
         functionName: 'addVerifier',
         enabled: (ethers.utils.isAddress(inputAddress)),
-        args: [inputAddress, verifierInfo]
+        args: [inputAddress, verifierInfo],
+        onError: (error) => {
+            setPrepareErrorShort(error.message.split('(reason="execution reverted: ')[1].split('", method')[0]);
+        }
     })
 
-    const { data, isLoading, isSuccess, write } = useContractWrite(config)
+    const { data, isLoading: isLoadingWrite, isSuccess, isError, error: errorWrite, write } = useContractWrite(config)
+
+    // using the useWaitForTransaction we can show feedback on the status of the transaction
+    const { isLoading: isLoadingTx, isSuccess: isSuccessTx } = useWaitForTransaction({
+        hash: data?.hash,
+    });
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -137,17 +147,21 @@ export function AddNewVerifierModal(props: {
                         </Select>
                     </FormControl>
 
-                    {isLoading && <p>Please check your wallet to complete the procedure...</p>}
-                    {isSuccess && <p>Transaction hash: {JSON.stringify(data)}</p>}
+                    {isLoadingWrite && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Check your wallet to complete the procedure...</Box>}
+                    {isLoadingTx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Please wait for the transaction to be mined...</Box>}
+                    {isSuccessTx && <Box mt="1em" p={4} bg="green" borderRadius="lg">Transaction mined with success</Box>}
+                    {isError && <Box mt="1em" p={4} bg="tomato" borderRadius="lg">Error: there is an error with Metamask</Box>}
+                    {isPrepareError && <Box mt="1em" p={4} bg="tomato" borderRadius="lg">{prepareErrorShort}</Box>}
+
                 </ModalBody>
 
                 <ModalFooter>
                     <ButtonGroup>
-                        <Button size='sm' colorScheme='red' disabled={isLoading} onClick={props.onClose}>
+                        <Button size='sm' colorScheme='red' disabled={isLoadingTx || isLoadingWrite} onClick={props.onClose}>
                             Close
                         </Button>
-                        <Button size='sm' colorScheme='blue' type="submit" disabled={didSignature.length > 0}>Sign</Button>
-                        <Button isLoading={isLoading} loadingText="Confirming" size='sm' colorScheme='green' disabled={isLoading || !write || didSignature.length == 0} onClick={() => write?.()}>Confirm</Button>
+                        <Button size='sm' colorScheme='blue' type="submit" disabled={didSignature.length > 0 || isPrepareError}>{didSignature.length > 0 ? "Signed" : "Sign"}</Button>
+                        <Button isLoading={isLoadingWrite || isLoadingTx} loadingText="Confirming" size='sm' colorScheme='green' disabled={isLoadingWrite || isLoadingTx || !write || didSignature.length == 0} onClick={() => write?.()}>Confirm</Button>
                     </ButtonGroup>
                 </ModalFooter>
             </form>

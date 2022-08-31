@@ -23,7 +23,7 @@ import { Custodian, Auditor, Signatory, utils } from 'ssikit-sdk';
 import axios from 'axios';
 import { Buffer } from "buffer";
 import useVerificationRegistryData from '../../../hooks/useVerificationRegistryData';
-import { useContractWrite, usePrepareContractWrite, useSignTypedData } from 'wagmi';
+import { useContractWrite, usePrepareContractWrite, useSignTypedData, useWaitForTransaction } from 'wagmi';
 import { ethers } from 'ethers';
 
 export default function VerifyCredentialsModal(props: {policiesToUse: string[]}) {
@@ -53,21 +53,29 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
         useSignTypedData({
             domain,
             types,
-            value: verificationResult
+            value: verificationResult,
+            onError: (error) => {
+                console.log(JSON.stringify(error));
+            }
         });
 
     const { config, error: prepareError } = usePrepareContractWrite({
         addressOrName: vr_address,
         contractInterface: vr_abi,
         functionName: 'registerVerification',
-        enabled: (ethers.utils.isAddress(subject)),
+        enabled: (ethers.utils.isAddress(subject) && !!signature),
         args: [verificationResult, signature],
         onError(error) {
             console.log('Error', error)
         },
     })
 
-    const { data, error: writeError, isLoading, isSuccess, write } = useContractWrite(config);
+    const { data, error: writeError, isError: isErrorWrite, isLoading: isLoadingWrite, isSuccess, write } = useContractWrite(config);
+
+    // using the useWaitForTransaction we can show feedback on the status of the transaction
+    const { isLoading: isLoadingTx, isSuccess: isSuccessTx } = useWaitForTransaction({
+        hash: data?.hash,
+    });
 
     const checkIfCredsRevoked = async (credentials: any[]) => {
         let revoked = await Promise.all(credentials.map(async cred => {
@@ -159,11 +167,13 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
 
     useEffect(() => {
         if (didSignature) {
-            signTypedData();
+            try {
+                signTypedData();
+            } catch (error) {
+                console.log("Sign error: ", error)
+            }
         }
     }, [didSignature])
-
-    console.log(prepareError)
 
     return (
         <>
@@ -230,6 +240,7 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                                         onChange={(e) => setSubject(e.target.value)}
                                         className="monospace"
                                         w="60%"
+                                        name='subject'
                                     />
                                 </FormControl>
                                 <FormControl isRequired>
@@ -258,25 +269,30 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                                         w="60%"
                                     />
                                 </FormControl>
-                                {signError ? <Text mt="1em" mb="0.5em" bg="red">{signError?.message}</Text> : null}
+
+                                {isLoadingWrite && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Check your wallet to complete the procedure...</Box>}
+                                {isLoadingTx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Please wait for the transaction to be mined...</Box>}
+                                {isSuccessTx && <Box mt="1em" p={4} bg="green" borderRadius="lg">Transaction mined with success</Box>}
+                                {isErrorWrite && <Box mt="1em" p={4} bg="tomato" borderRadius="lg">Error: there is an error with Metamask</Box>}
+                            
                             </Box>
                             <HStack ml="auto" mt="1.5em">
                                 <Button onClick={onClose} size='md' colorScheme='red'>
                                     Close
                                 </Button>
-                                <Button size='md' colorScheme={isLoadingSignature ? 'yellow' : 'blue'} disabled={isLoadingSignature || !verified} mr={3} onClick={() => {
+                                <Button size='md' isLoading={isLoadingSignature} loadingText="Signing" colorScheme='blue' disabled={isLoadingSignature || isSuccessSignature || !verified} mr={3} onClick={() => {
                                     try {
                                         registerVerificationRecord();
                                     } catch( error ) {
                                         console.log("Try catch error: ", error);
                                     }
                                 }}>
-                                    {isLoadingSignature ? "Check Wallet" : "Create Signature"}
+                                    {isSuccessSignature ? "Signed" : "Sign"}
                                 </Button>
-                                <Button size='md' colorScheme={isLoading ? 'yellow' : 'green'} disabled={!write} onClick={() => {
+                                <Button size='md' isLoading={isLoadingTx || isLoadingWrite} loadingText="Confirming" colorScheme={isLoadingWrite ? 'yellow' : 'green'} disabled={!write || isLoadingTx || isLoadingWrite} onClick={() => {
                                     write?.()
                                 }}>
-                                    {isLoading ? "Confirm tx" : "Confirm"}
+                                    Confirm
                                 </Button>
                             </HStack>
                         </ModalFooter>
