@@ -59,7 +59,7 @@ const ShowVerifiersView = ({
                             return <VerifierItemController verifier={verifier} key={index} />
                         })
                     )
-                    : <p>Seems there are no verifiers</p>
+                    : <Text>Seems there are no verifiers</Text>
                 }
             </ul>
         </Box>
