@@ -42,7 +42,7 @@ const SearchVerificationRecordsView = ({
                     </FormControl>
                 </Box>
             </Flex>
-            {(verificationRecords?.length && verificationRecords?.[0]) ? 
+            {(verificationRecords?.length) ? 
                 <>
                     <Heading as='h2' size='xl'>Verification Records list</Heading>
                     <ul>

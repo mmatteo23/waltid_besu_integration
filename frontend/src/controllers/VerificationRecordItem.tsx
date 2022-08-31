@@ -32,8 +32,9 @@ const VerificationRecordItemController = ({
     const { config: revokeConfig, error: prepareRevokeError, isError: isPrepareRevokeError } = usePrepareContractWrite({
         ...contract,
         functionName: 'revokeVerification',
-        args: [record.uuid],
+        args: [record.uuid, "diploma"],
         onError(error) {
+            console.log(error);
             setPrepareRevokeErrorShort(error.message.split('(reason="execution reverted: ')[1].split('", method')[0])
         }
     });
@@ -59,7 +60,7 @@ const VerificationRecordItemController = ({
     const { config: removeConfig, error: prepareRemoveError, isError: isPrepareRemoveError } = usePrepareContractWrite({
         ...contract,
         functionName: 'removeVerification',
-        args: [record.uuid],
+        args: [record.uuid, "diploma"],
         onError(error) {
             setPrepareRemoveErrorShort(error.message.split('(reason="execution reverted: ')[1].split('", method')[0])
         }

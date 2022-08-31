@@ -45,6 +45,14 @@ declare interface IERC721Metadata {
     details: string
 }
 
+declare interface ITrustedSmartContract {
+    name: string,
+    trusted: boolean,
+    lastChangeTime: number,
+    address: string,
+    owner: string,
+}
+
 declare interface signatureRequest {
     keyId: string;
     message: string;

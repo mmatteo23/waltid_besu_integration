@@ -9,7 +9,8 @@ import { SearchVerifierView, ShowVerifiersView } from "../views";
 const SearchVerifierFromAddressController = () => {
 
     const [verifierAddress, setVerifierAddress] = useState("");
-    /*
+    
+    /* OLD ON-CHAIN Query
     const [vr_address, vr_abi] = useVerificationRegistryData();
 
     const { data: verifierInfo, isError, isLoading } = useContractRead({
@@ -65,6 +66,7 @@ const SearchVerifierFromAddressController = () => {
         verifiers={verifiers} 
         setVerifierAddress={setVerifierAddress}
         setFilterDid={setFilterDid}
+        loading={loading}
     />
 };
 

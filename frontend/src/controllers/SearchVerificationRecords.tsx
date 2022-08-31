@@ -40,7 +40,7 @@ const SearchVerificationRecordsController = () => {
         ...contract,
         functionName: 'getVerification',
         enabled: (uuid?.length == 66),
-        args: [uuid],
+        args: [uuid, "diploma"],
         select: (data) => {
             return filterDeletedData(data);
         },
@@ -50,7 +50,7 @@ const SearchVerificationRecordsController = () => {
         ...contract,
         functionName: 'getVerificationsForSubject',
         enabled: (ethers.utils.isAddress(subjectAddress)),
-        args: [subjectAddress],
+        args: [subjectAddress, "diploma"],
         select: (data) => {
             return filterDeletedData(data);
         },
@@ -63,7 +63,7 @@ const SearchVerificationRecordsController = () => {
         select: (data) => {
             return filterDeletedData(data);
         },
-        args: [verifierAddress],
+        args: [verifierAddress, "diploma"],
     });
 
     let verificationRecords;
@@ -77,6 +77,8 @@ const SearchVerificationRecordsController = () => {
     if (verifierAddress) {
         verificationRecords = verificationRecords3;
     }
+
+    console.log(verificationRecords1, verificationRecords2, verificationRecords3);
 
     return <SearchVerificationRecordsView 
         verificationRecords={verificationRecords} 

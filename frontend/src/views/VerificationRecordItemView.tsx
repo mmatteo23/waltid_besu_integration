@@ -79,6 +79,9 @@ const VerificationRecordItemView = ({
 
                     <Box display="inline-block" mt="1em" p={4} bg="orange.200" color="black" borderRadius="lg">
                         This account cannot perform actions to this record.
+                        {isPrepareRemoveError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">{prepareRemoveErrorShort}</Box>}
+                        {isPrepareRevokeError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">{prepareRevokeErrorShort}</Box>}
+
                     </Box>
 
                     : <>

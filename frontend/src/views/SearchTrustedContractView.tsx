@@ -2,51 +2,71 @@
 
 import {
     FormControl, FormLabel, Input,
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    TableCaption,
-    TableContainer,
-    IconButton,
     Box,
     Heading,
+    Center,
+    Spinner,
+    Stack,
 } from "@chakra-ui/react";
-import { ethers } from "ethers";
+import { AxiosError } from "axios";
 import { Result } from "ethers/lib/utils";
-import { BiExport } from "react-icons/bi";
-import { FaTimes } from "react-icons/fa";
 import { TrustedContractItemController, VerifierItemController } from "../controllers";
 
 const SearchTrustedContractView = ({ 
-    contractInfo, 
-    setContractAddress, 
+    contractsInfo, 
+    setContractAddress,
+    setContractName,
+    loading,
+    error,
 }: {
-    contractInfo: Result | undefined,
-    setContractAddress: (arg0: string) => void
+    contractsInfo: ITrustedSmartContract[],
+    setContractAddress: (arg0: string) => void,
+    setContractName: (arg0: string) => void,
+    loading: boolean,
+    error: AxiosError | undefined,
 }) => {
     return (
         <Box width="100%" mr="auto">
             <Heading as='h2' size='xl' mt="1em">Search a Trusted Contract by Address</Heading>
-            <Box width="33%" mt="2em" mb="2em">
+            <Stack width="50%" mt="2em" mb="2em" direction="row" spacing="1em">
                 <FormControl>
                     <FormLabel htmlFor="address">Address:</FormLabel>
                     <Input name="address" variant='filled' placeholder='0x123...' onChange={event =>
                         setContractAddress(event.currentTarget.value)
                     } />
                 </FormControl>
-            </Box>
+                <FormControl>
+                    <FormLabel htmlFor="name">Name:</FormLabel>
+                    <Input name="name" variant='filled' placeholder='contract name' onChange={event =>
+                        setContractName(event.currentTarget.value)
+                    } />
+                </FormControl>
+            </Stack>
             
-            {contractInfo ?
-                <Box mb="1em">
-                    <ul>
-                        <TrustedContractItemController contractInfo={contractInfo} index={1} />
-                    </ul>
-                </Box>
-                : null
-            }
+            <ul>
+                {
+                    loading ?
+                        <Center>
+                            <Spinner
+                                thickness='4px'
+                                speed='0.65s'
+                                emptyColor='gray.200'
+                                color='blue.500'
+                                size='xl'
+                            />
+                        </Center>
+                    : null
+                }
+                {contractsInfo.length ?
+                    contractsInfo.map((contract, index) => {
+                        return <TrustedContractItemController 
+                            contractInfo={contract} 
+                            key={index}     
+                        />
+                    })
+                    : null
+                }
+            </ul>
         </Box>
     )
 };

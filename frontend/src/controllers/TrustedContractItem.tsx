@@ -5,11 +5,9 @@ import { TrustedContractItemView } from "../views";
 
 
 const TrustedContractItemController = ({
-    contractInfo,
-    index
+    contractInfo
 } : {
-    contractInfo: Result,
-    index: number
+    contractInfo: ITrustedSmartContract
 }) => {
 
     /***************************
@@ -23,7 +21,7 @@ const TrustedContractItemController = ({
     const { config, error: prepareError, isError: isPrepareError } = usePrepareContractWrite({
         ...contract,
         functionName: 'editTrust',
-        args: [contractInfo.addr, !contractInfo.trusted],
+        args: [contractInfo.address, !contractInfo.trusted],
     });
 
     const { data, error: error, isLoading: isLoadingWrite, isError: isError, write: write } = useContractWrite(config);
@@ -39,7 +37,6 @@ const TrustedContractItemController = ({
 
     return <TrustedContractItemView 
         contractInfo={contractInfo}
-        index={index}
         handleClick={handleClick}
         isLoadingWrite={isLoadingWrite}
         isLoadingTx={isLoadingTx}

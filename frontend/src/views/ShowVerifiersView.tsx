@@ -4,7 +4,9 @@ import {
     Heading,
     Text,
     Flex,
-    Stack
+    Stack,
+    Spinner,
+    Center
 } from "@chakra-ui/react";
 import { Result } from "ethers/lib/utils";
 import { VerifierItemController } from "../controllers";
@@ -12,11 +14,13 @@ import { VerifierItemController } from "../controllers";
 const ShowVerifiersView = ({
     verifiers,
     setVerifierAddress,
-    setFilterDid
+    setFilterDid,
+    loading
 }: {
     verifiers: IVerifier[] | undefined,
     setVerifierAddress: (arg0: string) => void,
-    setFilterDid: (arg0: string) => void
+    setFilterDid: (arg0: string) => void,
+    loading: boolean
 }) => {
     return (
         <Box width="100%" mr="auto">
@@ -38,6 +42,19 @@ const ShowVerifiersView = ({
             </Stack>
 
             <ul>
+                {
+                    loading ? 
+                        <Center>
+                            <Spinner
+                                thickness='4px'
+                                speed='0.65s'
+                                emptyColor='gray.200'
+                                color='blue.500'
+                                size='xl'
+                            />
+                        </Center>
+                    : null
+                }
                 {
                     verifiers?.length ? (
                         verifiers.map((verifier, index) => {

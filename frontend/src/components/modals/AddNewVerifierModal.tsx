@@ -11,11 +11,13 @@ import {
     FormLabel,
     Input,
     Select,
+    ButtonGroup,
 } from '@chakra-ui/react'
 import { ethers, utils } from 'ethers';
 import { useEffect, useState } from 'react'
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import useVerificationRegistryData from '../../hooks/useVerificationRegistryData';
+import { Buffer } from 'buffer';
 import * as ssikit from 'ssikit-sdk';
 import axios from 'axios';
 
@@ -31,7 +33,6 @@ export function AddNewVerifierModal(props: {
     const [did, setDid] = useState('');
     const [url, setUrl] = useState('');
     const [inputAddress, setAddress] = useState('');
-    const [proof, setProof] = useState('');
     const [keys, setKeys] = useState<ssikit.utils.Key[]>([]);
     const [verifierKey, setVerifierKey] = useState<string>(keys[0]?.keyId?.id);
     const [didSignature, setDidSignature] = useState<string>('');
@@ -41,7 +42,7 @@ export function AddNewVerifierModal(props: {
         did: did,
         url: url,
         signer: inputAddress,
-        proof: proof
+        proof: didSignature
     }
 
     const { config } = usePrepareContractWrite({
@@ -67,7 +68,8 @@ export function AddNewVerifierModal(props: {
             message: recordFields
         }
         let didSignature = (await axios.post("/createSignature", {data:request})).data;
-        setDidSignature(didSignature);
+        const encodedSignature = Buffer.from(JSON.stringify(didSignature)).toString("base64");
+        setDidSignature(encodedSignature);
     }
 
     const initKeys = async () => {
@@ -75,13 +77,15 @@ export function AddNewVerifierModal(props: {
         setKeys(keys);
         setVerifierKey(keys[0]?.keyId?.id);
     }
-
+    /*
     useEffect(() => {
-        if (didSignature) {
+        if (didSignature !== '') {
+            console.log("entro nel locale");
+            console.log(config);
             write?.();
         }
     }, [didSignature]);
-
+    */
     useEffect(() => {
         initKeys();
     }, [])
@@ -138,10 +142,13 @@ export function AddNewVerifierModal(props: {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button size='sm' colorScheme='red' mr={3} disabled={isLoading} onClick={props.onClose}>
-                        Close
-                    </Button>
-                    <Button isLoading={isLoading} loadingText="Confirming" size='sm' colorScheme='green' type="submit">Confirm</Button>
+                    <ButtonGroup>
+                        <Button size='sm' colorScheme='red' disabled={isLoading} onClick={props.onClose}>
+                            Close
+                        </Button>
+                        <Button size='sm' colorScheme='blue' type="submit" disabled={didSignature.length > 0}>Sign</Button>
+                        <Button isLoading={isLoading} loadingText="Confirming" size='sm' colorScheme='green' disabled={isLoading || !write || didSignature.length == 0} onClick={() => write?.()}>Confirm</Button>
+                    </ButtonGroup>
                 </ModalFooter>
             </form>
         </ModalContent>

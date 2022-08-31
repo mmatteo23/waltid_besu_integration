@@ -10,7 +10,9 @@ const useDiplomaIssuerManagerData = (): [
     },
 ] => {
 
-    const contract_address = "0x7e3E8dFfb775D533d401Aa30621F783cEA83A747";
+    //const contract_address = "0x7e3E8dFfb775D533d401Aa30621F783cEA83A747";
+    const contract_address = "0x901A95d186C03dC874FdF1823C676D11f5EEfb95";
+
     const abi = VR as unknown as ContractInterface;
 
     const contract = {

@@ -10,7 +10,9 @@ const useDiplomaERC721Data = (): [
     },
 ] => {
 
-    const contract_address = "0x7e798Dcb871C34AD6356C78b3A130264296d67b6";
+    //const contract_address = "0x7e798Dcb871C34AD6356C78b3A130264296d67b6";
+    const contract_address = "0xe72230aF40cf56580Ae0845bEAf30B5b4AF7fD51";
+
     const abi = VR as unknown as ContractInterface;
 
     const contract = {
