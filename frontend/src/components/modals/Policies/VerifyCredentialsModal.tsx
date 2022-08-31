@@ -126,19 +126,17 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
     };
 
     const registerVerificationRecord = async () => {
-        let messageString = JSON.stringify({
-            subject: subject,
-            expiration: expiration,
-            jsonResult: result,
-            useCase: "diploma"
-        });
-        let encoded = Buffer.from(messageString).toString('base64');
+        let record = verificationResult;
+        delete record.signature;
+
+        let messageString = JSON.stringify(record);
         const request: signatureRequest = {
             keyId: verifierKey,
-            message: encoded
+            message: messageString
         }
         let didSignature = (await axios.post("/createSignature", {data:request})).data;
-        setDidSignature(JSON.stringify(didSignature));
+        let encoded = Buffer.from(JSON.stringify(didSignature)).toString('base64');
+        setDidSignature(encoded);
     }
 
     const reset = () => {
@@ -289,7 +287,7 @@ export default function VerifyCredentialsModal(props: {policiesToUse: string[]})
                                 }}>
                                     {isSuccessSignature ? "Signed" : "Sign"}
                                 </Button>
-                                <Button size='md' isLoading={isLoadingTx || isLoadingWrite} loadingText="Confirming" colorScheme={isLoadingWrite ? 'yellow' : 'green'} disabled={!write || isLoadingTx || isLoadingWrite} onClick={() => {
+                                <Button size='md' isLoading={isLoadingTx || isLoadingWrite} loadingText="Confirming" colorScheme={isLoadingWrite ? 'yellow' : 'green'} disabled={!write || isLoadingTx || isLoadingWrite || isSuccessTx} onClick={() => {
                                     write?.()
                                 }}>
                                     Confirm

@@ -39,6 +39,9 @@ const VerifierItemView = ({
             <Box>
                 <span className="fieldname">Registration date:</span> <Moment unix>{contractInfo.lastChangeTime}</Moment>
             </Box>
+            <Box>
+                <span className="fieldname">Owner:</span> {contractInfo.owner}
+            </Box>
 
             {isLoadingWrite && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Check your wallet to complete the procedure...</Box>}
             {isLoadingTx && <Box mt="1em" p={4} bg="yellow" color="black" borderRadius="lg">Please wait for the transaction to be mined...</Box>}

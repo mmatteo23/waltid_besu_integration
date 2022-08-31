@@ -46,7 +46,6 @@ const SearchVerifierFromAddressController = () => {
                         id
                         signer
                         url
-                        proof
                     }
                 }
                 `
@@ -54,7 +53,7 @@ const SearchVerifierFromAddressController = () => {
         )
         .then((result) => {
             //console.log(result);
-            setVerifiers(result.data.data.verifiers);
+            setVerifiers(result.data.data?.verifiers);
             setLoading(false);
         })
         .catch((error) => {

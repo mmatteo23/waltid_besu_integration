@@ -41,7 +41,7 @@ const ShowVerifiersView = ({
 
             <ul>
                 {
-                    loading ? 
+                    loading && verifiers?.length ? 
                         <Center>
                             <Spinner
                                 thickness='4px'
@@ -59,7 +59,7 @@ const ShowVerifiersView = ({
                             return <VerifierItemController verifier={verifier} key={index} />
                         })
                     )
-                    : <Text>Seems there are no verifiers</Text>
+                    : <Text align="center" fontSize="2xl">Seems there are no verifiers</Text>
                 }
             </ul>
         </Box>

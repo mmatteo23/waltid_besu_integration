@@ -1,8 +1,39 @@
+import axios from "axios";
 import { Result } from "ethers/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Buffer } from "buffer";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import useVerificationRegistryData from "../hooks/useVerificationRegistryData";
 import VerificationRecordItemView from "../views/VerificationRecordItemView";
+import * as jose from "jose";
+
+const getVerifierDid = (verifierAddress: string) => {
+    return "did:ebsi:ztW3Hw2Gcd9rrNuLC9LPqCs";
+}
+
+const validateSignature = async (record: IVerificationRecord) => {
+    const decodedSignature: jose.GeneralJWSInput = JSON.parse(Buffer.from(record.signature, 'base64').toString('ascii'));
+
+    const _verifierDid = getVerifierDid(record.verifier);
+
+    const requestVerification: verificationRequest = {
+        verifierDid: _verifierDid,
+        message: decodedSignature
+    }
+
+    const result = (await axios.post(
+        "/verifySignature", 
+        {data: requestVerification}
+    )).data as IVerificationResult;
+
+    return (
+        result.subject === record.subject &&
+        result.expiration.toString() === record.expirationTime.toString() &&
+        result.jsonResult === record.jsonResult &&
+        result.useCase === record.indexType
+    );
+
+}
 
 
 const VerificationRecordItemController = ({
@@ -13,6 +44,7 @@ const VerificationRecordItemController = ({
 
     const [prepareRevokeErrorShort, setPrepareRevokeErrorShort] = useState("");
     const [prepareRemoveErrorShort, setPrepareRemoveErrorShort] = useState("");
+    const [isValid, setIsValid] = useState(false);
 
     /**
      * Contract Data
@@ -82,6 +114,13 @@ const VerificationRecordItemController = ({
         removeWrite?.();
     }
 
+    useEffect(() => {
+        validateSignature(record as unknown as IVerificationRecord)
+            .then(
+                isValid => setIsValid(isValid)
+            )   
+    });
+
     return <VerificationRecordItemView 
         record={record}
         handleClickRevoke={handleClickRevoke}
@@ -106,6 +145,7 @@ const VerificationRecordItemController = ({
         txHashRemove={removeData?.hash}
         isLoadingRemoveTx={isLoadingRemoveTx}
         isSuccessRemoveTx={isSuccessRemoveTx}
+        isValid={isValid}
     />
 }
 

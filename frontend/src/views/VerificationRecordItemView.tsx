@@ -1,5 +1,20 @@
-import { CloseIcon, DeleteIcon } from "@chakra-ui/icons";
-import { Badge, Box, Button, ButtonGroup } from "@chakra-ui/react";
+import { CloseIcon, DeleteIcon, InfoIcon } from "@chakra-ui/icons";
+import {
+    Badge,
+    Box,
+    Button,
+    ButtonGroup,
+    Textarea,
+    Text,
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
+    Tooltip,
+    Flex,
+} from "@chakra-ui/react";
+import { Buffer } from "buffer";
 import { Result } from "ethers/lib/utils";
 import Moment from 'react-moment';
 Moment.globalFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -28,6 +43,7 @@ const VerificationRecordItemView = ({
     txHashRemove,
     isLoadingRemoveTx,
     isSuccessRemoveTx,
+    isValid
 }: {
     record: Result,
     handleClickRevoke: () => void,
@@ -52,6 +68,7 @@ const VerificationRecordItemView = ({
     txHashRemove: string | undefined,
     isLoadingRemoveTx: boolean,
     isSuccessRemoveTx: boolean,
+    isValid: boolean
 }) => {
     return <li className="card-item">
         <div className="verification-record-box">
@@ -60,19 +77,62 @@ const VerificationRecordItemView = ({
                 <Badge variant="solid" colorScheme={record.revoked ? 'red' : 'green'} fontSize='1em'>{record.revoked ? "REVOKED" : "VALID"}</Badge>
             </div>
             <div className="verification-record-data">
-                <p>
+                <Text>
                     <span className="fieldname">Verifier:</span> {record.verifier}
-                </p>
-                <p>
+                </Text>
+                <Text>
                     <span className="fieldname">Subject:</span>  {record.subject}
-                </p>
+                </Text>
             </div>
             <div>
-                <p>
+                <Text>
                     <span className="fieldname">Entry time: </span> <Moment unix>{record.entryTime}</Moment>
                     <span className="fieldname">Expiration time: </span> <Moment unix>{(record.expirationTime)}</Moment>
-                </p>
+                </Text>
             </div>
+            <Box mt="2em">
+                <Flex alignItems="center">
+                    <Tooltip label="If DID signature isn't VALID you cannot trust the record" fontSize='md' bg='teal.200'>
+                        <InfoIcon mr="0.5em" />
+                    </Tooltip>
+                    <span className="fieldname">DID signature:</span> 
+                    <Badge colorScheme={isValid ? "green" : "red"} variant='solid' ml="1em" fontSize="lg">
+                        {
+                            isValid ? "VALID" : "INVALID"
+                        }
+                    </Badge>
+                </Flex>           
+            </Box>
+            <Box mt="1em">    
+                <Accordion allowToggle>
+                    <AccordionItem>
+                        <h2>
+                            <AccordionButton>
+                                <Box flex='1' textAlign='left'>
+                                    See DID signature details (for manual verification)
+                                </Box>
+                                <AccordionIcon />
+                            </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                            <Textarea 
+                                value={
+                                    JSON.stringify(
+                                        JSON.parse(
+                                            Buffer.from(record.signature, 'base64').toString('ascii')
+                                        ), 
+                                        null, 
+                                        4
+                                    )
+                                } 
+                                height="18em"
+                                readOnly/>
+                            <Text><span className="fieldname">Verification JSON result:</span></Text>
+                            <Textarea value={JSON.stringify(JSON.parse(record.jsonResult), null, 4)} height="18em" readOnly />
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
+            </Box>
 
             {
                 isPrepareRevokeError && isPrepareRemoveError ?
@@ -107,7 +167,7 @@ const VerificationRecordItemView = ({
                         {isSuccessRevokeTx &&
                             <Box mt="1em" p={4} bg="green" borderRadius="lg">
                                 Transaction mined with success.
-                                <p><a href={'https://goerli.etherscan.io/tx/' + txHashRevoke} /></p>
+                                <Text><a href={'https://goerli.etherscan.io/tx/' + txHashRevoke} /></Text>
                             </Box>}
                         {isRevokeError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">{revokeError?.message}</Box>}
                         {isPrepareRevokeError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">{prepareRevokeErrorShort}</Box>}
@@ -117,7 +177,7 @@ const VerificationRecordItemView = ({
                         {isSuccessRemoveTx &&
                             <Box mt="1em" p={4} bg="green" borderRadius="lg">
                                 Transaction mined with success.
-                                <p><a href={'https://goerli.etherscan.io/tx/' + txHashRemove} /></p>
+                                <Text><a href={'https://goerli.etherscan.io/tx/' + txHashRemove} /></Text>
                             </Box>}
                         {isRemoveError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">{removeError?.message}</Box>}
                         {isPrepareRemoveError && <Box mt="1em" p={4} bg="teal" borderRadius="lg" width="50%">{prepareRemoveErrorShort}</Box>}

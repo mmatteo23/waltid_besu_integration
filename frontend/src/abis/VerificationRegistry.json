@@ -134,11 +134,6 @@
 						"internalType": "address",
 						"name": "signer",
 						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "proof",
-						"type": "string"
 					}
 				],
 				"indexed": false,
@@ -193,11 +188,6 @@
 						"internalType": "address",
 						"name": "signer",
 						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "proof",
-						"type": "string"
 					}
 				],
 				"indexed": false,
@@ -237,11 +227,6 @@
 						"internalType": "address",
 						"name": "signer",
 						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "proof",
-						"type": "string"
 					}
 				],
 				"internalType": "struct VerifierInfo",
@@ -511,11 +496,6 @@
 						"internalType": "address",
 						"name": "signer",
 						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "proof",
-						"type": "string"
 					}
 				],
 				"internalType": "struct VerifierInfo",
@@ -790,11 +770,6 @@
 						"internalType": "address",
 						"name": "signer",
 						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "proof",
-						"type": "string"
 					}
 				],
 				"internalType": "struct VerifierInfo",

@@ -1,3 +1,4 @@
+
 declare interface IVerifier {
     name: string,
     did: string,
@@ -10,7 +11,19 @@ declare interface IVerificationResult {
     expiration: number,
     jsonResult: string,
     useCase: string,
+    signature?: string,
+}
+
+declare interface IVerificationRecord {
+    uuid: string,
+    verifier: string,
+    subject: string,
+    entryTime: number,
+    expirationTime: number,
+    revoked: boolean,
     signature: string,
+    jsonResult: string,
+    indexType: string
 }
 
 declare interface ITokenContract {
