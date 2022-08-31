@@ -5,7 +5,7 @@ import {
 } from '../../../controllers';
 import { Box, Heading, HStack, Text } from '@chakra-ui/react';
 
-export default function VerifierOnChain(){
+export default function Verifiers(){
     
     return (
         <Box id='main-container' className="with-navbar">

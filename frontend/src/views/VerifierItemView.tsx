@@ -41,9 +41,6 @@ const VerifierItemView = ({
             <Box>
                 <span className="fieldname">Signer:</span> {verifier.signer}
             </Box>
-            <Box>
-                <span className="fieldname">Proof:</span> <span>{verifier.proof}</span>
-            </Box>
 
             {
                 isPrepareRemoveError ?

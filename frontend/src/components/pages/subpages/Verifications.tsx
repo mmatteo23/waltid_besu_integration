@@ -5,7 +5,7 @@ import { Auditor, utils } from 'ssikit-sdk';
 import { AddPolicyModal, VerifyCredentialsModal } from '../../modals/Policies';
 import { SearchVerificationRecordsController, VerificationRecordCountController } from '../../../controllers';
 
-export default function VerifierOffChain(){
+export default function Verifications(){
 
     const [policies, setPolicies] = useState<utils.VerificationPolicy[]>([]);
     const [policiesToUse, setPoliciesToUse] = useState<string[]>([]);
